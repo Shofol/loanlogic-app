@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import { Provider } from "react-redux";
+import store from "./src/store/store";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import {
+  Mulish_400Regular,
+  Mulish_500Medium,
+  Mulish_600SemiBold,
+  Mulish_700Bold
+} from "@expo-google-fonts/mulish";
+
+import Toast from "react-native-toast-message";
+import StackNavigator from "./src/navigation/StackNavigator";
+
+const App: React.FC = () => {
+  let [fontsLoaded] = useFonts({
+    Mulish_400Regular,
+    Mulish_500Medium,
+    Mulish_600SemiBold,
+    Mulish_700Bold
+  });
+
+  if (fontsLoaded) {
+    return (
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <Provider store={store}>
+            <StackNavigator />
+            <Toast />
+          </Provider>
+        </SafeAreaProvider>
+      </NavigationContainer>
+    );
+  } else {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+};
+
+export default App;
