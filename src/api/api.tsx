@@ -1,6 +1,8 @@
 import axios from "axios";
+import * as SecureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
 import { baseURL } from "./config";
+
 const api = axios.create({
   baseURL: baseURL
 });
@@ -8,7 +10,7 @@ const api = axios.create({
 let showNotFoundError = true;
 let loadingToast: boolean = false;
 
-api.interceptors.request.use(function (config) {
+api.interceptors.request.use(async function (config) {
   if (config.method !== "get") {
     loadingToast = true;
     Toast.show({
@@ -19,9 +21,8 @@ api.interceptors.request.use(function (config) {
   if (config.method === "get" && config.data) {
     showNotFoundError = config.data.showNotFoundError;
   }
-  const tokenStr = localStorage.getItem("gesToken")
-    ? localStorage.getItem("gesToken")
-    : null;
+  const tokenStr = await SecureStore.getItemAsync("secure_token");
+
   config.headers["Authorization"] = `Bearer ${tokenStr}`;
   return config;
 });

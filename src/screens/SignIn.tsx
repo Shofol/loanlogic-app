@@ -3,12 +3,48 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import axios from "axios";
+import * as SecureStore from "expo-secure-store";
+import { Controller, useForm } from "react-hook-form";
+import { TextInput } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
+import { baseURL } from "../api/config";
 import { components } from "../components";
 import { theme } from "../constants";
-import { svg } from "../svg";
+import { InputStyles } from "../constants/theme";
 
 const SignIn: React.FC = ({ navigation }: any) => {
   const [rememberMe, setRememberMe] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  });
+
+  const onSubmit = async (values: any) => {
+    console.log(values);
+    try {
+      const response = await axios.post(baseURL + "/user/login", values);
+      // toast.success(`Succesfully Logged In`);
+      Toast.show({
+        type: "info",
+        text1: "Signed In Succesfully",
+        position: "bottom"
+      });
+      await SecureStore.setItemAsync("secure_token", response.data.token);
+      setTimeout(() => {
+        navigation.navigate("TabNavigator");
+      }, 100);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderHeader = () => {
     return <components.Header title="Sign in" goBack={true} />;
@@ -30,21 +66,54 @@ const SignIn: React.FC = ({ navigation }: any) => {
           >
             ¡Bienvenido a Gestiona!
           </Text>
-          <components.InputField
-            placeholder="cristinawolf@mail.com"
-            containerStyle={{ marginBottom: 14 }}
-            icon={<svg.CheckSvg />}
-          />
-          <components.InputField
-            placeholder="••••••"
-            icon={
-              <TouchableOpacity>
-                <svg.EyeOffSvg />
-              </TouchableOpacity>
-            }
-            secureTextEntry={true}
-            containerStyle={{ marginBottom: 20 }}
-          />
+
+          <View style={InputStyles.container}>
+            <Controller
+              control={control}
+              rules={{
+                required: true
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="john@example.com"
+                  style={InputStyles.input}
+                  placeholderTextColor={"#868698"}
+                  autoCapitalize="none"
+                  // keyboardType={"email-address"}
+                  onChangeText={onChange}
+                  numberOfLines={1}
+                  value={value}
+                  onBlur={onBlur}
+                />
+              )}
+              name="email"
+            />
+          </View>
+          {errors.email && <Text>This is required.</Text>}
+
+          <View style={InputStyles.container}>
+            <Controller
+              control={control}
+              rules={{
+                required: true
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder="*******"
+                  secureTextEntry={true}
+                  autoCapitalize="none"
+                  style={InputStyles.input}
+                  placeholderTextColor={"#868698"}
+                  onChangeText={onChange}
+                  numberOfLines={1}
+                  value={value}
+                  onBlur={onBlur}
+                />
+              )}
+              name="password"
+            />
+          </View>
+          {errors.password && <Text>This is required.</Text>}
           <View
             style={{
               flexDirection: "row",
@@ -113,9 +182,10 @@ const SignIn: React.FC = ({ navigation }: any) => {
           </View>
           <components.Button
             title="Sign in"
-            onPress={() => navigation.navigate("TabNavigator")}
+            onPress={handleSubmit(onSubmit)}
             containerStyle={{ marginBottom: 30 }}
           />
+
           <View
             style={{
               flexDirection: "row",

@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -57,6 +57,31 @@ const FONTS = {
     fontFamily: "Mulish_700Bold"
   }
 };
+
+export const InputStyles = StyleSheet.create({
+  container: {
+    height: 50,
+    width: "100%",
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "transparent",
+    marginBottom: 20
+  },
+  input: {
+    flex: 1,
+    height: "100%",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 14,
+    lineHeight: 16 * 1,
+    ...FONTS.Mulish_400Regular
+  }
+});
 
 const SIZES = {
   width,
