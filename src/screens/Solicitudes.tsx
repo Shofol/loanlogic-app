@@ -16,8 +16,8 @@ import Referencias from "./Referencias";
 const Solicitudes: React.FC = ({ navigation }: any) => {
   const [stepper, setStepper] = useState(null);
   const [valueToSubmit, setValueToSubmit] = useState({});
-  const [occupation, setOccupation] = useState(null);
-  const [willSkip5, setWillSkip5] = useState(false);
+  const [occupation, setOccupation] = useState<string | null>(null);
+  // const [willSkip5, setWillSkip5] = useState(false);
   const [isLastForm, setIsLastForm] = useState(false);
   const [dpiData, setDpiData] = useState(null);
 
@@ -28,7 +28,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       //   icon: <CreditCard size={16} />,
       content: (
         <DatosCrédito
-          stepper={stepper}
           onOccupationSelect={(occupation) => {
             setOccupation(occupation);
           }}
@@ -44,11 +43,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       //   icon: <FileText size={16} />,
       content: (
         <DPINIT
-          stepper={stepper}
-          setDPIData={(value) => {
-            setDpiData(value);
-          }}
-          onSubmit={(value) => {
+          onSubmit={(value: any) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
           }}
         />
@@ -60,49 +55,46 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       //   icon: <User size={16} />,
       content: (
         <DatosDelSolicitante
-          data={dpiData}
-          stepper={stepper}
+          occupation={occupation}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
           }}
         />
       )
     },
-    occupation !== "BUSINESS" && occupation !== "NOINCOME"
-      ? {
-          id: "asalariado",
-          title: "Asalariado",
-          //   icon: <Gift size={16} />,
-          content: (
-            <Asalariado
-              data={dpiData}
-              stepper={stepper}
-              onSubmit={(value) => {
-                setValueToSubmit({ ...valueToSubmit, ...value });
-              }}
-            />
-          )
-        }
-      : null,
+    // occupation !== "BUSINESS" && occupation !== "NOINCOME"
 
-    occupation !== "SALARIED" && occupation !== "NOINCOME"
-      ? {
-          id: "negocio-propio",
-          title: "Negocio propio",
-          //   icon: <Briefcase size={16} />,
-          content: (
-            <NegocioPropio
-              data={dpiData}
-              stepper={stepper}
-              skipSept5={willSkip5}
-              onSubmit={(value) => {
-                setValueToSubmit({ ...valueToSubmit, ...value });
-              }}
-            />
-          )
-        }
-      : null,
-
+    {
+      id: "asalariado",
+      title: "Asalariado",
+      //   icon: <Gift size={16} />,
+      content: (
+        <Asalariado
+          data={dpiData}
+          stepper={stepper}
+          occupation={occupation}
+          onSubmit={(value) => {
+            setValueToSubmit({ ...valueToSubmit, ...value });
+          }}
+        />
+      )
+    },
+    // occupation !== "SALARIED" && occupation !== "NOINCOME"
+    {
+      id: "negocio-propio",
+      title: "Negocio propio",
+      //   icon: <Briefcase size={16} />,
+      content: (
+        <NegocioPropio
+          data={dpiData}
+          stepper={stepper}
+          occupation={occupation}
+          onSubmit={(value) => {
+            setValueToSubmit({ ...valueToSubmit, ...value });
+          }}
+        />
+      )
+    },
     {
       id: "referencias",
       title: "Referencias",

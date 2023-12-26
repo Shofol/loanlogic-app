@@ -80,6 +80,11 @@ export const InputStyles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 16 * 1,
     ...FONTS.Mulish_400Regular
+  },
+  label: {
+    marginBottom: 10,
+    fontSize: 16,
+    color: COLORS.mainDark
   }
 });
 

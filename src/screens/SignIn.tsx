@@ -3,12 +3,8 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import axios from "axios";
-import * as SecureStore from "expo-secure-store";
 import { Controller, useForm } from "react-hook-form";
 import { TextInput } from "react-native-gesture-handler";
-import Toast from "react-native-toast-message";
-import { baseURL } from "../api/config";
 import { components } from "../components";
 import { theme } from "../constants";
 import { InputStyles } from "../constants/theme";
@@ -30,14 +26,13 @@ const SignIn: React.FC = ({ navigation }: any) => {
   const onSubmit = async (values: any) => {
     console.log(values);
     try {
-      const response = await axios.post(baseURL + "/user/login", values);
-      // toast.success(`Succesfully Logged In`);
-      Toast.show({
-        type: "info",
-        text1: "Signed In Succesfully",
-        position: "bottom"
-      });
-      await SecureStore.setItemAsync("secure_token", response.data.token);
+      // const response = await axios.post(baseURL + "/user/login", values);
+      // Toast.show({
+      //   type: "info",
+      //   text1: "Signed In Succesfully",
+      //   position: "bottom"
+      // });
+      // await SecureStore.setItemAsync("secure_token", response.data.token);
       setTimeout(() => {
         navigation.navigate("TabNavigator");
       }, 100);
@@ -70,9 +65,11 @@ const SignIn: React.FC = ({ navigation }: any) => {
           <View style={InputStyles.container}>
             <Controller
               control={control}
-              rules={{
-                required: true
-              }}
+              rules={
+                {
+                  // required: true
+                }
+              }
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   placeholder="john@example.com"
@@ -94,9 +91,11 @@ const SignIn: React.FC = ({ navigation }: any) => {
           <View style={InputStyles.container}>
             <Controller
               control={control}
-              rules={{
-                required: true
-              }}
+              rules={
+                {
+                  // required: true
+                }
+              }
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   placeholder="*******"
@@ -181,7 +180,7 @@ const SignIn: React.FC = ({ navigation }: any) => {
             </TouchableOpacity>
           </View>
           <components.Button
-            title="Sign in"
+            title="Conectarse"
             onPress={handleSubmit(onSubmit)}
             containerStyle={{ marginBottom: 30 }}
           />
