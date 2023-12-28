@@ -59,6 +59,10 @@ const FONTS = {
 };
 
 export const InputStyles = StyleSheet.create({
+  field: {
+    flexDirection: "column",
+    marginBottom: 20
+  },
   container: {
     height: 50,
     width: "100%",
@@ -68,8 +72,7 @@ export const InputStyles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     alignItems: "center",
-    borderColor: "transparent",
-    marginBottom: 20
+    borderColor: "transparent"
   },
   input: {
     flex: 1,
@@ -85,6 +88,20 @@ export const InputStyles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 16,
     color: COLORS.mainDark
+  },
+  error: {
+    marginTop: 10,
+    color: "#fb504f",
+    fontWeight: "bold"
+  }
+});
+
+export const Wizard = StyleSheet.create({
+  header: {
+    textAlign: "center",
+    ...FONTS.H3,
+    color: COLORS.linkColor,
+    marginBottom: 30
   }
 });
 

@@ -1,12 +1,14 @@
 import { Slider } from "@react-native-assets/slider";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import DropDownPicker from "react-native-dropdown-picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWizard } from "react-use-wizard";
 import api from "../api/api";
+import CustomCheckbox from "../components/CustomCheckbox";
+import CustomDropdownPicker from "../components/CustomDropdownPicker";
+import CustomInput from "../components/CustomInput";
 import { guaranteeTypes, professions } from "../constants/data";
 import { InputStyles, theme } from "../constants/theme";
 
@@ -78,28 +80,24 @@ const DatosCrédito = ({
           DatosCrédito
         </Text>
 
-        <Text style={InputStyles.label}>¿Qué producto desea?</Text>
-        <Controller
-          control={control}
-          // rules={{
-          //   required: true
-          // }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <DropDownPicker
-              style={InputStyles.container}
-              open={open}
-              value={value}
-              items={products}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              listMode="SCROLLVIEW"
-              onSelectItem={(e) => onChange(e.value)}
-            />
-          )}
-          name="product_id"
-        />
-        {errors.product_id && <Text>This is required.</Text>}
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>¿Qué producto desea?*</Text>
+          <Controller
+            control={control}
+            // rules={{
+            //   required: true
+            // }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDropdownPicker
+                value={value}
+                items={products}
+                onSelectItem={(e: any) => onChange(e.value)}
+              />
+            )}
+            name="product_id"
+          />
+          {errors.product_id && <Text>This is required.</Text>}
+        </View>
 
         <Text style={InputStyles.label}>
           Monto deseado del crédito:* de 500 en 500Q
@@ -128,33 +126,31 @@ const DatosCrédito = ({
           {errors.credit_amount && <Text>This is required.</Text>}
         </View>
 
-        <Text style={InputStyles.label}>
-          Destino del crédito<Text>*</Text>
-        </Text>
-
-        <View style={InputStyles.container}>
-          <Controller
-            control={control}
-            // rules={{
-            //   required: true,
-            //   minLength: 5
-            // }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="mínimo 5 caracteres"
-                style={InputStyles.input}
-                placeholderTextColor={"#868698"}
-                autoCapitalize="none"
-                onChangeText={onChange}
-                numberOfLines={1}
-                value={value}
-                onBlur={onBlur}
-              />
-            )}
-            name="credit_destination"
-          />
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>
+            Destino del crédito<Text>*</Text>
+          </Text>
+          <View style={InputStyles.container}>
+            <Controller
+              control={control}
+              // rules={{
+              //   required: true
+              // }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <CustomInput
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  placeholder="Teléfono del trabajo"
+                />
+              )}
+              name="credit_destination"
+            />
+          </View>
+          {errors.credit_destination && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
-        {errors.credit_destination && <Text>This is required.</Text>}
 
         <Text style={InputStyles.label}>
           ¿De qué tipo de garantía dispone? (seleccione todas las opciones
@@ -164,25 +160,16 @@ const DatosCrédito = ({
         <View style={{ marginBottom: 20 }}>
           {guaranteeTypes.map((gurrentee_items, index) => {
             return (
-              <View style={{ marginTop: 10 }}>
+              <View style={{ marginTop: 10 }} key={gurrentee_items.title}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
+                  rules={{
+                    required: true
+                  }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <BouncyCheckbox
-                      size={20}
-                      fillColor="#26C770"
-                      unfillColor="#FFFFFF"
+                    <CustomCheckbox
                       text={gurrentee_items.title}
-                      iconStyle={{ borderColor: "26C770" }}
-                      innerIconStyle={{ borderWidth: 2 }}
-                      textStyle={{
-                        fontFamily: "JosefinSans-Regular",
-                        textDecorationLine: "none"
-                      }}
-                      onPress={(e) => onChange(gurrentee_items.value)}
+                      onchange={(e: any) => onChange(gurrentee_items.value)}
                     />
                   )}
                   name={`gurrentee_items.${index}`}
@@ -190,20 +177,23 @@ const DatosCrédito = ({
               </View>
             );
           })}
+          {errors.gurrentee_items && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <Text style={InputStyles.label}>
-          Usted es (seleccione una única opción)
+          Usted es (seleccione una única opción)*
         </Text>
 
         {professions.map((prof) => {
           return (
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 10 }} key={prof.title}>
               <Controller
                 control={control}
-                // rules={{
-                //   required: true
-                // }}
+                rules={{
+                  required: true
+                }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <BouncyCheckbox
                     disabled={value !== "" && value !== prof.value}
@@ -218,7 +208,6 @@ const DatosCrédito = ({
                     iconStyle={{ borderColor: "26C770" }}
                     innerIconStyle={{ borderWidth: 2 }}
                     textStyle={{
-                      fontFamily: "JosefinSans-Regular",
                       textDecorationLine: "none"
                     }}
                     onPress={(e) => {

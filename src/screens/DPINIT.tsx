@@ -1,38 +1,36 @@
 import "dayjs/locale/es";
 
-import dayjs from "dayjs";
-import React, { useRef, useState } from "react";
+import * as DocumentPicker from "expo-document-picker";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import {
-  Button,
-  Modal,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { Button, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import DateTimePicker from "react-native-ui-datepicker";
 import { useWizard } from "react-use-wizard";
+import CustomCheckbox from "../components/CustomCheckbox";
+import CustomDatePicker from "../components/CustomDatePicker";
+import CustomDropdownPicker from "../components/CustomDropdownPicker";
+import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
-import { departments, municipalitiesValues } from "../constants/data";
-import { InputStyles } from "../constants/theme";
+import {
+  departments,
+  municipalitiesValues,
+  wantCredit
+} from "../constants/data";
+import { InputStyles, Wizard } from "../constants/theme";
 
 const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
   const { handleStep, previousStep, nextStep } = useWizard();
-  const [open, setOpen] = useState(false);
-  const [muniOpen, setMuniOpen] = useState(false);
-  const [negCountryOpen, setNegCountryOpen] = useState(false);
-  const [negMuniOpen, setNegMuniOpen] = useState(false);
+  const [isNITNotRequired, setIsNITNotRequired] = useState(false);
+  const [municipalities, setMunicipalities] = useState<any[]>([]);
+  const [negMunicipalities, setNegMunicipalities] = useState<any[]>([]);
+  // const [date, setDate] = useState<any>(dayjs());
+  // const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [municipalities, setMunicipalities] = useState([]);
-  const [negMunicipalities, setNegMunicipalities] = useState([]);
-  const munRef = useRef(null);
-  const neMunRef = useRef(null);
+  const _pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({});
 
-  const [date, setDate] = useState(dayjs());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+    console.log(result);
+  };
 
   const {
     control,
@@ -45,7 +43,10 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
       place_of_birth_region: "",
       neighborhood_region: "",
       neighborhood_city: "",
-      expiration_date: null
+      expiration_date: null,
+      nit: "",
+      credit_institutions_and_amount: "",
+      is_have_credit: null
     }
   });
 
@@ -60,132 +61,180 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
       contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
     >
       <View>
-        <Text
-          style={{
-            textAlign: "center",
-            ...theme.FONTS.H3,
-            color: theme.COLORS.linkColor,
-            marginBottom: 30
-          }}
-        >
-          DPI & NIT
-        </Text>
+        <Text style={Wizard.header}>DPI & NIT</Text>
 
-        <Text style={InputStyles.label}>
-          Destino del crédito<Text>*</Text>
-        </Text>
-
-        <View style={InputStyles.container}>
-          <Controller
-            control={control}
-            // rules={{
-            //   required: true,
-            //   minLength: 5
-            // }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Número DPI"
-                style={InputStyles.input}
-                placeholderTextColor={"#868698"}
-                autoCapitalize="none"
-                onChangeText={onChange}
-                value={value}
-                onBlur={onBlur}
-              />
-            )}
-            name="dpi_number"
-          />
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>
+            Destino del crédito<Text>*</Text>
+          </Text>
+          <View style={InputStyles.container}>
+            <Controller
+              control={control}
+              // rules={{
+              //   required: true
+              // }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <CustomInput
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  placeholder="Número DPI"
+                />
+              )}
+              name="dpi_number"
+            />
+          </View>
+          {errors.dpi_number && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
-        {errors.dpi_number && <Text>This is required.</Text>}
 
         <Text style={InputStyles.label}>
           Lugar de nacimiento (departamento, municipio)*
         </Text>
 
-        <Text style={InputStyles.label}>Departamento</Text>
-        <Controller
-          control={control}
-          // rules={{
-          //   required: true
-          // }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <DropDownPicker
-              style={InputStyles.container}
-              open={open}
-              value={value}
-              items={departments}
-              setOpen={setOpen}
-              setValue={() => {}}
-              listMode="MODAL"
-              onSelectItem={(e) => {
-                setMunicipalities(
-                  municipalitiesValues.filter(
-                    (muni) => muni.department === e.value
-                  )[0].municipalities
-                );
-                onChange(e.value);
-              }}
-            />
-          )}
-          name="place_of_birth_city"
-        />
-        {errors.place_of_birth_city && <Text>This is required.</Text>}
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>Departamento</Text>
+          <Controller
+            control={control}
+            // rules={{
+            //   required: true
+            // }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDropdownPicker
+                value={value}
+                items={departments}
+                onSelectItem={(e: any) => {
+                  setMunicipalities(
+                    municipalitiesValues.filter(
+                      (muni) => muni.department === e.value
+                    )[0].municipalities
+                  );
+                  onChange(e.value);
+                }}
+              />
+            )}
+            name="place_of_birth_city"
+          />
+          {errors.place_of_birth_city && <Text>This is required.</Text>}
+        </View>
 
-        <Text style={InputStyles.label}>Municipio</Text>
-        <Controller
-          control={control}
-          // rules={{
-          //   required: true
-          // }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <DropDownPicker
-              style={InputStyles.container}
-              open={muniOpen}
-              value={value}
-              items={municipalities}
-              setOpen={setMuniOpen}
-              setValue={() => {}}
-              listMode="MODAL"
-              onSelectItem={(e) => onChange(e.value)}
-            />
-          )}
-          name="place_of_birth_region"
-        />
-        {errors.place_of_birth_region && <Text>This is required.</Text>}
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>Municipio</Text>
+          <Controller
+            control={control}
+            // rules={{
+            //   required: true
+            // }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDropdownPicker
+                value={value}
+                items={municipalities}
+                onSelectItem={(e: any) => onChange(e.value)}
+              />
+            )}
+            name="place_of_birth_region"
+          />
+          {errors.place_of_birth_region && <Text>This is required.</Text>}
+        </View>
 
-        <Text style={InputStyles.label}>
-          Fecha vencimiento<Text>*</Text>
-        </Text>
-
-        <TouchableOpacity
-          style={[
-            InputStyles.container,
-            {
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-start"
-            }
-          ]}
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text style={{ textTransform: "capitalize" }}>
-            {date
-              ? dayjs(date).locale("es").format("MMMM, DD, YYYY")
-              : "Seleccionar fecha de vencimiento"}
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>
+            Fecha vencimiento<Text>*</Text>
           </Text>
-        </TouchableOpacity>
 
-        <Modal
-          animationType="slide"
-          visible={showDatePicker}
-          presentationStyle="fullScreen"
+          <Controller
+            control={control}
+            rules={
+              {
+                // required: true
+                // minLength: 5
+              }
+            }
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDatePicker
+                defaultValue={null}
+                value={value}
+                onChange={onChange}
+                defaultText="Seleccionar fecha de vencimiento"
+              />
+            )}
+            name="expiration_date"
+          />
+          {errors.expiration_date && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
+        </View>
+
+        <Text style={InputStyles.label}>Vecindad*</Text>
+
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>Departamento</Text>
+          <Controller
+            control={control}
+            // rules={{
+            //   required: true
+            // }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDropdownPicker
+                value={value}
+                items={departments}
+                onSelectItem={(e: any) => {
+                  setNegMunicipalities(
+                    municipalitiesValues.filter(
+                      (muni) => muni.department === e.value
+                    )[0].municipalities
+                  );
+                  onChange(e.value);
+                }}
+              />
+            )}
+            name="neighborhood_city"
+          />
+          {errors.neighborhood_city && <Text>This is required.</Text>}
+        </View>
+
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>Municipio</Text>
+          <Controller
+            control={control}
+            // rules={{
+            //   required: true
+            // }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDropdownPicker
+                value={value}
+                items={negMunicipalities}
+                onSelectItem={(e: any) => onChange(e.value)}
+              />
+            )}
+            name="neighborhood_region"
+          />
+          {errors.neighborhood_region && <Text>This is required.</Text>}
+        </View>
+
+        <Text style={InputStyles.label}>Foto ambos lados del DPI*</Text>
+        <TouchableOpacity
           style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center"
+            padding: 10,
+            borderColor: theme.COLORS.green,
+            borderWidth: 2,
+            borderRadius: 5,
+            marginBottom: 20
+          }}
+          onPress={(e) => {
+            _pickDocument();
           }}
         >
-          <View style={{ position: "absolute", left: 0, top: "25%" }}>
+          <Text style={{ fontSize: 16 }}>Cargar Foto</Text>
+        </TouchableOpacity>
+
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>
+            NIT
+            {!isNITNotRequired && <Text>*</Text>}
+          </Text>
+          <View style={InputStyles.container}>
             <Controller
               control={control}
               // rules={{
@@ -193,78 +242,78 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
               //   minLength: 5
               // }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <DateTimePicker
+                <CustomInput
+                  onChange={onChange}
+                  onBlur={onBlur}
                   value={value}
-                  mode="date"
-                  locale="es"
-                  onValueChange={(date) => {
-                    if (date) {
-                      setDate(date);
-                      setShowDatePicker(false);
-                      onChange(date.split(" ")[0]);
-                    }
-                  }}
+                  placeholder="NIT"
                 />
               )}
-              name="expiration_date"
+              name="nit"
             />
           </View>
-        </Modal>
-        {errors.expiration_date && <Text>This is required.</Text>}
+          {errors.nit && <Text>This is required.</Text>}
+        </View>
 
-        <Text style={InputStyles.label}>Vecindad*</Text>
+        <View style={{ marginTop: 10, marginBottom: 20 }}>
+          <CustomCheckbox
+            text="No tengo NIT"
+            onchange={(e: any) => {
+              setIsNITNotRequired(!isNITNotRequired);
+            }}
+          />
+        </View>
 
-        <Text style={InputStyles.label}>Departamento</Text>
-        <Controller
-          control={control}
-          // rules={{
-          //   required: true
-          // }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <DropDownPicker
-              style={InputStyles.container}
-              open={negCountryOpen}
-              value={value}
-              items={departments}
-              setOpen={setNegCountryOpen}
-              setValue={() => {}}
-              listMode="MODAL"
-              onSelectItem={(e) => {
-                // munRef.current.clearValue();
-                setNegMunicipalities(
-                  municipalitiesValues.filter(
-                    (muni) => muni.department === e.value
-                  )[0].municipalities
-                );
-                onChange(e.value);
-              }}
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>
+            Tiene crédito con alguna institución financiera o con personas
+            individuales? <Text>*</Text>
+          </Text>
+          <Controller
+            control={control}
+            // rules={{
+            //   required: true
+            // }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomDropdownPicker
+                value={value}
+                items={wantCredit}
+                onSelectItem={(e: any) => onChange(e.value)}
+              />
+            )}
+            name="is_have_credit"
+          />
+          {errors.is_have_credit && <Text>This is required.</Text>}
+        </View>
+
+        <View style={InputStyles.field}>
+          <Text style={InputStyles.label}>
+            Si la respuesta es sí, indicar las instituciones y monto
+            <Text>*</Text>
+          </Text>
+
+          <View style={InputStyles.container}>
+            <Controller
+              control={control}
+              // rules={{
+              //   required: true,
+              //   minLength: 5
+              // }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <CustomInput
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  placeholder="Si la respuesta es sí, indicar las instituciones y monto"
+                />
+              )}
+              name="credit_institutions_and_amount"
             />
+          </View>
+          {errors.credit_institutions_and_amount && (
+            <Text>This is required.</Text>
           )}
-          name="neighborhood_city"
-        />
-        {errors.neighborhood_city && <Text>This is required.</Text>}
-
-        <Text style={InputStyles.label}>Municipio</Text>
-        <Controller
-          control={control}
-          // rules={{
-          //   required: true
-          // }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <DropDownPicker
-              style={InputStyles.container}
-              open={negMuniOpen}
-              value={value}
-              items={negMunicipalities}
-              setOpen={setNegMuniOpen}
-              setValue={() => {}}
-              listMode="MODAL"
-              onSelectItem={(e) => onChange(e.value)}
-            />
-          )}
-          name="neighborhood_region"
-        />
-        {errors.neighborhood_region && <Text>This is required.</Text>}
+        </View>
 
         <View
           style={{

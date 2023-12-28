@@ -1,16 +1,21 @@
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import axios from "axios";
+import * as SecureStore from "expo-secure-store";
 import { Controller, useForm } from "react-hook-form";
-import { TextInput } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
+import { baseURL } from "../api/config";
 import { components } from "../components";
+import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import { InputStyles } from "../constants/theme";
 
 const SignIn: React.FC = ({ navigation }: any) => {
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -24,18 +29,20 @@ const SignIn: React.FC = ({ navigation }: any) => {
   });
 
   const onSubmit = async (values: any) => {
-    console.log(values);
+    setLoading(true);
     try {
-      // const response = await axios.post(baseURL + "/user/login", values);
-      // Toast.show({
-      //   type: "info",
-      //   text1: "Signed In Succesfully",
-      //   position: "bottom"
-      // });
-      // await SecureStore.setItemAsync("secure_token", response.data.token);
+      const response = await axios.post(baseURL + "/user/login", values);
+      setLoading(false);
+      Toast.show({
+        type: "success",
+        text1: "Signed In Succesfully",
+        position: "bottom",
+        visibilityTime: 2000
+      });
+      await SecureStore.setItemAsync("secure_token", response.data.token);
       setTimeout(() => {
         navigation.navigate("TabNavigator");
-      }, 100);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -50,6 +57,10 @@ const SignIn: React.FC = ({ navigation }: any) => {
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
       >
+        {loading && (
+          <ActivityIndicator size="large" color={theme.COLORS.linkColor} />
+        )}
+
         <View style={{ paddingTop: theme.SIZES.height * 0.05 }}>
           <Text
             style={{
@@ -62,57 +73,59 @@ const SignIn: React.FC = ({ navigation }: any) => {
             ¡Bienvenido a Gestiona!
           </Text>
 
-          <View style={InputStyles.container}>
-            <Controller
-              control={control}
-              rules={
-                {
-                  // required: true
-                }
-              }
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  placeholder="john@example.com"
-                  style={InputStyles.input}
-                  placeholderTextColor={"#868698"}
-                  autoCapitalize="none"
-                  // keyboardType={"email-address"}
-                  onChangeText={onChange}
-                  numberOfLines={1}
-                  value={value}
-                  onBlur={onBlur}
-                />
-              )}
-              name="email"
-            />
+          <View style={InputStyles.field}>
+            <Text style={InputStyles.label}>
+              Su dirección de correo electrónico<Text>*</Text>
+            </Text>
+            <View style={InputStyles.container}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <CustomInput
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder="john@example.com"
+                  />
+                )}
+                name="email"
+              />
+            </View>
+            {errors.email && (
+              <Text style={InputStyles.error}>This is required.</Text>
+            )}
           </View>
-          {errors.email && <Text>This is required.</Text>}
 
-          <View style={InputStyles.container}>
-            <Controller
-              control={control}
-              rules={
-                {
-                  // required: true
-                }
-              }
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  placeholder="*******"
-                  secureTextEntry={true}
-                  autoCapitalize="none"
-                  style={InputStyles.input}
-                  placeholderTextColor={"#868698"}
-                  onChangeText={onChange}
-                  numberOfLines={1}
-                  value={value}
-                  onBlur={onBlur}
-                />
-              )}
-              name="password"
-            />
+          <View style={InputStyles.field}>
+            <Text style={InputStyles.label}>
+              Tu contraseña<Text>*</Text>
+            </Text>
+            <View style={InputStyles.container}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <CustomInput
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder="********"
+                    secureTextEntry={true}
+                  />
+                )}
+                name="password"
+              />
+            </View>
+            {errors.password && (
+              <Text style={InputStyles.error}>This is required.</Text>
+            )}
           </View>
-          {errors.password && <Text>This is required.</Text>}
+
           <View
             style={{
               flexDirection: "row",

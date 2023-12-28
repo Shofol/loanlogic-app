@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 
+import * as SecureStore from "expo-secure-store";
 import { components } from "../components";
 import { theme } from "../constants";
 
@@ -28,6 +29,16 @@ const onboarding = [
 const Onboarding: React.FC = ({ navigation }: any) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
+  const checkOnboarding = async () => {
+    const status = await SecureStore.getItemAsync("onboarded");
+    console.log(status);
+    return status === "true";
+  };
+
+  useEffect(() => {
+    console.log(checkOnboarding());
+  }, []);
+
   function updateCurrentSlideIndex(e: any) {
     const contentOffsetX = e.nativeEvent.contentOffset.x;
     const currentIndex = Math.round(contentOffsetX / theme.SIZES.width);
@@ -37,6 +48,9 @@ const Onboarding: React.FC = ({ navigation }: any) => {
   return (
     <View
       style={{
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
         flex: 1
       }}
     >
@@ -51,17 +65,20 @@ const Onboarding: React.FC = ({ navigation }: any) => {
           return (
             <View
               style={{
-                backgroundColor: "white",
-                paddingTop: theme.SIZES.height * 0.08,
-                paddingBottom: theme.SIZES.height * 0.07,
-                paddingHorizontal: 20,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20
+                flex: 1,
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "white"
+                // paddingTop: theme.SIZES.height * 0.08,
+                // paddingBottom: theme.SIZES.height * 0.07,
+                // paddingHorizontal: 20,
+                // borderTopLeftRadius: 20,
+                // borderTopRightRadius: 20
               }}
             >
               <View
                 style={{
-                  alignSelf: "center",
                   marginBottom: 20
                 }}
               >
@@ -123,7 +140,10 @@ const Onboarding: React.FC = ({ navigation }: any) => {
                 </View> */}
               <components.Button
                 title="Get Started"
-                onPress={() => navigation.navigate("SignIn")}
+                onPress={async () => {
+                  await SecureStore.setItemAsync("onboarded", "true");
+                  navigation.navigate("SignIn");
+                }}
               />
             </View>
           );
