@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Slider } from "@react-native-assets/slider";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -5,6 +6,7 @@ import { Button, Text, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWizard } from "react-use-wizard";
+import { z } from "zod";
 import api from "../api/api";
 import CustomCheckbox from "../components/CustomCheckbox";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
@@ -19,39 +21,38 @@ const DatosCrédito = ({
   onSubmit: (value: any) => void;
   onOccupationSelect: (value: string) => void;
 }) => {
-  const { handleStep, previousStep, nextStep } = useWizard();
-  const [rangeValue, setRangeValue] = useState(500);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { previousStep, nextStep } = useWizard();
   const [products, setProducts] = useState<any[]>([]);
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(0);
-  const [items, setItems] = useState([
-    { label: "Apple", value: "apple" },
-    { label: "Banana", value: "banana" }
-  ]);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+
+  const Schema = z
+    .object({
+      product_id: z.number(),
+      credit_destination: z.string().min(5),
+      occupation: z.string().min(1),
+      credit_amount: z.number()
+    })
+    .required();
 
   const {
+    getValues,
+    setError,
     control,
     handleSubmit,
     formState: { errors }
   } = useForm({
+    resolver: zodResolver(Schema),
     defaultValues: {
-      product_id: "",
-      credit_amount: 0,
+      product_id: null,
+      credit_amount: 500,
       credit_destination: "",
-      gurrentee_items: [""],
+      gurrentee_items: [undefined],
       occupation: ""
     }
   });
-  //   const onSubmit = (data) => console.log(data);
 
   useEffect(() => {
-    setMinValue(parseInt("500"));
-    setMaxValue(parseInt("20000"));
     fetchData();
-  }, [currentPage]);
+  }, []);
 
   const fetchData = async () => {
     const response = await api.get(`product/label`);
@@ -59,8 +60,20 @@ const DatosCrédito = ({
   };
 
   const onFormSubmit = async (values: any) => {
+    const finalVales = getValues();
+    const guaranteeItems = finalVales.gurrentee_items.filter(
+      (val) => val !== undefined
+    );
+    if (guaranteeItems.length > 0) {
+      values.guarantee_items = guaranteeItems;
+    } else {
+      setError("gurrentee_items", {
+        type: "custom",
+        message: "This is required"
+      });
+      console.log("error");
+    }
     onSubmit(values);
-    console.log(values);
     nextStep();
   };
 
@@ -84,9 +97,6 @@ const DatosCrédito = ({
           <Text style={InputStyles.label}>¿Qué producto desea?*</Text>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDropdownPicker
                 value={value}
@@ -96,7 +106,9 @@ const DatosCrédito = ({
             )}
             name="product_id"
           />
-          {errors.product_id && <Text>This is required.</Text>}
+          {errors.product_id && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <Text style={InputStyles.label}>
@@ -105,14 +117,11 @@ const DatosCrédito = ({
         <View style={{ marginBottom: 20, marginLeft: 10 }}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Slider
                 value={value} // set the current slider's value
-                minimumValue={minValue} // Minimum value
-                maximumValue={maxValue} // Maximum value
+                minimumValue={500} // Minimum value
+                maximumValue={20000} // Maximum value
                 step={500} // The step for the slider (0 means that the slider will handle any decimal value within the range [min, max])
                 minimumTrackTintColor="#3EB290" // The track color before the current value
                 maximumTrackTintColor="grey" // The track color after the current value
@@ -133,9 +142,9 @@ const DatosCrédito = ({
           <View style={InputStyles.container}>
             <Controller
               control={control}
-              // rules={{
-              //   required: true
-              // }}
+              rules={{
+                required: "This is required"
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomInput
                   onChange={onChange}
@@ -148,7 +157,9 @@ const DatosCrédito = ({
             />
           </View>
           {errors.credit_destination && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>
+              {errors.credit_destination.message}
+            </Text>
           )}
         </View>
 
@@ -163,9 +174,6 @@ const DatosCrédito = ({
               <View style={{ marginTop: 10 }} key={gurrentee_items.title}>
                 <Controller
                   control={control}
-                  rules={{
-                    required: true
-                  }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomCheckbox
                       text={gurrentee_items.title}
@@ -178,14 +186,15 @@ const DatosCrédito = ({
             );
           })}
           {errors.gurrentee_items && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>
+              {errors.gurrentee_items.message}
+            </Text>
           )}
         </View>
 
         <Text style={InputStyles.label}>
           Usted es (seleccione una única opción)*
         </Text>
-
         {professions.map((prof) => {
           return (
             <View style={{ marginTop: 10 }} key={prof.title}>
@@ -226,6 +235,10 @@ const DatosCrédito = ({
             </View>
           );
         })}
+
+        {errors.occupation && (
+          <Text style={InputStyles.error}>This is required</Text>
+        )}
 
         <View
           style={{

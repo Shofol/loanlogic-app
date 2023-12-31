@@ -16,7 +16,7 @@ import Referencias from "./Referencias";
 const Solicitudes: React.FC = ({ navigation }: any) => {
   const [stepper, setStepper] = useState(null);
   const [valueToSubmit, setValueToSubmit] = useState({});
-  const [occupation, setOccupation] = useState<string | null>(null);
+  const [occupation, setOccupation] = useState<string>("");
   // const [willSkip5, setWillSkip5] = useState(false);
   const [isLastForm, setIsLastForm] = useState(false);
   const [dpiData, setDpiData] = useState(null);
@@ -70,8 +70,8 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       //   icon: <Gift size={16} />,
       content: (
         <Asalariado
-          data={dpiData}
-          stepper={stepper}
+          // data={dpiData}
+          // stepper={stepper}
           occupation={occupation}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
@@ -86,8 +86,8 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       //   icon: <Briefcase size={16} />,
       content: (
         <NegocioPropio
-          data={dpiData}
-          stepper={stepper}
+          // data={dpiData}
+          // stepper={stepper}
           occupation={occupation}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
@@ -101,8 +101,8 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       //   icon: <Globe size={16} />,
       content: (
         <Referencias
-          data={dpiData}
-          stepper={stepper}
+          // data={dpiData}
+          // stepper={stepper}
           onPrevious={() => {
             setIsLastForm(false);
           }}

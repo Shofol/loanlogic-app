@@ -1,11 +1,13 @@
 import "dayjs/locale/es";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWizard } from "react-use-wizard";
+import { z } from "zod";
 import CustomCheckbox from "../components/CustomCheckbox";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
@@ -23,8 +25,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
   const [isNITNotRequired, setIsNITNotRequired] = useState(false);
   const [municipalities, setMunicipalities] = useState<any[]>([]);
   const [negMunicipalities, setNegMunicipalities] = useState<any[]>([]);
-  // const [date, setDate] = useState<any>(dayjs());
-  // const [showDatePicker, setShowDatePicker] = useState(false);
 
   const _pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({});
@@ -32,17 +32,32 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
     console.log(result);
   };
 
+  const Schema = z
+    .object({
+      dpi_number: z.string().min(1),
+      place_of_birth_city: z.string(),
+      place_of_birth_region: z.string(),
+      neighborhood_city: z.string(),
+      neighborhood_region: z.string(),
+      expiration_date: z.string(),
+      nit: z.string().min(1),
+      credit_institutions_and_amount: z.string().min(1),
+      is_have_credit: z.string()
+    })
+    .required();
+
   const {
     control,
     handleSubmit,
     formState: { errors }
   } = useForm({
+    resolver: zodResolver(Schema),
     defaultValues: {
       dpi_number: "",
-      place_of_birth_city: 0,
-      place_of_birth_region: "",
-      neighborhood_region: "",
-      neighborhood_city: "",
+      place_of_birth_city: null,
+      place_of_birth_region: null,
+      neighborhood_region: null,
+      neighborhood_city: null,
       expiration_date: null,
       nit: "",
       credit_institutions_and_amount: "",
@@ -70,9 +85,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
           <View style={InputStyles.container}>
             <Controller
               control={control}
-              // rules={{
-              //   required: true
-              // }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomInput
                   onChange={onChange}
@@ -97,10 +109,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
           <Text style={InputStyles.label}>Departamento</Text>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
-            render={({ field: { onChange, onBlur, value } }) => (
+            render={({ field: { onChange, value } }) => (
               <CustomDropdownPicker
                 value={value}
                 items={departments}
@@ -116,16 +125,15 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             )}
             name="place_of_birth_city"
           />
-          {errors.place_of_birth_city && <Text>This is required.</Text>}
+          {errors.place_of_birth_city && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <View style={InputStyles.field}>
           <Text style={InputStyles.label}>Municipio</Text>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDropdownPicker
                 value={value}
@@ -135,7 +143,9 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             )}
             name="place_of_birth_region"
           />
-          {errors.place_of_birth_region && <Text>This is required.</Text>}
+          {errors.place_of_birth_region && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <View style={InputStyles.field}>
@@ -145,12 +155,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
 
           <Controller
             control={control}
-            rules={
-              {
-                // required: true
-                // minLength: 5
-              }
-            }
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDatePicker
                 defaultValue={null}
@@ -172,9 +176,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
           <Text style={InputStyles.label}>Departamento</Text>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDropdownPicker
                 value={value}
@@ -191,16 +192,15 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             )}
             name="neighborhood_city"
           />
-          {errors.neighborhood_city && <Text>This is required.</Text>}
+          {errors.neighborhood_city && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <View style={InputStyles.field}>
           <Text style={InputStyles.label}>Municipio</Text>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDropdownPicker
                 value={value}
@@ -210,7 +210,9 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             )}
             name="neighborhood_region"
           />
-          {errors.neighborhood_region && <Text>This is required.</Text>}
+          {errors.neighborhood_region && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <Text style={InputStyles.label}>Foto ambos lados del DPI*</Text>
@@ -237,10 +239,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
           <View style={InputStyles.container}>
             <Controller
               control={control}
-              // rules={{
-              //   required: true,
-              //   minLength: 5
-              // }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomInput
                   onChange={onChange}
@@ -252,7 +250,9 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
               name="nit"
             />
           </View>
-          {errors.nit && <Text>This is required.</Text>}
+          {errors.nit && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <View style={{ marginTop: 10, marginBottom: 20 }}>
@@ -271,9 +271,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
           </Text>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDropdownPicker
                 value={value}
@@ -283,7 +280,9 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             )}
             name="is_have_credit"
           />
-          {errors.is_have_credit && <Text>This is required.</Text>}
+          {errors.is_have_credit && (
+            <Text style={InputStyles.error}>This is required.</Text>
+          )}
         </View>
 
         <View style={InputStyles.field}>
@@ -295,10 +294,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
           <View style={InputStyles.container}>
             <Controller
               control={control}
-              // rules={{
-              //   required: true,
-              //   minLength: 5
-              // }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomInput
                   onChange={onChange}
@@ -311,7 +306,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             />
           </View>
           {errors.credit_institutions_and_amount && (
-            <Text>This is required.</Text>
+            <Text style={InputStyles.error}>This is required.</Text>
           )}
         </View>
 

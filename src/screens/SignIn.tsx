@@ -80,9 +80,9 @@ const SignIn: React.FC = ({ navigation }: any) => {
             <View style={InputStyles.container}>
               <Controller
                 control={control}
-                rules={{
-                  required: true
-                }}
+                // rules={{
+                //   required: true
+                // }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <CustomInput
                     onChange={onChange}
@@ -106,9 +106,9 @@ const SignIn: React.FC = ({ navigation }: any) => {
             <View style={InputStyles.container}>
               <Controller
                 control={control}
-                rules={{
-                  required: true
-                }}
+                // rules={{
+                //   required: true
+                // }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <CustomInput
                     onChange={onChange}

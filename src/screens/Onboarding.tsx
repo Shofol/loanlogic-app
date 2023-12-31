@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 
-import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { components } from "../components";
 import { theme } from "../constants";
 
@@ -28,15 +28,24 @@ const onboarding = [
 
 const Onboarding: React.FC = ({ navigation }: any) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isOnboarded, setIsOnboarded] = useState(true);
 
   const checkOnboarding = async () => {
-    const status = await SecureStore.getItemAsync("onboarded");
-    console.log(status);
-    return status === "true";
+    try {
+      const value = await AsyncStorage.getItem("onboarded");
+      if (value === "true") {
+        navigation.navigate("SignIn");
+        // value previously stored
+      } else {
+        setIsOnboarded(false);
+      }
+    } catch (e) {
+      // error reading value
+    }
   };
 
   useEffect(() => {
-    console.log(checkOnboarding());
+    checkOnboarding();
   }, []);
 
   function updateCurrentSlideIndex(e: any) {
@@ -54,101 +63,73 @@ const Onboarding: React.FC = ({ navigation }: any) => {
         flex: 1
       }}
     >
-      <FlatList
-        data={onboarding}
-        keyExtractor={(item) => item.id}
-        horizontal={true}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={updateCurrentSlideIndex}
-        renderItem={({ item, index }) => {
-          return (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "white"
-                // paddingTop: theme.SIZES.height * 0.08,
-                // paddingBottom: theme.SIZES.height * 0.07,
-                // paddingHorizontal: 20,
-                // borderTopLeftRadius: 20,
-                // borderTopRightRadius: 20
-              }}
-            >
+      {!isOnboarded && (
+        <FlatList
+          data={onboarding}
+          keyExtractor={(item) => item.id}
+          horizontal={true}
+          pagingEnabled={true}
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={updateCurrentSlideIndex}
+          renderItem={({ item, index }) => {
+            return (
               <View
                 style={{
-                  marginBottom: 20
+                  flex: 1,
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "white"
                 }}
               >
-                <Image
-                  source={require("../assets/logo.png")}
-                  style={{ width: 100, height: 80 }}
-                />
-              </View>
-              <Text
-                style={{
-                  textAlign: "center",
-                  ...theme.FONTS.H3,
-                  color: theme.COLORS.mainDark,
-                  marginBottom: 18
-                }}
-              >
-                {item.title}
-              </Text>
-
-              <Text
-                style={{
-                  textAlign: "center",
-                  ...theme.FONTS.Mulish_500Medium,
-                  color: theme.COLORS.mainDark,
-                  marginBottom: 18
-                }}
-              >
-                {item.description}
-              </Text>
-
-              {/* <View
+                <View
                   style={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "row",
-                    marginBottom: 45
+                    marginBottom: 20
                   }}
                 >
-                  {onboarding.map((_, index) => {
-                    return (
-                      <View
-                        key={index}
-                        style={[
-                          {
-                            width: 8,
-                            height: 8,
-                            marginHorizontal: 5,
-                            borderRadius: 50,
-                            borderWidth: 3,
-                            borderColor: "#D1D2DB"
-                          },
-                          currentSlideIndex == index && {
-                            borderColor: theme.COLORS.mainDark
-                          }
-                        ]}
-                      />
-                    );
-                  })}
-                </View> */}
-              <components.Button
-                title="Get Started"
-                onPress={async () => {
-                  await SecureStore.setItemAsync("onboarded", "true");
-                  navigation.navigate("SignIn");
-                }}
-              />
-            </View>
-          );
-        }}
-      />
+                  <Image
+                    source={require("../assets/logo.png")}
+                    style={{ width: 100, height: 80 }}
+                  />
+                </View>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    ...theme.FONTS.H3,
+                    color: theme.COLORS.mainDark,
+                    marginBottom: 18
+                  }}
+                >
+                  {item.title}
+                </Text>
+
+                <Text
+                  style={{
+                    textAlign: "center",
+                    ...theme.FONTS.Mulish_500Medium,
+                    color: theme.COLORS.mainDark,
+                    marginBottom: 18
+                  }}
+                >
+                  {item.description}
+                </Text>
+
+                <components.Button
+                  title="Get Started"
+                  onPress={async () => {
+                    try {
+                      await AsyncStorage.setItem("onboarded", "true");
+                    } catch (e) {
+                      // saving error
+                    }
+                    navigation.navigate("SignIn");
+                  }}
+                />
+              </View>
+            );
+          }}
+        />
+      )}
     </View>
   );
 };

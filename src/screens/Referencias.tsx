@@ -6,7 +6,13 @@ import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import { InputStyles, Wizard } from "../constants/theme";
 
-const Referencias = () => {
+const Referencias = ({
+  onPrevious,
+  onSubmit
+}: {
+  onPrevious: (value: any) => void;
+  onSubmit: (value: any) => void;
+}) => {
   const { handleStep, previousStep, nextStep } = useWizard();
 
   const onFormSubmit = async (values: any) => {
