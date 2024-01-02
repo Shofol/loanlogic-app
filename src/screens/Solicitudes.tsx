@@ -27,7 +27,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
     let values: any = { ...valueToSubmit };
     values.created_from = "DASHBOARD";
     const user: any = await SecureStore.getItemAsync("user");
-    // values.userId = JSON.parse(user).id;
+    values.userId = JSON.parse(user).id;
     Object.entries(values).map((pair: any) => {
       if (pair[0] === "photos_of_bills" || pair[0] === "photos_of_the_dpi") {
         values[`${pair[0]}`].map((file: any) => {
@@ -39,8 +39,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
         form.append(pair[0], pair[1]);
       }
     });
-
-    console.log(form);
 
     try {
       const response = await api.post("credit-application", form);
