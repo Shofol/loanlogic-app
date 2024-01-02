@@ -71,7 +71,6 @@ const DatosCrédito = ({
         type: "custom",
         message: "This is required"
       });
-      console.log("error");
     }
     onSubmit(values);
     nextStep();
@@ -249,12 +248,12 @@ const DatosCrédito = ({
         >
           <Button
             color={theme.COLORS.bodyTextColor}
-            title="Go Previous"
+            title="Anterior"
             onPress={() => previousStep()}
           />
           <Button
             color={theme.COLORS.linkColor}
-            title="Go Next"
+            title="Siguiente"
             onPress={handleSubmit(onFormSubmit)}
           />
         </View>

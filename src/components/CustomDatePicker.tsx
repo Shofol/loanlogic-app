@@ -53,6 +53,8 @@ const CustomDatePicker = ({
             value={value}
             mode="date"
             locale="es"
+            headerButtonColor={theme.COLORS.linkColor}
+            selectedItemColor={theme.COLORS.linkColor}
             onValueChange={(date) => {
               if (date) {
                 setDate(date);

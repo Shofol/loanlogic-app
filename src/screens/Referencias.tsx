@@ -1,7 +1,9 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { useWizard } from "react-use-wizard";
+import { z } from "zod";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import { InputStyles, Wizard } from "../constants/theme";
@@ -16,9 +18,8 @@ const Referencias = ({
   const { handleStep, previousStep, nextStep } = useWizard();
 
   const onFormSubmit = async (values: any) => {
-    // onSubmit(values);
-    console.log(values);
-    nextStep();
+    onSubmit(values);
+    // nextStep();
 
     // if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
     //   nextStep();
@@ -29,31 +30,52 @@ const Referencias = ({
     // }
   };
 
+  const Schema = z
+    .object({
+      f_references_name_and_surname: z.string().min(1),
+      f_references_name_and_surname_2: z.string().min(1),
+      f_references_work_phone: z.string().min(1).max(8),
+      f_references_work_phone_2: z.string().min(1).max(8),
+      f_references_cell_phone: z.string().min(1).max(8),
+      f_references_cell_phone_2: z.string().min(1).max(8),
+      f_references_relationship: z.string().min(1),
+      f_references_relationship_2: z.string().min(1),
+      p_references_name_and_surname: z.string().min(1),
+      p_references_name_and_surname_2: z.string().min(1),
+      p_references_work_phone: z.string().min(1).max(8),
+      p_references_work_phone_2: z.string().min(1).max(8),
+      p_references_cell_phone: z.string().min(1).max(8),
+      p_references_cell_phone_2: z.string().min(1).max(8),
+      p_references_relationship: z.string().min(1),
+      p_references_relationship_2: z.string().min(1)
+    })
+    .required();
+
   const {
     control,
     handleSubmit,
     formState: { errors }
   } = useForm({
+    resolver: zodResolver(Schema),
     defaultValues: {
       f_references_name_and_surname: "",
-      f_references_name_and_surname2: "",
+      f_references_name_and_surname_2: "",
       f_references_work_phone: "",
-      f_references_work_phone2: "",
+      f_references_work_phone_2: "",
       f_references_cell_phone: "",
-      f_references_cell_phone2: "",
+      f_references_cell_phone_2: "",
       f_references_relationship: "",
       f_references_relationship_2: "",
       p_references_name_and_surname: "",
-      p_references_name_and_surname2: "",
+      p_references_name_and_surname_2: "",
       p_references_work_phone: "",
-      p_references_work_phone2: "",
+      p_references_work_phone_2: "",
       p_references_cell_phone: "",
-      p_references_cell_phone2: "",
+      p_references_cell_phone_2: "",
       p_references_relationship: "",
       p_references_relationship_2: ""
     }
   });
-  const [municipalities, setMunicipalities] = useState<any[]>([]);
   const [referenciasFamiliares, setReferenciasFamiliares] = useState([
     "",
     "_2"
@@ -67,7 +89,7 @@ const Referencias = ({
   return (
     <View>
       <Text style={Wizard.header}>Referencias</Text>
-
+      <Text>{JSON.stringify(errors)}</Text>
       <View style={{ marginBottom: 20 }}>
         <Text style={theme.FONTS.H4}>
           Referencias familiares {"\n"}(que no vivan con usted)
@@ -76,7 +98,7 @@ const Referencias = ({
 
       {referenciasFamiliares.map((ref) => {
         return (
-          <>
+          <View key={ref}>
             <View style={InputStyles.field}>
               <Text style={InputStyles.label}>
                 Nombre y apellidos<Text>*</Text>
@@ -84,9 +106,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -112,9 +131,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -140,9 +156,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -168,9 +181,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -188,7 +198,7 @@ const Referencias = ({
                 `f_references_cell_phone${ref}` as keyof ReferenceFormType
               ] && <Text style={InputStyles.error}>This is required.</Text>}
             </View>
-          </>
+          </View>
         );
       })}
 
@@ -199,7 +209,7 @@ const Referencias = ({
       </View>
       {referenciasPersonales.map((ref) => {
         return (
-          <>
+          <View key={ref}>
             <View style={InputStyles.field}>
               <Text style={InputStyles.label}>
                 Nombre y apellidos<Text>*</Text>
@@ -207,9 +217,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -235,9 +242,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -263,9 +267,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -291,9 +292,6 @@ const Referencias = ({
               <View style={InputStyles.container}>
                 <Controller
                   control={control}
-                  // rules={{
-                  //   required: true
-                  // }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomInput
                       onChange={onChange}
@@ -311,7 +309,7 @@ const Referencias = ({
                 `p_references_cell_phone${ref}` as keyof ReferenceFormType
               ] && <Text style={InputStyles.error}>This is required.</Text>}
             </View>
-          </>
+          </View>
         );
       })}
 
@@ -324,15 +322,13 @@ const Referencias = ({
       >
         <Button
           color={theme.COLORS.bodyTextColor}
-          title="Go Previous"
+          title="Anterior"
           onPress={() => previousStep()}
         />
         <Button
           color={theme.COLORS.linkColor}
-          title="Go Next"
-          onPress={() => nextStep()}
-
-          // onPress={handleSubmit(onFormSubmit)}
+          title="Siguiente"
+          onPress={handleSubmit(onFormSubmit)}
         />
       </View>
     </View>
@@ -343,19 +339,19 @@ export default Referencias;
 
 type ReferenceFormType = {
   f_references_name_and_surname: string;
-  f_references_name_and_surname2: string;
+  f_references_name_and_surname_2: string;
   f_references_work_phone: string;
-  f_references_work_phone2: string;
+  f_references_work_phone_2: string;
   f_references_cell_phone: string;
-  f_references_cell_phone2: string;
+  f_references_cell_phone_2: string;
   f_references_relationship: string;
   f_references_relationship_2: string;
   p_references_name_and_surname: string;
-  p_references_name_and_surname2: string;
+  p_references_name_and_surname_2: string;
   p_references_work_phone: string;
-  p_references_work_phone2: string;
+  p_references_work_phone_2: string;
   p_references_cell_phone: string;
-  p_references_cell_phone2: string;
+  p_references_cell_phone_2: string;
   p_references_relationship: string;
   p_references_relationship_2: string;
 };

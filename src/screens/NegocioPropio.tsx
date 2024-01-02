@@ -1,7 +1,9 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { useWizard } from "react-use-wizard";
+import { z } from "zod";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
 import CustomInput from "../components/CustomInput";
@@ -20,23 +22,36 @@ const NegocioPropio = ({
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
-    console.log(values);
-    nextStep();
 
-    // if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
-    //   nextStep();
-    // } else if (occupation === "BUSINESS") {
-    //   goToStep(4);
-    // } else {
-    //   goToStep(5);
-    // }
+    if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
+      nextStep();
+    } else if (occupation === "BUSINESS") {
+      goToStep(4);
+    } else {
+      goToStep(5);
+    }
   };
+
+  const Schema = z
+    .object({
+      business_name: z.string().min(1),
+      start_date: z.string().min(1),
+      nit5: z.string().min(1),
+      monthly_sales: z.string().min(1),
+      monthly_expenses5: z.string().min(1),
+      business_address: z.string().min(1),
+      business_municipality: z.string().min(1),
+      business_department: z.string().min(1),
+      business_phone: z.string().min(1).max(8)
+    })
+    .required();
 
   const {
     control,
     handleSubmit,
     formState: { errors }
   } = useForm({
+    resolver: zodResolver(Schema),
     defaultValues: {
       business_name: "",
       start_date: "",
@@ -62,9 +77,6 @@ const NegocioPropio = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -88,12 +100,6 @@ const NegocioPropio = ({
 
         <Controller
           control={control}
-          rules={
-            {
-              // required: true
-              // minLength: 5
-            }
-          }
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDatePicker
               defaultValue={null}
@@ -115,9 +121,6 @@ const NegocioPropio = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -141,9 +144,6 @@ const NegocioPropio = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -167,9 +167,6 @@ const NegocioPropio = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -193,9 +190,6 @@ const NegocioPropio = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -216,9 +210,6 @@ const NegocioPropio = ({
         <Text style={InputStyles.label}>Departamento</Text>
         <Controller
           control={control}
-          // rules={{
-          //   required: true
-          // }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDropdownPicker
               value={value}
@@ -242,9 +233,6 @@ const NegocioPropio = ({
         <Text style={InputStyles.label}>Municipio</Text>
         <Controller
           control={control}
-          // rules={{
-          //   required: true
-          // }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDropdownPicker
               value={value}
@@ -264,9 +252,6 @@ const NegocioPropio = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -279,7 +264,11 @@ const NegocioPropio = ({
           />
         </View>
         {errors.business_phone && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>
+            {errors.business_phone.type === "too_small"
+              ? "This is required"
+              : errors.business_phone.message}
+          </Text>
         )}
       </View>
 
@@ -292,7 +281,7 @@ const NegocioPropio = ({
       >
         <Button
           color={theme.COLORS.bodyTextColor}
-          title="Go Previous"
+          title="Anterior"
           onPress={() => {
             if (occupation === "BUSINESS") {
               goToStep(3);
@@ -303,12 +292,11 @@ const NegocioPropio = ({
         />
         <Button
           color={theme.COLORS.linkColor}
-          title="Go Next"
-          onPress={() => {
-            nextStep();
-          }}
-
-          // onPress={handleSubmit(onFormSubmit)}
+          title="Siguiente"
+          // onPress={() => {
+          //   nextStep();
+          // }}
+          onPress={handleSubmit(onFormSubmit)}
         />
       </View>
     </View>

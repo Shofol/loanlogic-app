@@ -1,10 +1,14 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { useWizard } from "react-use-wizard";
+import { z } from "zod";
 import CustomCheckbox from "../components/CustomCheckbox";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
+import CustomFileUploader from "../components/CustomFileUploader";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import {
@@ -15,6 +19,7 @@ import {
   sexValues
 } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
+import { formatToFile } from "../utils/formatToFile";
 
 const DatosDelSolicitante = ({
   onSubmit,
@@ -27,7 +32,6 @@ const DatosDelSolicitante = ({
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
-    console.log(values);
     nextStep();
 
     // if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
@@ -39,11 +43,37 @@ const DatosDelSolicitante = ({
     // }
   };
 
+  const [isSecondNameNotRequired, setisSecondNameNotRequired] = useState(false);
+  const [municipalities, setMunicipalities] = useState<any[]>([]);
+
+  const Schema = z
+    .object({
+      photos_of_bills: z.any().array().nonempty(),
+      surname: z.string().min(1),
+      second_surname: z.string().min(1),
+      name: z.string().min(1),
+      second_name: !isSecondNameNotRequired ? z.string().min(1) : z.any(),
+      phone_number: z.string().min(1).max(8),
+      landline_phone_number: z.string().min(1).max(8),
+      email: z.string().min(1).email(),
+      residence_address: z.string().min(1),
+      residence_municipality: z.string().min(1),
+      department_of_residence: z.string().min(1),
+      birth_date: z.string().min(1),
+      profession: z.string().min(1),
+      civil_status: z.string().min(1),
+      sex: z.string().min(1),
+      nationality: z.string().min(1)
+    })
+    .required();
+
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm({
+    resolver: zodResolver(Schema),
     defaultValues: {
       photos_of_bills: [],
       surname: "",
@@ -63,8 +93,21 @@ const DatosDelSolicitante = ({
       nationality: ""
     }
   });
-  const [isSecondNameNotRequired, setisSecondNameNotRequired] = useState(false);
-  const [municipalities, setMunicipalities] = useState<any[]>([]);
+
+  const pickDocument = async () => {
+    let newUploadedFiles: any[] = [];
+
+    let result = await DocumentPicker.getDocumentAsync({
+      multiple: true
+    });
+
+    if (result.assets) {
+      result.assets.map((item) => {
+        newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
+      });
+      setValue("photos_of_bills", newUploadedFiles as any);
+    }
+  };
 
   return (
     <View>
@@ -77,9 +120,6 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -103,9 +143,6 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -129,9 +166,6 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -156,9 +190,6 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -189,22 +220,20 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
                 placeholder="Número de celular"
+                keyboardType="numeric"
               />
             )}
             name="phone_number"
           />
         </View>
         {errors.phone_number && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>{errors.phone_number.message}</Text>
         )}
       </View>
 
@@ -213,15 +242,13 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
                 placeholder="Número de teléfono fijo"
+                keyboardType="numeric"
               />
             )}
             name="landline_phone_number"
@@ -237,9 +264,6 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -252,7 +276,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.email && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>{errors.email.message}</Text>
         )}
       </View>
 
@@ -261,9 +285,6 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -284,9 +305,6 @@ const DatosDelSolicitante = ({
         <Text style={InputStyles.label}>Departamento</Text>
         <Controller
           control={control}
-          // rules={{
-          //   required: true
-          // }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDropdownPicker
               value={value}
@@ -303,16 +321,15 @@ const DatosDelSolicitante = ({
           )}
           name="department_of_residence"
         />
-        {errors.department_of_residence && <Text>This is required.</Text>}
+        {errors.department_of_residence && (
+          <Text style={InputStyles.error}>This is required.</Text>
+        )}
       </View>
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>Municipio</Text>
         <Controller
           control={control}
-          // rules={{
-          //   required: true
-          // }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDropdownPicker
               value={value}
@@ -322,7 +339,9 @@ const DatosDelSolicitante = ({
           )}
           name="residence_municipality"
         />
-        {errors.residence_municipality && <Text>This is required.</Text>}
+        {errors.residence_municipality && (
+          <Text style={InputStyles.error}>This is required.</Text>
+        )}
       </View>
 
       <View style={InputStyles.field}>
@@ -332,12 +351,6 @@ const DatosDelSolicitante = ({
 
         <Controller
           control={control}
-          rules={
-            {
-              // required: true
-              // minLength: 5
-            }
-          }
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDatePicker
               defaultValue={null}
@@ -357,9 +370,6 @@ const DatosDelSolicitante = ({
         <View style={InputStyles.container}>
           <Controller
             control={control}
-            // rules={{
-            //   required: true
-            // }}
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomInput
                 onChange={onChange}
@@ -380,9 +390,6 @@ const DatosDelSolicitante = ({
         <Text style={InputStyles.label}>Estado civil</Text>
         <Controller
           control={control}
-          // rules={{
-          //   required: true
-          // }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDropdownPicker
               value={value}
@@ -394,16 +401,15 @@ const DatosDelSolicitante = ({
           )}
           name="civil_status"
         />
-        {errors.civil_status && <Text>This is required.</Text>}
+        {errors.civil_status && (
+          <Text style={InputStyles.error}>This is required.</Text>
+        )}
       </View>
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>Sexo*</Text>
         <Controller
           control={control}
-          // rules={{
-          //   required: true
-          // }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDropdownPicker
               value={value}
@@ -415,16 +421,13 @@ const DatosDelSolicitante = ({
           )}
           name="sex"
         />
-        {errors.sex && <Text>This is required.</Text>}
+        {errors.sex && <Text style={InputStyles.error}>This is required.</Text>}
       </View>
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>Nacionalidad*</Text>
         <Controller
           control={control}
-          // rules={{
-          //   required: true
-          // }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomDropdownPicker
               value={value}
@@ -436,7 +439,23 @@ const DatosDelSolicitante = ({
           )}
           name="nationality"
         />
-        {errors.nationality && <Text>This is required.</Text>}
+        {errors.nationality && (
+          <Text style={InputStyles.error}>This is required.</Text>
+        )}
+      </View>
+
+      <Text style={InputStyles.label}>
+        Foto del recibo de la luz (u otro recibo)*
+      </Text>
+      <View style={{ marginBottom: 20 }}>
+        <CustomFileUploader
+          onSelect={() => {
+            pickDocument();
+          }}
+        />
+        {errors.photos_of_bills && (
+          <Text style={[InputStyles.error]}>This is required.</Text>
+        )}
       </View>
 
       <View

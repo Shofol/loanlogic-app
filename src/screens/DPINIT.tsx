@@ -4,13 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWizard } from "react-use-wizard";
 import { z } from "zod";
 import CustomCheckbox from "../components/CustomCheckbox";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
+import CustomFileUploader from "../components/CustomFileUploader";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import {
@@ -19,18 +20,14 @@ import {
   wantCredit
 } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
+import { formatToFile } from "../utils/formatToFile";
 
 const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
   const { handleStep, previousStep, nextStep } = useWizard();
   const [isNITNotRequired, setIsNITNotRequired] = useState(false);
   const [municipalities, setMunicipalities] = useState<any[]>([]);
   const [negMunicipalities, setNegMunicipalities] = useState<any[]>([]);
-
-  const _pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({});
-
-    console.log(result);
-  };
+  const [isCreditInsAmntRqrd, setIsCreditInsAmntRqrd] = useState(false);
 
   const Schema = z
     .object({
@@ -40,15 +37,20 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
       neighborhood_city: z.string(),
       neighborhood_region: z.string(),
       expiration_date: z.string(),
-      nit: z.string().min(1),
-      credit_institutions_and_amount: z.string().min(1),
-      is_have_credit: z.string()
+      nit: !isNITNotRequired ? z.string().min(1) : z.any(),
+      credit_institutions_and_amount: isCreditInsAmntRqrd
+        ? z.string().min(1)
+        : z.any(),
+      is_have_credit: z.string(),
+      photos_of_the_dpi: z.any().array().nonempty()
     })
     .required();
 
   const {
+    setValue,
     control,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
@@ -61,13 +63,28 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
       expiration_date: null,
       nit: "",
       credit_institutions_and_amount: "",
-      is_have_credit: null
+      is_have_credit: null,
+      photos_of_the_dpi: []
     }
   });
 
+  const pickDocument = async () => {
+    let newUploadedFiles: any[] = [];
+
+    let result = await DocumentPicker.getDocumentAsync({
+      multiple: true
+    });
+
+    if (result.assets) {
+      result.assets.map((item) => {
+        newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
+      });
+      setValue("photos_of_the_dpi", newUploadedFiles as any);
+    }
+  };
+
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
-    console.log(values);
     nextStep();
   };
 
@@ -216,20 +233,16 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
         </View>
 
         <Text style={InputStyles.label}>Foto ambos lados del DPI*</Text>
-        <TouchableOpacity
-          style={{
-            padding: 10,
-            borderColor: theme.COLORS.green,
-            borderWidth: 2,
-            borderRadius: 5,
-            marginBottom: 20
-          }}
-          onPress={(e) => {
-            _pickDocument();
-          }}
-        >
-          <Text style={{ fontSize: 16 }}>Cargar Foto</Text>
-        </TouchableOpacity>
+        <View style={{ marginBottom: 20 }}>
+          <CustomFileUploader
+            onSelect={() => {
+              pickDocument();
+            }}
+          />
+          {errors.photos_of_the_dpi && (
+            <Text style={[InputStyles.error]}>This is required.</Text>
+          )}
+        </View>
 
         <View style={InputStyles.field}>
           <Text style={InputStyles.label}>
@@ -275,7 +288,10 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
               <CustomDropdownPicker
                 value={value}
                 items={wantCredit}
-                onSelectItem={(e: any) => onChange(e.value)}
+                onSelectItem={(e: any) => {
+                  setIsCreditInsAmntRqrd(e.value === "yes" ? true : false);
+                  onChange(e.value);
+                }}
               />
             )}
             name="is_have_credit"
@@ -288,7 +304,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
         <View style={InputStyles.field}>
           <Text style={InputStyles.label}>
             Si la respuesta es sí, indicar las instituciones y monto
-            <Text>*</Text>
+            {isCreditInsAmntRqrd && <Text>*</Text>}
           </Text>
 
           <View style={InputStyles.container}>
@@ -319,12 +335,12 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
         >
           <Button
             color={theme.COLORS.bodyTextColor}
-            title="Go Previous"
+            title="Anterior"
             onPress={() => previousStep()}
           />
           <Button
             color={theme.COLORS.linkColor}
-            title="Go Next"
+            title="Siguiente"
             onPress={handleSubmit(onFormSubmit)}
           />
         </View>

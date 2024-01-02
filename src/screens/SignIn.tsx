@@ -40,10 +40,21 @@ const SignIn: React.FC = ({ navigation }: any) => {
         visibilityTime: 2000
       });
       await SecureStore.setItemAsync("secure_token", response.data.token);
+      await SecureStore.setItemAsync(
+        "user",
+        JSON.stringify(response.data.data)
+      );
       setTimeout(() => {
         navigation.navigate("TabNavigator");
       });
     } catch (error) {
+      setLoading(false);
+      Toast.show({
+        type: "error",
+        text1: "Sign In Failed",
+        position: "bottom",
+        visibilityTime: 2000
+      });
       console.log(error);
     }
   };
