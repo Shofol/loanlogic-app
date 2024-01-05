@@ -132,7 +132,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.surname && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -155,7 +155,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.second_surname && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -178,7 +178,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.name && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -202,7 +202,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.second_name && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -255,7 +255,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.landline_phone_number && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -297,7 +297,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.residence_address && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -322,7 +322,7 @@ const DatosDelSolicitante = ({
           name="department_of_residence"
         />
         {errors.department_of_residence && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -340,7 +340,7 @@ const DatosDelSolicitante = ({
           name="residence_municipality"
         />
         {errors.residence_municipality && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -361,7 +361,7 @@ const DatosDelSolicitante = ({
           name="birth_date"
         />
         {errors.birth_date && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -382,7 +382,7 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.profession && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -402,7 +402,7 @@ const DatosDelSolicitante = ({
           name="civil_status"
         />
         {errors.civil_status && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -421,7 +421,9 @@ const DatosDelSolicitante = ({
           )}
           name="sex"
         />
-        {errors.sex && <Text style={InputStyles.error}>This is required.</Text>}
+        {errors.sex && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
       </View>
 
       <View style={InputStyles.field}>
@@ -440,7 +442,7 @@ const DatosDelSolicitante = ({
           name="nationality"
         />
         {errors.nationality && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -454,7 +456,7 @@ const DatosDelSolicitante = ({
           }}
         />
         {errors.photos_of_bills && (
-          <Text style={[InputStyles.error]}>This is required.</Text>
+          <Text style={[InputStyles.error]}>Esto es requerido.</Text>
         )}
       </View>
 

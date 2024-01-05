@@ -34,6 +34,21 @@ const StackNavigator: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="FotoGarantía"
+        component={screens.FotoGarantía}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Garantía"
+        component={screens.Garantía}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Cobranza"
+        component={screens.Cobranza}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Profile"
         component={screens.Profile}
         options={{ headerShown: false }}

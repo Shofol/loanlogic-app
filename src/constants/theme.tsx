@@ -10,7 +10,9 @@ const COLORS = {
   green: "#3EB290",
   grey1: "#D8D9DB",
   linkColor: "#26C770",
-  transparent: "transparent"
+  transparent: "transparent",
+  warning: "#ff7207",
+  danger: "#dc3444"
 };
 
 const FONTS = {
@@ -74,6 +76,17 @@ export const InputStyles = StyleSheet.create({
     alignItems: "center",
     borderColor: "transparent"
   },
+  containerBg: {
+    height: 50,
+    width: "100%",
+    backgroundColor: COLORS.bgColor,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "transparent"
+  },
   input: {
     flex: 1,
     height: "100%",
@@ -102,6 +115,36 @@ export const Wizard = StyleSheet.create({
     ...FONTS.H3,
     color: COLORS.linkColor,
     marginBottom: 30
+  }
+});
+
+export const ComponentStyles = StyleSheet.create({
+  card: {
+    backgroundColor: COLORS.white,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 20
+  }
+});
+
+export const DataStyle = StyleSheet.create({
+  data: {
+    ...FONTS.Mulish_400Regular,
+    fontSize: 14,
+    lineHeight: 12 * 1.6,
+    color: COLORS.bodyTextColor
+  },
+  dataSemiBold: {
+    ...FONTS.Mulish_600SemiBold,
+    fontSize: 14,
+    lineHeight: 12 * 1.6,
+    color: COLORS.bodyTextColor
+  },
+  separator: {
+    borderBottomColor: COLORS.bodyTextColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    marginVertical: 5
   }
 });
 

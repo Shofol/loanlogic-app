@@ -114,7 +114,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             />
           </View>
           {errors.dpi_number && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -143,7 +143,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             name="place_of_birth_city"
           />
           {errors.place_of_birth_city && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -161,7 +161,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             name="place_of_birth_region"
           />
           {errors.place_of_birth_region && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -183,7 +183,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             name="expiration_date"
           />
           {errors.expiration_date && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -210,7 +210,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             name="neighborhood_city"
           />
           {errors.neighborhood_city && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -228,7 +228,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             name="neighborhood_region"
           />
           {errors.neighborhood_region && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -240,7 +240,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             }}
           />
           {errors.photos_of_the_dpi && (
-            <Text style={[InputStyles.error]}>This is required.</Text>
+            <Text style={[InputStyles.error]}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -264,7 +264,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             />
           </View>
           {errors.nit && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -297,7 +297,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             name="is_have_credit"
           />
           {errors.is_have_credit && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -322,7 +322,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             />
           </View>
           {errors.credit_institutions_and_amount && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 

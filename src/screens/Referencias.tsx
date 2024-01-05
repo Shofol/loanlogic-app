@@ -121,7 +121,7 @@ const Referencias = ({
               </View>
               {errors[
                 `f_references_name_and_surname${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
 
             <View style={InputStyles.field}>
@@ -146,7 +146,7 @@ const Referencias = ({
               </View>
               {errors[
                 `f_references_relationship${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
 
             <View style={InputStyles.field}>
@@ -171,7 +171,7 @@ const Referencias = ({
               </View>
               {errors[
                 `f_references_work_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
 
             <View style={InputStyles.field}>
@@ -196,7 +196,7 @@ const Referencias = ({
               </View>
               {errors[
                 `f_references_cell_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
           </View>
         );
@@ -232,7 +232,7 @@ const Referencias = ({
               </View>
               {errors[
                 `p_references_name_and_surname${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
 
             <View style={InputStyles.field}>
@@ -257,7 +257,7 @@ const Referencias = ({
               </View>
               {errors[
                 `p_references_relationship${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
 
             <View style={InputStyles.field}>
@@ -282,7 +282,7 @@ const Referencias = ({
               </View>
               {errors[
                 `p_references_work_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
 
             <View style={InputStyles.field}>
@@ -307,7 +307,7 @@ const Referencias = ({
               </View>
               {errors[
                 `p_references_cell_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>This is required.</Text>}
+              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
             </View>
           </View>
         );

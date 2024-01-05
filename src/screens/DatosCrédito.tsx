@@ -69,7 +69,7 @@ const DatosCrédito = ({
     } else {
       setError("gurrentee_items", {
         type: "custom",
-        message: "This is required"
+        message: "Esto es requerido"
       });
     }
     onSubmit(values);
@@ -106,7 +106,7 @@ const DatosCrédito = ({
             name="product_id"
           />
           {errors.product_id && (
-            <Text style={InputStyles.error}>This is required.</Text>
+            <Text style={InputStyles.error}>Esto es requerido.</Text>
           )}
         </View>
 
@@ -131,7 +131,7 @@ const DatosCrédito = ({
             )}
             name="credit_amount"
           />
-          {errors.credit_amount && <Text>This is required.</Text>}
+          {errors.credit_amount && <Text>Esto es requerido.</Text>}
         </View>
 
         <View style={InputStyles.field}>
@@ -142,7 +142,7 @@ const DatosCrédito = ({
             <Controller
               control={control}
               rules={{
-                required: "This is required"
+                required: "Esto es requerido"
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomInput
@@ -236,7 +236,7 @@ const DatosCrédito = ({
         })}
 
         {errors.occupation && (
-          <Text style={InputStyles.error}>This is required</Text>
+          <Text style={InputStyles.error}>Esto es requerido</Text>
         )}
 
         <View

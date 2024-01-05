@@ -1,6 +1,7 @@
 import CardDetails from "./CardDetails";
 import CardMenu from "./CardMenu";
 import ChangePinCode from "./ChangePinCode";
+import Cobranza from "./Cobranza";
 import ConfirmationCode from "./ConfirmationCode";
 import CreateInvoice from "./CreateInvoice";
 import Dashboard from "./Dashboard";
@@ -10,7 +11,9 @@ import ExchangeRates from "./ExchangeRates";
 import FAQ from "./FAQ";
 import ForgotPassword from "./ForgotPassword";
 import ForgotPasswordSentEmail from "./ForgotPasswordSentEmail";
+import FotoGarantía from "./FotoGarantía";
 import FundTransfer from "./FundTransfer";
+import Garantía from "./Garantía";
 import IbanPayment from "./IbanPayment";
 import InvoiceSent from "./InvoiceSent";
 import Loans from "./Loans";
@@ -27,6 +30,7 @@ import PaymentSuccess from "./PaymentSuccess";
 import Payments from "./Payments";
 import PrivacyPolicy from "./PrivacyPolicy";
 import Profile from "./Profile";
+import RecuperaciónDiaria from "./RecuperaciónDiaria";
 import SignIn from "./SignIn";
 import SignInCode from "./SignInCode";
 import SignUp from "./SignUp";
@@ -79,7 +83,11 @@ const screens = {
   TransactionDetails,
   PaymentSuccess,
   PaymentFailed,
-  Solicitudes
+  Solicitudes,
+  FotoGarantía,
+  Garantía,
+  RecuperaciónDiaria,
+  Cobranza
 };
 
 export { screens };

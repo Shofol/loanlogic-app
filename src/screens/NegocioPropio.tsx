@@ -89,7 +89,7 @@ const NegocioPropio = ({
           />
         </View>
         {errors.business_name && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -110,7 +110,7 @@ const NegocioPropio = ({
           name="start_date"
         />
         {errors.start_date && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -133,7 +133,7 @@ const NegocioPropio = ({
           />
         </View>
         {errors.nit5 && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -156,7 +156,7 @@ const NegocioPropio = ({
           />
         </View>
         {errors.monthly_sales && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -179,7 +179,7 @@ const NegocioPropio = ({
           />
         </View>
         {errors.monthly_expenses5 && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -202,7 +202,7 @@ const NegocioPropio = ({
           />
         </View>
         {errors.business_address && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -226,7 +226,7 @@ const NegocioPropio = ({
           )}
           name="business_department"
         />
-        {errors.business_department && <Text>This is required.</Text>}
+        {errors.business_department && <Text>Esto es requerido.</Text>}
       </View>
 
       <View style={InputStyles.field}>
@@ -242,7 +242,7 @@ const NegocioPropio = ({
           )}
           name="business_municipality"
         />
-        {errors.business_municipality && <Text>This is required.</Text>}
+        {errors.business_municipality && <Text>Esto es requerido.</Text>}
       </View>
 
       <View style={InputStyles.field}>
@@ -266,7 +266,7 @@ const NegocioPropio = ({
         {errors.business_phone && (
           <Text style={InputStyles.error}>
             {errors.business_phone.type === "too_small"
-              ? "This is required"
+              ? "Esto es requerido"
               : errors.business_phone.message}
           </Text>
         )}

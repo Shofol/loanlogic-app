@@ -94,7 +94,7 @@ const Asalariado = ({
           />
         </View>
         {errors.company_name && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -115,7 +115,7 @@ const Asalariado = ({
           name="entry_date"
         />
         {errors.entry_date && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -138,7 +138,7 @@ const Asalariado = ({
           />
         </View>
         {errors.position && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -161,7 +161,7 @@ const Asalariado = ({
           />
         </View>
         {errors.monthly_income && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -184,7 +184,7 @@ const Asalariado = ({
           />
         </View>
         {errors.monthly_expenses && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -207,7 +207,7 @@ const Asalariado = ({
           />
         </View>
         {errors.date_and_number_of_income && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -230,7 +230,7 @@ const Asalariado = ({
           />
         </View>
         {errors.immediate_boss_name && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -253,7 +253,7 @@ const Asalariado = ({
           />
         </View>
         {errors.work_address && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -278,7 +278,7 @@ const Asalariado = ({
           name="work_department"
         />
         {errors.work_department && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -296,7 +296,7 @@ const Asalariado = ({
           name="work_municipality"
         />
         {errors.work_municipality && (
-          <Text style={InputStyles.error}>This is required.</Text>
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -321,7 +321,7 @@ const Asalariado = ({
         {errors.work_phone && (
           <Text style={InputStyles.error}>
             {errors.work_phone.type === "too_small"
-              ? "This is required"
+              ? "Esto es requerido"
               : errors.work_phone.message}
           </Text>
         )}

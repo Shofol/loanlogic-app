@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,6 +27,17 @@ const SignIn: React.FC = ({ navigation }: any) => {
       password: ""
     }
   });
+
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const checkToken = async () => {
+    const tokenStr = await SecureStore.getItemAsync("secure_token");
+    if (tokenStr) {
+      navigation.navigate("TabNavigator");
+    }
+  };
 
   const onSubmit = async (values: any) => {
     setLoading(true);
@@ -106,7 +117,7 @@ const SignIn: React.FC = ({ navigation }: any) => {
               />
             </View>
             {errors.email && (
-              <Text style={InputStyles.error}>This is required.</Text>
+              <Text style={InputStyles.error}>Esto es requerido.</Text>
             )}
           </View>
 
@@ -133,7 +144,7 @@ const SignIn: React.FC = ({ navigation }: any) => {
               />
             </View>
             {errors.password && (
-              <Text style={InputStyles.error}>This is required.</Text>
+              <Text style={InputStyles.error}>Esto es requerido.</Text>
             )}
           </View>
 
@@ -245,10 +256,12 @@ const SignIn: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
+    <>
       {renderHeader()}
-      {renderContent()}
-    </SafeAreaView>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
+        {renderContent()}
+      </SafeAreaView>
+    </>
   );
 };
 

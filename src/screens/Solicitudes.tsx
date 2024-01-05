@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import * as SecureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
@@ -22,7 +21,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
   const [isLastForm, setIsLastForm] = useState(false);
 
   const handleSubmitForm = async () => {
-    console.log("handling submission");
     const form = new FormData();
     let values: any = { ...valueToSubmit };
     values.created_from = "DASHBOARD";
@@ -142,7 +140,13 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
   ];
 
   const renderHeader = () => {
-    return <components.Header title="Solicitudes" goBack={true} />;
+    return (
+      <components.Header
+        title="Solicitudes"
+        goBack={true}
+        goBackColor={theme.COLORS.white}
+      />
+    );
   };
 
   const renderContent = () => {
@@ -162,10 +166,12 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
+    <>
       {renderHeader()}
+      {/* <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}> */}
       {renderContent()}
-    </SafeAreaView>
+      {/* </SafeAreaView> */}
+    </>
   );
 };
 

@@ -11,9 +11,9 @@ const CustomInput = ({
   keyboardType = "default"
 }: {
   placeholder: string;
-  onChange: any;
-  value: string;
-  onBlur: any;
+  onChange?: any;
+  value: string | undefined;
+  onBlur?: any;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
 }) => {
