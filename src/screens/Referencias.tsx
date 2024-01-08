@@ -10,42 +10,35 @@ import { InputStyles, Wizard } from "../constants/theme";
 
 const Referencias = ({
   onPrevious,
-  onSubmit
+  onSubmit,
+  occupation
 }: {
   onPrevious: (value: any) => void;
   onSubmit: (value: any) => void;
+  occupation: string;
 }) => {
-  const { handleStep, previousStep, nextStep } = useWizard();
+  const { handleStep, previousStep, nextStep, goToStep } = useWizard();
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
-    // nextStep();
-
-    // if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
-    //   nextStep();
-    // } else if (occupation === "BUSINESS") {
-    //   goToStep(4);
-    // } else {
-    //   goToStep(5);
-    // }
   };
 
   const Schema = z
     .object({
       f_references_name_and_surname: z.string().min(1),
       f_references_name_and_surname_2: z.string().min(1),
-      f_references_work_phone: z.string().min(1).max(8),
-      f_references_work_phone_2: z.string().min(1).max(8),
-      f_references_cell_phone: z.string().min(1).max(8),
-      f_references_cell_phone_2: z.string().min(1).max(8),
+      f_references_work_phone: z.number().min(1).max(8),
+      f_references_work_phone_2: z.number().min(1).max(8),
+      f_references_cell_phone: z.number().min(1).max(8),
+      f_references_cell_phone_2: z.number().min(1).max(8),
       f_references_relationship: z.string().min(1),
       f_references_relationship_2: z.string().min(1),
       p_references_name_and_surname: z.string().min(1),
       p_references_name_and_surname_2: z.string().min(1),
-      p_references_work_phone: z.string().min(1).max(8),
-      p_references_work_phone_2: z.string().min(1).max(8),
-      p_references_cell_phone: z.string().min(1).max(8),
-      p_references_cell_phone_2: z.string().min(1).max(8),
+      p_references_work_phone: z.number().min(1).max(8),
+      p_references_work_phone_2: z.number().min(1).max(8),
+      p_references_cell_phone: z.number().min(1).max(8),
+      p_references_cell_phone_2: z.number().min(1).max(8),
       p_references_relationship: z.string().min(1),
       p_references_relationship_2: z.string().min(1)
     })
@@ -162,6 +155,7 @@ const Referencias = ({
                       onBlur={onBlur}
                       value={value}
                       placeholder="Teléfono trabajo"
+                      keyboardType="numeric"
                     />
                   )}
                   name={
@@ -187,6 +181,7 @@ const Referencias = ({
                       onBlur={onBlur}
                       value={value}
                       placeholder="Celular"
+                      keyboardType="numeric"
                     />
                   )}
                   name={
@@ -273,6 +268,7 @@ const Referencias = ({
                       onBlur={onBlur}
                       value={value}
                       placeholder="Teléfono trabajo"
+                      keyboardType="numeric"
                     />
                   )}
                   name={
@@ -298,6 +294,7 @@ const Referencias = ({
                       onBlur={onBlur}
                       value={value}
                       placeholder="Celular"
+                      keyboardType="numeric"
                     />
                   )}
                   name={
@@ -323,7 +320,15 @@ const Referencias = ({
         <Button
           color={theme.COLORS.bodyTextColor}
           title="Anterior"
-          onPress={() => previousStep()}
+          onPress={() => {
+            if (occupation === "SALARIED") {
+              goToStep(3);
+            } else if (occupation === "NOINCOME") {
+              goToStep(2);
+            } else {
+              previousStep();
+            }
+          }}
         />
         <Button
           color={theme.COLORS.linkColor}
@@ -340,18 +345,18 @@ export default Referencias;
 type ReferenceFormType = {
   f_references_name_and_surname: string;
   f_references_name_and_surname_2: string;
-  f_references_work_phone: string;
-  f_references_work_phone_2: string;
-  f_references_cell_phone: string;
-  f_references_cell_phone_2: string;
+  f_references_work_phone: number;
+  f_references_work_phone_2: number;
+  f_references_cell_phone: number;
+  f_references_cell_phone_2: number;
   f_references_relationship: string;
   f_references_relationship_2: string;
   p_references_name_and_surname: string;
   p_references_name_and_surname_2: string;
-  p_references_work_phone: string;
-  p_references_work_phone_2: string;
-  p_references_cell_phone: string;
-  p_references_cell_phone_2: string;
+  p_references_work_phone: number;
+  p_references_work_phone_2: number;
+  p_references_cell_phone: number;
+  p_references_cell_phone_2: number;
   p_references_relationship: string;
   p_references_relationship_2: string;
 };

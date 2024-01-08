@@ -125,6 +125,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "Referencias",
       content: (
         <Referencias
+          occupation={occupation}
           onPrevious={() => {
             setIsLastForm(false);
           }}

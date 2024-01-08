@@ -100,7 +100,8 @@ export const InputStyles = StyleSheet.create({
   label: {
     marginBottom: 10,
     fontSize: 16,
-    color: COLORS.mainDark
+    color: COLORS.mainDark,
+    ...FONTS.Mulish_400Regular
   },
   error: {
     marginTop: 10,

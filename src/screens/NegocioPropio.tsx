@@ -18,7 +18,7 @@ const NegocioPropio = ({
   onSubmit: (value: any) => void;
   occupation: string;
 }) => {
-  const { handleStep, previousStep, nextStep, goToStep } = useWizard();
+  const { previousStep, nextStep, goToStep } = useWizard();
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
@@ -37,12 +37,12 @@ const NegocioPropio = ({
       business_name: z.string().min(1),
       start_date: z.string().min(1),
       nit5: z.string().min(1),
-      monthly_sales: z.string().min(1),
-      monthly_expenses5: z.string().min(1),
+      monthly_sales: z.number().min(1),
+      monthly_expenses5: z.number().min(1),
       business_address: z.string().min(1),
       business_municipality: z.string().min(1),
       business_department: z.string().min(1),
-      business_phone: z.string().min(1).max(8)
+      business_phone: z.number().min(1).max(8)
     })
     .required();
 
@@ -150,6 +150,7 @@ const NegocioPropio = ({
                 onBlur={onBlur}
                 value={value}
                 placeholder="Ventas mensuales"
+                keyboardType="numeric"
               />
             )}
             name="monthly_sales"
@@ -173,6 +174,7 @@ const NegocioPropio = ({
                 onBlur={onBlur}
                 value={value}
                 placeholder="Gastos mensuales"
+                keyboardType="numeric"
               />
             )}
             name="monthly_expenses5"
@@ -258,6 +260,7 @@ const NegocioPropio = ({
                 onBlur={onBlur}
                 value={value}
                 placeholder="Teléfono del negocio"
+                keyboardType="numeric"
               />
             )}
             name="business_phone"
@@ -284,7 +287,7 @@ const NegocioPropio = ({
           title="Anterior"
           onPress={() => {
             if (occupation === "BUSINESS") {
-              goToStep(3);
+              goToStep(2);
             } else {
               previousStep();
             }

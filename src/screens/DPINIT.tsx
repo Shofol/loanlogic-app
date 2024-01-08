@@ -1,10 +1,9 @@
 import "dayjs/locale/es";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, Image, Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWizard } from "react-use-wizard";
 import { z } from "zod";
@@ -20,15 +19,13 @@ import {
   wantCredit
 } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
-import { formatToFile } from "../utils/formatToFile";
 
 const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
-  const { handleStep, previousStep, nextStep } = useWizard();
+  const { previousStep, nextStep } = useWizard();
   const [isNITNotRequired, setIsNITNotRequired] = useState(false);
   const [municipalities, setMunicipalities] = useState<any[]>([]);
   const [negMunicipalities, setNegMunicipalities] = useState<any[]>([]);
   const [isCreditInsAmntRqrd, setIsCreditInsAmntRqrd] = useState(false);
-  const [documents, setDocuments] = useState([]);
 
   const Schema = z
     .object({
@@ -51,7 +48,6 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
     setValue,
     control,
     handleSubmit,
-    setError,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
@@ -69,20 +65,8 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
     }
   });
 
-  const pickDocument = async () => {
-    let newUploadedFiles: any[] = [];
-
-    let result = await DocumentPicker.getDocumentAsync({
-      multiple: true
-    });
-
-    if (result.assets) {
-      result.assets.map((item) => {
-        newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
-      });
-      setValue("photos_of_the_dpi", newUploadedFiles as any);
-      setDocuments(newUploadedFiles as any);
-    }
+  const onDocumentUpload = (newUploadedFiles: any) => {
+    setValue("photos_of_the_dpi", newUploadedFiles as any);
   };
 
   const onFormSubmit = async (values: any) => {
@@ -237,33 +221,13 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
         <Text style={InputStyles.label}>Foto ambos lados del DPI*</Text>
         <View style={{ marginBottom: 20 }}>
           <CustomFileUploader
-            onSelect={() => {
-              pickDocument();
+            onUpload={(files) => {
+              onDocumentUpload(files);
             }}
           />
           {errors.photos_of_the_dpi && (
             <Text style={[InputStyles.error]}>Esto es requerido.</Text>
           )}
-        </View>
-
-        <View style={{ marginBottom: 20, flexDirection: "row", gap: 16 }}>
-          {documents.length > 0 &&
-            documents.map((item: any) => {
-              const isImage = item.type.includes("image");
-              return (
-                <Image
-                  key={item.name}
-                  style={{ width: 50, height: 50 }}
-                  source={
-                    isImage
-                      ? {
-                          uri: item.uri
-                        }
-                      : require("../assets/icons/file.png")
-                  }
-                />
-              );
-            })}
         </View>
 
         <View style={InputStyles.field}>

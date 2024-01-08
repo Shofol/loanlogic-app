@@ -25,14 +25,14 @@ const Asalariado = ({
       company_name: z.string().min(1),
       entry_date: z.string().min(1),
       position: z.string().min(1),
-      monthly_income: z.string().min(1),
-      monthly_expenses: z.string().min(1),
+      monthly_income: z.number().min(1),
+      monthly_expenses: z.number().min(1),
       date_and_number_of_income: z.string().min(1),
       immediate_boss_name: z.string().min(1),
       work_address: z.string().min(1),
       work_department: z.string().min(1),
       work_municipality: z.string().min(1),
-      work_phone: z.string().min(1).max(8)
+      work_phone: z.number().min(1).max(8)
     })
     .required();
 
@@ -60,12 +60,9 @@ const Asalariado = ({
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
-    // nextStep();
 
-    if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
+    if (occupation === "BUSINESS" || occupation === "SALARIEDANDBUSINESS") {
       nextStep();
-    } else if (occupation === "BUSINESS") {
-      goToStep(4);
     } else {
       goToStep(5);
     }
@@ -154,6 +151,7 @@ const Asalariado = ({
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
+                keyboardType="numeric"
                 placeholder="Ingresos mensuales"
               />
             )}
@@ -177,6 +175,7 @@ const Asalariado = ({
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
+                keyboardType="numeric"
                 placeholder="Gastos mensuales"
               />
             )}
@@ -312,6 +311,7 @@ const Asalariado = ({
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
+                keyboardType="numeric"
                 placeholder="Teléfono del trabajo"
               />
             )}

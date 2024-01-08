@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
@@ -19,7 +18,6 @@ import {
   sexValues
 } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
-import { formatToFile } from "../utils/formatToFile";
 
 const DatosDelSolicitante = ({
   onSubmit,
@@ -32,15 +30,13 @@ const DatosDelSolicitante = ({
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
-    nextStep();
-
-    // if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
-    //   nextStep();
-    // } else if (occupation === "BUSINESS") {
-    //   goToStep(4);
-    // } else {
-    //   goToStep(5);
-    // }
+    if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
+      nextStep();
+    } else if (occupation === "BUSINESS") {
+      goToStep(4);
+    } else {
+      goToStep(5);
+    }
   };
 
   const [isSecondNameNotRequired, setisSecondNameNotRequired] = useState(false);
@@ -53,8 +49,8 @@ const DatosDelSolicitante = ({
       second_surname: z.string().min(1),
       name: z.string().min(1),
       second_name: !isSecondNameNotRequired ? z.string().min(1) : z.any(),
-      phone_number: z.string().min(1).max(8),
-      landline_phone_number: z.string().min(1).max(8),
+      phone_number: z.number().min(1).max(8),
+      landline_phone_number: z.number().min(1).max(8),
       email: z.string().min(1).email(),
       residence_address: z.string().min(1),
       residence_municipality: z.string().min(1),
@@ -94,19 +90,8 @@ const DatosDelSolicitante = ({
     }
   });
 
-  const pickDocument = async () => {
-    let newUploadedFiles: any[] = [];
-
-    let result = await DocumentPicker.getDocumentAsync({
-      multiple: true
-    });
-
-    if (result.assets) {
-      result.assets.map((item) => {
-        newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
-      });
-      setValue("photos_of_bills", newUploadedFiles as any);
-    }
+  const onDocumentUpload = async (newUploadedFiles: any) => {
+    setValue("photos_of_bills", newUploadedFiles);
   };
 
   return (
@@ -451,8 +436,8 @@ const DatosDelSolicitante = ({
       </Text>
       <View style={{ marginBottom: 20 }}>
         <CustomFileUploader
-          onSelect={() => {
-            pickDocument();
+          onUpload={(files) => {
+            onDocumentUpload(files);
           }}
         />
         {errors.photos_of_bills && (
