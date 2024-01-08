@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import api from "../../api/api";
 import { ComponentStyles, theme } from "../../constants/theme";
 
 const DesgloseRecuperación = () => {
-  const [data, setData] = useState(null);
   const [list, setList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -13,7 +12,6 @@ const DesgloseRecuperación = () => {
 
   const fetchData = async () => {
     const response = await api.get(`/stats/debt_collection_breakdown`);
-    setData(response.data.data);
     setList([
       {
         title: "Ingresos recuperación",
@@ -64,13 +62,13 @@ const DesgloseRecuperación = () => {
         DESGLOSE RECUPERACIÓN
       </Text>
 
-      <FlatList
-        data={list}
-        renderItem={({ item }) => (
-          <Item title={item.title} value={item.value} />
-        )}
-        keyExtractor={(item) => item.id}
-      />
+      <View style={{ justifyContent: "flex-start", marginVertical: 10 }}>
+        {list.map((item) => {
+          return (
+            <Item key={item.title} title={item.title} value={item.value} />
+          );
+        })}
+      </View>
     </View>
   );
 };

@@ -16,7 +16,8 @@ const TabNavigator = () => {
     Dashboard = "Dashboard",
     Solicitudes = "Solicitudes",
     Garantía = "Garantía",
-    RecuperaciónDiaria = "Recuperación Diaria"
+    RecuperaciónDiaria = "Recuperación",
+    Clientes = "Clientes"
     // Loans = "Loans",
     // Notifications = "Notifications",
     // More = "More"
@@ -50,9 +51,22 @@ const TabNavigator = () => {
     {
       name: Tab.Solicitudes,
       icon: (
-        <svg.SafeDepositSvg
+        <svg.CreditCardSvg
           color={
             currentScreen === Tab.Solicitudes
+              ? theme.COLORS.linkColor
+              : theme.COLORS.bodyTextColor
+          }
+        />
+      )
+    },
+
+    {
+      name: Tab.Clientes,
+      icon: (
+        <svg.UserOneSvg
+          color={
+            currentScreen === Tab.Clientes
               ? theme.COLORS.linkColor
               : theme.COLORS.bodyTextColor
           }
@@ -129,6 +143,7 @@ const TabNavigator = () => {
       {currentScreen === Tab.Dashboard && <screens.Dashboard />}
       {currentScreen === Tab.Garantía && <screens.FotoGarantía />}
       {currentScreen === Tab.Solicitudes && <screens.Solicitudes />}
+      {currentScreen === Tab.Clientes && <screens.Clientes />}
       {currentScreen === Tab.RecuperaciónDiaria && (
         <screens.RecuperaciónDiaria />
       )}

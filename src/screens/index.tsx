@@ -1,6 +1,7 @@
 import CardDetails from "./CardDetails";
 import CardMenu from "./CardMenu";
 import ChangePinCode from "./ChangePinCode";
+import Clientes from "./Clientes";
 import Cobranza from "./Cobranza";
 import ConfirmationCode from "./ConfirmationCode";
 import CreateInvoice from "./CreateInvoice";
@@ -25,6 +26,7 @@ import Onboarding from "./Onboarding";
 import OpenMoneybox from "./OpenMoneybox";
 import OpenNewCard from "./OpenNewCard";
 import OpenNewLoan from "./OpenNewLoan";
+import Pago from "./Pago";
 import PaymentFailed from "./PaymentFailed";
 import PaymentSuccess from "./PaymentSuccess";
 import Payments from "./Payments";
@@ -87,7 +89,9 @@ const screens = {
   FotoGarantía,
   Garantía,
   RecuperaciónDiaria,
-  Cobranza
+  Cobranza,
+  Clientes,
+  Pago
 };
 
 export { screens };

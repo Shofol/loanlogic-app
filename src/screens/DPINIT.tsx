@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, Text, View } from "react-native";
+import { Button, Image, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useWizard } from "react-use-wizard";
 import { z } from "zod";
@@ -28,6 +28,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
   const [municipalities, setMunicipalities] = useState<any[]>([]);
   const [negMunicipalities, setNegMunicipalities] = useState<any[]>([]);
   const [isCreditInsAmntRqrd, setIsCreditInsAmntRqrd] = useState(false);
+  const [documents, setDocuments] = useState([]);
 
   const Schema = z
     .object({
@@ -80,6 +81,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
         newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
       });
       setValue("photos_of_the_dpi", newUploadedFiles as any);
+      setDocuments(newUploadedFiles as any);
     }
   };
 
@@ -242,6 +244,26 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
           {errors.photos_of_the_dpi && (
             <Text style={[InputStyles.error]}>Esto es requerido.</Text>
           )}
+        </View>
+
+        <View style={{ marginBottom: 20, flexDirection: "row", gap: 16 }}>
+          {documents.length > 0 &&
+            documents.map((item: any) => {
+              const isImage = item.type.includes("image");
+              return (
+                <Image
+                  key={item.name}
+                  style={{ width: 50, height: 50 }}
+                  source={
+                    isImage
+                      ? {
+                          uri: item.uri
+                        }
+                      : require("../assets/icons/file.png")
+                  }
+                />
+              );
+            })}
         </View>
 
         <View style={InputStyles.field}>

@@ -65,7 +65,7 @@ const DatosCrédito = ({
       (val) => val !== undefined
     );
     if (guaranteeItems.length > 0) {
-      values.guarantee_items = guaranteeItems;
+      values.gurrentee_items = guaranteeItems;
     } else {
       setError("gurrentee_items", {
         type: "custom",

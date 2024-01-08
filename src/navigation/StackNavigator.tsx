@@ -49,6 +49,16 @@ const StackNavigator: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="Clientes"
+        component={screens.Clientes}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Pago"
+        component={screens.Pago}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Profile"
         component={screens.Profile}
         options={{ headerShown: false }}
