@@ -5,22 +5,7 @@ import Toast from "react-native-toast-message";
 import api from "../api/api";
 import { theme } from "../constants";
 import { svg } from "../svg";
-
-const getStatusColor = (status: string) => {
-  if (status) {
-    if (status.includes("PENDING")) {
-      return theme.COLORS.warning;
-    } else if (status.includes("ACCEPTED")) {
-      return theme.COLORS.green;
-    } else if (status.includes("REFUSED")) {
-      return theme.COLORS.mainDark;
-    } else if (status.includes("ERROR")) {
-      return theme.COLORS.danger;
-    } else {
-      return theme.COLORS.info;
-    }
-  }
-};
+import StatusTag from "./StatusTag";
 
 const CoberturaItem: React.FC<any> = ({
   item,
@@ -72,24 +57,7 @@ const CoberturaItem: React.FC<any> = ({
         }}
       >
         <View>
-          <View
-            style={{
-              backgroundColor: getStatusColor(item.status),
-              paddingHorizontal: 10,
-              borderRadius: 5
-            }}
-          >
-            <Text
-              style={{
-                ...theme.FONTS.Mulish_400Regular,
-                fontSize: 10,
-                lineHeight: 12 * 1.6,
-                color: theme.COLORS.white
-              }}
-            >
-              {`${item.status}`}
-            </Text>
-          </View>
+          <StatusTag status={item.status} />
           <Text
             style={{
               ...theme.FONTS.H6,

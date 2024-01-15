@@ -44,6 +44,7 @@ import StatisticsChooseCard from "./StatisticsChooseCard";
 import TopUpPayment from "./TopUpPayment";
 import TransactionDetails from "./TransactionDetails";
 import TransactionHistory from "./TransactionHistory";
+import ValidaciónCrédito from "./ValidaciónCrédito";
 import VerifyYourPhoneNumber from "./VerifyYourPhoneNumber";
 
 const screens = {
@@ -93,7 +94,8 @@ const screens = {
   Cobranza,
   Clientes,
   Pago,
-  Cobertura
+  Cobertura,
+  ValidaciónCrédito
 };
 
 export { screens };
