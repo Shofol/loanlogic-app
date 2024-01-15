@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "react-native-ui-datepicker";
 import { InputStyles, theme } from "../constants/theme";
@@ -17,6 +17,12 @@ const CustomDatePicker = ({
 }) => {
   const [date, setDate] = useState<any>(defaultValue);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  useEffect(() => {
+    if (value) {
+      setDate(value);
+    }
+  }, [value]);
 
   return (
     <>

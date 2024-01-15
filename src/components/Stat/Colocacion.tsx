@@ -22,7 +22,6 @@ const Colocacion = () => {
               100
           )
         : 0;
-    console.log(progressValue);
     setQoutient(+response.data.data.totalRequestedAmount);
     setDivisor(+response.data.data.dailyGoal);
     setPieData([

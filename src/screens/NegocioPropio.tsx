@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
-import { useWizard } from "react-use-wizard";
 import { z } from "zod";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
@@ -13,12 +12,18 @@ import { InputStyles, Wizard } from "../constants/theme";
 
 const NegocioPropio = ({
   onSubmit,
-  occupation
+  occupation,
+  dpiData,
+  previousStep,
+  nextStep
 }: {
   onSubmit: (value: any) => void;
   occupation: string;
+  dpiData: any;
+  previousStep: (e?: number) => void;
+  nextStep: (e?: number) => void;
 }) => {
-  const { previousStep, nextStep, goToStep } = useWizard();
+  // const { previousStep, nextStep, goToStep } = useWizard();
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
@@ -26,9 +31,9 @@ const NegocioPropio = ({
     if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
       nextStep();
     } else if (occupation === "BUSINESS") {
-      goToStep(4);
+      nextStep(4);
     } else {
-      goToStep(5);
+      nextStep(5);
     }
   };
 
@@ -37,12 +42,22 @@ const NegocioPropio = ({
       business_name: z.string().min(1),
       start_date: z.string().min(1),
       nit5: z.string().min(1),
-      monthly_sales: z.number().min(1),
-      monthly_expenses5: z.number().min(1),
+      monthly_sales: z
+        .string()
+        .min(1)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      monthly_expenses5: z
+        .string()
+        .min(1)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
       business_address: z.string().min(1),
       business_municipality: z.string().min(1),
       business_department: z.string().min(1),
-      business_phone: z.number().min(1).max(8)
+      business_phone: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números")
     })
     .required();
 
@@ -53,15 +68,15 @@ const NegocioPropio = ({
   } = useForm({
     resolver: zodResolver(Schema),
     defaultValues: {
-      business_name: "",
-      start_date: "",
-      nit5: "",
-      monthly_sales: "",
-      monthly_expenses5: "",
-      business_address: "",
-      business_municipality: "",
-      business_department: "",
-      business_phone: ""
+      business_name: dpiData ? dpiData.business_name : "",
+      start_date: dpiData ? dpiData.start_date : "",
+      nit5: dpiData ? dpiData.nit5 : "",
+      monthly_sales: dpiData ? dpiData.monthly_sales : "",
+      monthly_expenses5: dpiData ? dpiData.monthly_expenses5 : "",
+      business_address: dpiData ? dpiData.business_address : "",
+      business_municipality: dpiData ? dpiData.business_municipality : "",
+      business_department: dpiData ? dpiData.business_department : "",
+      business_phone: dpiData ? dpiData.business_phone : ""
     }
   });
   const [municipalities, setMunicipalities] = useState<any[]>([]);
@@ -157,7 +172,11 @@ const NegocioPropio = ({
           />
         </View>
         {errors.monthly_sales && (
-          <Text style={InputStyles.error}>Esto es requerido.</Text>
+          <Text style={InputStyles.error}>
+            {errors.monthly_sales.type === "too_small"
+              ? "Esto es requerido"
+              : errors.monthly_sales.message?.toString()}
+          </Text>
         )}
       </View>
 
@@ -181,7 +200,11 @@ const NegocioPropio = ({
           />
         </View>
         {errors.monthly_expenses5 && (
-          <Text style={InputStyles.error}>Esto es requerido.</Text>
+          <Text style={InputStyles.error}>
+            {errors.monthly_expenses5.type === "too_small"
+              ? "Esto es requerido"
+              : errors.monthly_expenses5.message?.toString()}
+          </Text>
         )}
       </View>
 
@@ -270,7 +293,7 @@ const NegocioPropio = ({
           <Text style={InputStyles.error}>
             {errors.business_phone.type === "too_small"
               ? "Esto es requerido"
-              : errors.business_phone.message}
+              : errors.business_phone.message?.toString()}
           </Text>
         )}
       </View>
@@ -287,7 +310,7 @@ const NegocioPropio = ({
           title="Anterior"
           onPress={() => {
             if (occupation === "BUSINESS") {
-              goToStep(2);
+              previousStep(2);
             } else {
               previousStep();
             }

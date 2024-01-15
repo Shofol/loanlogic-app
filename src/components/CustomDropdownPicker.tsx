@@ -23,6 +23,7 @@ const CustomDropdownPicker = ({
       setOpen={setOpen}
       setValue={() => {}}
       listMode={items.length > 5 ? "MODAL" : "SCROLLVIEW"}
+      onChangeValue={(e) => onSelectItem({ value: e })}
       onSelectItem={onSelectItem}
       dropDownDirection="TOP"
     />

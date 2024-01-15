@@ -24,7 +24,7 @@ api.interceptors.request.use(async function (config) {
   const tokenStr = await SecureStore.getItemAsync("secure_token");
 
   config.headers["Authorization"] = `Bearer ${tokenStr}`;
-  config.headers["Content-Type"] = "multipart/form-data";
+  // config.headers["Content-Type"] = "multipart/form-data";
   return config;
 });
 

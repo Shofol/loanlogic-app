@@ -22,7 +22,6 @@ const MoraStat = () => {
               100
           )
         : 0;
-    console.log(progressValue);
     setQoutient(+response.data.data.totalDefault);
     setDivisor(+response.data.data.totalAmount);
     setPieData([

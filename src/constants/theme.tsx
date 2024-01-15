@@ -11,8 +11,9 @@ const COLORS = {
   grey1: "#D8D9DB",
   linkColor: "#26C770",
   transparent: "transparent",
-  warning: "#ff7207",
-  danger: "#dc3444"
+  warning: "#ff9e43",
+  danger: "#dc3444",
+  info: "#017bfe"
 };
 
 const FONTS = {

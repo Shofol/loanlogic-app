@@ -1,12 +1,13 @@
 import "dayjs/locale/es";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useWizard } from "react-use-wizard";
 import { z } from "zod";
+import api from "../api/api";
 import CustomCheckbox from "../components/CustomCheckbox";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
@@ -20,12 +21,61 @@ import {
 } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
 
-const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
-  const { previousStep, nextStep } = useWizard();
+const DPINIT = ({
+  onSubmit,
+  onLoadDPIData,
+  previousStep,
+  nextStep
+}: {
+  onSubmit: (value: any) => void;
+  onLoadDPIData: (value: any) => void;
+  previousStep: (e?: number) => void;
+  nextStep: (e?: number) => void;
+}) => {
+  // const { previousStep, nextStep } = useWizard();
   const [isNITNotRequired, setIsNITNotRequired] = useState(false);
   const [municipalities, setMunicipalities] = useState<any[]>([]);
   const [negMunicipalities, setNegMunicipalities] = useState<any[]>([]);
   const [isCreditInsAmntRqrd, setIsCreditInsAmntRqrd] = useState(false);
+  const [data, setData] = useState<any>();
+
+  const fetchDPIData = async (dpi_number: any) => {
+    try {
+      const response = await api.get(`/client/dpi/${dpi_number}`);
+      const tempData = response.data.data;
+      setData(tempData);
+      onLoadDPIData(response.data.data);
+    } catch (error) {
+      reset();
+      console.log(error);
+    }
+  };
+
+  const mapInitialValues = () => {
+    const initialValues = {
+      dpi_number: data ? data.dpi_number : "",
+      place_of_birth_city: data ? data.place_of_birth_city : "",
+      place_of_birth_region: data ? data.place_of_birth_region : "",
+      neighborhood_city: data ? data.neighborhood_city : "",
+      neighborhood_region: data ? data.neighborhood_region : "",
+      expiration_date: data ? data.expiration_date : null,
+      photos_of_the_dpi: [],
+      nit: data ? data.nit : "",
+      is_have_credit: "",
+      credit_institutions_and_amount: ""
+    };
+    return initialValues;
+  };
+
+  const [formValues, setFormValues] = useState(mapInitialValues());
+
+  useEffect(() => {
+    if (data) {
+      const values = mapInitialValues();
+      setFormValues(values);
+      reset(values);
+    }
+  }, [data]);
 
   const Schema = z
     .object({
@@ -46,23 +96,14 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
 
   const {
     setValue,
+    getValues,
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
-    defaultValues: {
-      dpi_number: "",
-      place_of_birth_city: null,
-      place_of_birth_region: null,
-      neighborhood_region: null,
-      neighborhood_city: null,
-      expiration_date: null,
-      nit: "",
-      credit_institutions_and_amount: "",
-      is_have_credit: null,
-      photos_of_the_dpi: []
-    }
+    defaultValues: formValues
   });
 
   const onDocumentUpload = (newUploadedFiles: any) => {
@@ -90,7 +131,10 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomInput
-                  onChange={onChange}
+                  onChange={(value: any) => {
+                    fetchDPIData(value);
+                    onChange(value);
+                  }}
                   onBlur={onBlur}
                   value={value}
                   placeholder="Número DPI"
@@ -161,7 +205,7 @@ const DPINIT = ({ onSubmit }: { onSubmit: (value: any) => void }) => {
             render={({ field: { onChange, onBlur, value } }) => (
               <CustomDatePicker
                 defaultValue={null}
-                value={value}
+                value={dayjs(value)}
                 onChange={onChange}
                 defaultText="Seleccionar fecha de vencimiento"
               />

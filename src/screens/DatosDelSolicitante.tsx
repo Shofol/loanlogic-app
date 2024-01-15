@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
-import { useWizard } from "react-use-wizard";
 import { z } from "zod";
 import CustomCheckbox from "../components/CustomCheckbox";
 import CustomDatePicker from "../components/CustomDatePicker";
@@ -21,21 +20,27 @@ import { InputStyles, Wizard } from "../constants/theme";
 
 const DatosDelSolicitante = ({
   onSubmit,
-  occupation
+  dpiData,
+  occupation,
+  previousStep,
+  nextStep
 }: {
   onSubmit: (value: any) => void;
+  dpiData: any;
   occupation: string | null;
+  previousStep: (e?: number) => void;
+  nextStep: (e?: number) => void;
 }) => {
-  const { handleStep, previousStep, nextStep, goToStep } = useWizard();
+  // const { handleStep, previousStep, nextStep, goToStep } = useWizard();
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
     if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
       nextStep();
     } else if (occupation === "BUSINESS") {
-      goToStep(4);
+      nextStep(4);
     } else {
-      goToStep(5);
+      nextStep(5);
     }
   };
 
@@ -49,8 +54,16 @@ const DatosDelSolicitante = ({
       second_surname: z.string().min(1),
       name: z.string().min(1),
       second_name: !isSecondNameNotRequired ? z.string().min(1) : z.any(),
-      phone_number: z.number().min(1).max(8),
-      landline_phone_number: z.number().min(1).max(8),
+      phone_number: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      landline_phone_number: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
       email: z.string().min(1).email(),
       residence_address: z.string().min(1),
       residence_municipality: z.string().min(1),
@@ -72,23 +85,24 @@ const DatosDelSolicitante = ({
     resolver: zodResolver(Schema),
     defaultValues: {
       photos_of_bills: [],
-      surname: "",
-      second_surname: "",
-      name: "",
-      second_name: "",
-      phone_number: "",
-      landline_phone_number: "",
-      email: "",
-      residence_address: "",
-      residence_municipality: "",
-      department_of_residence: "",
-      birth_date: null,
-      profession: "",
-      civil_status: "",
-      sex: "",
-      nationality: ""
+      surname: dpiData ? dpiData.surname : "",
+      second_surname: dpiData ? dpiData.second_surname : "",
+      name: dpiData ? dpiData.name : "",
+      second_name: dpiData ? dpiData.second_name : "",
+      phone_number: dpiData ? dpiData.phone_number : "",
+      landline_phone_number: dpiData ? dpiData.landline_phone_number : "",
+      email: dpiData ? dpiData.email : "",
+      residence_address: dpiData ? dpiData.residence_address : "",
+      residence_municipality: dpiData ? dpiData.residence_municipality : "",
+      department_of_residence: dpiData ? dpiData.department_of_residence : "",
+      birth_date: dpiData ? dpiData.birth_date : null,
+      profession: dpiData ? dpiData.profession : "",
+      civil_status: dpiData ? dpiData.civil_status : "",
+      sex: dpiData ? dpiData.sex : "",
+      nationality: dpiData ? dpiData.nationality : ""
     }
   });
+  // 1817283672722818263563113434
 
   const onDocumentUpload = async (newUploadedFiles: any) => {
     setValue("photos_of_bills", newUploadedFiles);
@@ -96,7 +110,9 @@ const DatosDelSolicitante = ({
 
   return (
     <View>
-      <Text style={Wizard.header}>Datos del Solicitante</Text>
+      <Text style={Wizard.header}>
+        Datos del Solicitante {JSON.stringify(errors)}
+      </Text>
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>
@@ -218,7 +234,11 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.phone_number && (
-          <Text style={InputStyles.error}>{errors.phone_number.message}</Text>
+          <Text style={InputStyles.error}>
+            {errors.phone_number.type === "too_small"
+              ? "Esto es requerido"
+              : errors.phone_number.message?.toString()}
+          </Text>
         )}
       </View>
 
@@ -240,7 +260,11 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.landline_phone_number && (
-          <Text style={InputStyles.error}>Esto es requerido.</Text>
+          <Text style={InputStyles.error}>
+            {errors.landline_phone_number.type === "too_small"
+              ? "Esto es requerido"
+              : errors.landline_phone_number.message?.toString()}
+          </Text>
         )}
       </View>
 
@@ -261,7 +285,11 @@ const DatosDelSolicitante = ({
           />
         </View>
         {errors.email && (
-          <Text style={InputStyles.error}>{errors.email.message}</Text>
+          <Text style={InputStyles.error}>
+            {errors.email.type === "too_small"
+              ? "Esto es requerido"
+              : errors.email.message?.toString()}
+          </Text>
         )}
       </View>
 

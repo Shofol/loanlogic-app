@@ -17,7 +17,8 @@ const TabNavigator = () => {
     Solicitudes = "Solicitudes",
     Garantía = "Garantía",
     RecuperaciónDiaria = "Recuperación",
-    Clientes = "Clientes"
+    Clientes = "Clientes",
+    Cobertura = "Cobertura"
     // Loans = "Loans",
     // Notifications = "Notifications",
     // More = "More"
@@ -85,6 +86,18 @@ const TabNavigator = () => {
           }
         />
       )
+    },
+    {
+      name: Tab.Cobertura,
+      icon: (
+        <svg.WalletSvg
+          color={
+            currentScreen === Tab.Cobertura
+              ? theme.COLORS.linkColor
+              : theme.COLORS.bodyTextColor
+          }
+        />
+      )
     }
 
     // {
@@ -147,7 +160,7 @@ const TabNavigator = () => {
       {currentScreen === Tab.RecuperaciónDiaria && (
         <screens.RecuperaciónDiaria />
       )}
-      {/* {currentScreen === Tab.Loans && <screens.Loans />} */}
+      {currentScreen === Tab.Cobertura && <screens.Cobertura />}
       {/* {currentScreen === Tab.Notifications && <screens.Notification />} */}
       {/* {currentScreen === Tab.More && <screens.More />} */}
       <View

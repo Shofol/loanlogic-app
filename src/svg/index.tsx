@@ -1,67 +1,69 @@
-import GoBackSvg from "./GoBackSvg";
-import UserOneSvg from "./UserOneSvg";
+import AmazonSvg from "./AmazonSvg";
 import ArrowOneSvg from "./ArrowOneSvg";
-import MessageSvg from "./MessageSvg";
-import LogOutSvg from "./LogOutSvg";
-import LanguageSvg from "./LanguageSvg";
-import FaceIdSvg from "./FaceIdSvg";
-import EditPhotoSvg from "./EditPhotoSvg";
 import CalendarSvg from "./CalendarSvg";
-import FileTextSvg from "./FileTextSvg";
-import LogoSvg from "./LogoSvg";
 import CheckSvg from "./CheckSvg";
+import CreditCardSvg from "./CreditCardSvg";
+import EditPhotoSvg from "./EditPhotoSvg";
 import EyeOffSvg from "./EyeOffSvg";
+import FaceIdSvg from "./FaceIdSvg";
 import FacebookSvg from "./FacebookSvg";
-import TwitterSvg from "./TwitterSvg";
+import FileTextSvg from "./FileTextSvg";
+import GoBackSvg from "./GoBackSvg";
 import GoogleSvg from "./GoogleSvg";
+import InfoSvg from "./InfoSvg";
+import LanguageSvg from "./LanguageSvg";
+import LoanWalletSvg from "./LoanWalletSvg";
+import LogOutSvg from "./LogOutSvg";
+import LogoSvg from "./LogoSvg";
+import MessageSvg from "./MessageSvg";
+import MoreSvg from "./MoreSvg";
+import MoreVerticalSvg from "./MoreVerticalSvg";
+import NotificationSvg from "./NotificationSvg";
+import PiggyBankSvg from "./PiggyBankSvg";
+import QuestionCloseSvg from "./QuestionCloseSvg";
+import QuestionOpenSvg from "./QuestionOpenSvg";
 import ReportSvg from "./ReportSvg";
 import SafeDepositSvg from "./SafeDepositSvg";
-import WalletSvg from "./WalletSvg";
-import NotificationSvg from "./NotificationSvg";
-import MoreSvg from "./MoreSvg";
-import UserSvg from "./UserSvg";
-import CreditCardSvg from "./CreditCardSvg";
 import TransferSvg from "./TransferSvg";
-import AmazonSvg from "./AmazonSvg";
+import TwitterSvg from "./TwitterSvg";
 import TypeCardSvg from "./TypeCardSvg";
-import PiggyBankSvg from "./PiggyBankSvg";
-import InfoSvg from "./InfoSvg";
-import LoanWalletSvg from "./LoanWalletSvg";
-import QuestionOpenSvg from "./QuestionOpenSvg";
-import QuestionCloseSvg from "./QuestionCloseSvg";
+import UserOneSvg from "./UserOneSvg";
+import UserSvg from "./UserSvg";
+import WalletSvg from "./WalletSvg";
 
 const svg = {
-    GoBackSvg,
-    UserOneSvg,
-    ArrowOneSvg,
-    MessageSvg,
-    LogOutSvg,
-    LanguageSvg,
-    FaceIdSvg,
-    EditPhotoSvg,
-    CalendarSvg,
-    FileTextSvg,
-    LogoSvg,
-    CheckSvg,
-    EyeOffSvg,
-    FacebookSvg,
-    TwitterSvg,
-    GoogleSvg,
-    ReportSvg,
-    SafeDepositSvg,
-    WalletSvg,
-    NotificationSvg,
-    MoreSvg,
-    UserSvg,
-    CreditCardSvg,
-    TransferSvg,
-    AmazonSvg,
-    TypeCardSvg,
-    PiggyBankSvg,
-    InfoSvg,
-    LoanWalletSvg,
-    QuestionOpenSvg,
-    QuestionCloseSvg,
+  GoBackSvg,
+  UserOneSvg,
+  ArrowOneSvg,
+  MessageSvg,
+  LogOutSvg,
+  LanguageSvg,
+  FaceIdSvg,
+  EditPhotoSvg,
+  CalendarSvg,
+  FileTextSvg,
+  LogoSvg,
+  CheckSvg,
+  EyeOffSvg,
+  FacebookSvg,
+  TwitterSvg,
+  GoogleSvg,
+  ReportSvg,
+  SafeDepositSvg,
+  WalletSvg,
+  NotificationSvg,
+  MoreSvg,
+  UserSvg,
+  CreditCardSvg,
+  TransferSvg,
+  AmazonSvg,
+  TypeCardSvg,
+  PiggyBankSvg,
+  InfoSvg,
+  LoanWalletSvg,
+  QuestionOpenSvg,
+  QuestionCloseSvg,
+  MoreVerticalSvg
 };
 
 export { svg };

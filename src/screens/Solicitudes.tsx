@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import * as SecureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
-import { Wizard } from "react-use-wizard";
+// import { Wizard } from "react-use-wizard";
 import api from "../api/api";
 import { components } from "../components";
 import { theme } from "../constants";
@@ -19,6 +19,8 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
   const [valueToSubmit, setValueToSubmit] = useState({});
   const [occupation, setOccupation] = useState<string>("");
   const [isLastForm, setIsLastForm] = useState(false);
+  const [dpiData, setDpiData] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const handleSubmitForm = async () => {
     const form = new FormData();
@@ -58,12 +60,30 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
     }
   }, [valueToSubmit]);
 
+  const handlePreviousStep = (value?: number) => {
+    if (!value) {
+      setCurrentStep(currentStep - 1);
+    } else {
+      setCurrentStep(value);
+    }
+  };
+
+  const handleNextStep = (value?: number) => {
+    if (!value) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      setCurrentStep(value);
+    }
+  };
+
   const steps = [
     {
       id: "datos-crédito",
       title: "Datos crédito",
       content: (
         <DatosCrédito
+          previousStep={(e?: number) => handlePreviousStep(e)}
+          nextStep={(e?: number) => handleNextStep(e)}
           onOccupationSelect={(occupation) => {
             setOccupation(occupation);
           }}
@@ -78,6 +98,11 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "DPI/NIT",
       content: (
         <DPINIT
+          previousStep={(e?: number) => handlePreviousStep(e)}
+          nextStep={(e?: number) => handleNextStep(e)}
+          onLoadDPIData={(dpiData: any) => {
+            setDpiData(dpiData);
+          }}
           onSubmit={(value: any) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
           }}
@@ -89,7 +114,10 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "Datos del solicitante",
       content: (
         <DatosDelSolicitante
+          previousStep={(e?: number) => handlePreviousStep(e)}
+          nextStep={(e?: number) => handleNextStep(e)}
           occupation={occupation}
+          dpiData={dpiData}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
           }}
@@ -101,6 +129,9 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "Asalariado",
       content: (
         <Asalariado
+          previousStep={(e?: number) => handlePreviousStep(e)}
+          nextStep={(e?: number) => handleNextStep(e)}
+          dpiData={dpiData}
           occupation={occupation}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
@@ -113,6 +144,9 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "Negocio propio",
       content: (
         <NegocioPropio
+          previousStep={(e?: number) => handlePreviousStep(e)}
+          nextStep={(e?: number) => handleNextStep(e)}
+          dpiData={dpiData}
           occupation={occupation}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
@@ -125,6 +159,9 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "Referencias",
       content: (
         <Referencias
+          previousStep={(e?: number) => handlePreviousStep(e)}
+          // nextStep={(e?: number) => handleNextStep(e)}
+          dpiData={dpiData}
           occupation={occupation}
           onPrevious={() => {
             setIsLastForm(false);
@@ -156,11 +193,18 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
       >
         <View style={{ paddingTop: theme.SIZES.height * 0.05 }}>
-          <Wizard>
-            {steps.map((step) => {
-              return <View key={step?.id}>{step?.content}</View>;
-            })}
-          </Wizard>
+          {/* <Wizard> */}
+          {steps.map((step, index) => {
+            return (
+              <View
+                style={{ display: index === currentStep ? "flex" : "none" }}
+                key={step?.id}
+              >
+                {step?.content}
+              </View>
+            );
+          })}
+          {/* </Wizard> */}
         </View>
       </KeyboardAwareScrollView>
     );

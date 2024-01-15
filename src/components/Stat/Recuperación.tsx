@@ -21,7 +21,6 @@ const Recuperación = () => {
               100
           )
         : 0;
-    console.log(progressValue);
     setQoutient(+response.data.data.total_collected);
     setDivisor(+response.data.data.total);
     setPieData([

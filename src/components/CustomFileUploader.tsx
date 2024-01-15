@@ -1,15 +1,23 @@
 import * as DocumentPicker from "expo-document-picker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { theme } from "../constants";
 import { formatToFile } from "../utils/formatToFile";
 
 const CustomFileUploader = ({
+  uploadedDocs,
   onUpload
 }: {
+  uploadedDocs?: any[];
   onUpload: (files: any) => void;
 }) => {
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (uploadedDocs && uploadedDocs?.length > 0) {
+      setDocuments(uploadedDocs);
+    }
+  }, [uploadedDocs]);
 
   const pickDocument = async () => {
     let newUploadedFiles: any[] = [];

@@ -2,6 +2,7 @@ import CardDetails from "./CardDetails";
 import CardMenu from "./CardMenu";
 import ChangePinCode from "./ChangePinCode";
 import Clientes from "./Clientes";
+import Cobertura from "./Cobertura";
 import Cobranza from "./Cobranza";
 import ConfirmationCode from "./ConfirmationCode";
 import CreateInvoice from "./CreateInvoice";
@@ -91,7 +92,8 @@ const screens = {
   RecuperaciónDiaria,
   Cobranza,
   Clientes,
-  Pago
+  Pago,
+  Cobertura
 };
 
 export { screens };

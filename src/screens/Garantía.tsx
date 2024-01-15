@@ -70,8 +70,6 @@ const Garantía: React.FC = ({ route, navigation }: any) => {
   };
 
   const onSubmit = async (values: any) => {
-    // console.log(values);
-    // return;
     const form = new FormData();
 
     Object.keys(values).map((key) => {

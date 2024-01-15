@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
-import { useWizard } from "react-use-wizard";
 import { z } from "zod";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
@@ -11,13 +10,17 @@ import { InputStyles, Wizard } from "../constants/theme";
 const Referencias = ({
   onPrevious,
   onSubmit,
-  occupation
+  occupation,
+  dpiData,
+  previousStep
 }: {
   onPrevious: (value: any) => void;
   onSubmit: (value: any) => void;
   occupation: string;
+  dpiData: any;
+  previousStep: (e?: number) => void;
 }) => {
-  const { handleStep, previousStep, nextStep, goToStep } = useWizard();
+  // const { handleStep, previousStep, nextStep, goToStep } = useWizard();
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
@@ -27,18 +30,50 @@ const Referencias = ({
     .object({
       f_references_name_and_surname: z.string().min(1),
       f_references_name_and_surname_2: z.string().min(1),
-      f_references_work_phone: z.number().min(1).max(8),
-      f_references_work_phone_2: z.number().min(1).max(8),
-      f_references_cell_phone: z.number().min(1).max(8),
-      f_references_cell_phone_2: z.number().min(1).max(8),
+      f_references_work_phone: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      f_references_work_phone_2: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      f_references_cell_phone: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      f_references_cell_phone_2: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
       f_references_relationship: z.string().min(1),
       f_references_relationship_2: z.string().min(1),
       p_references_name_and_surname: z.string().min(1),
       p_references_name_and_surname_2: z.string().min(1),
-      p_references_work_phone: z.number().min(1).max(8),
-      p_references_work_phone_2: z.number().min(1).max(8),
-      p_references_cell_phone: z.number().min(1).max(8),
-      p_references_cell_phone_2: z.number().min(1).max(8),
+      p_references_work_phone: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      p_references_work_phone_2: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      p_references_cell_phone: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      p_references_cell_phone_2: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
       p_references_relationship: z.string().min(1),
       p_references_relationship_2: z.string().min(1)
     })
@@ -165,7 +200,17 @@ const Referencias = ({
               </View>
               {errors[
                 `f_references_work_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
+              ] && (
+                <Text style={InputStyles.error}>
+                  {errors[
+                    `f_references_work_phone${ref}` as keyof ReferenceFormType
+                  ]?.type === "too_small"
+                    ? "Esto es requerido"
+                    : errors[
+                        `f_references_work_phone${ref}` as keyof ReferenceFormType
+                      ]?.message?.toString()}
+                </Text>
+              )}
             </View>
 
             <View style={InputStyles.field}>
@@ -191,7 +236,17 @@ const Referencias = ({
               </View>
               {errors[
                 `f_references_cell_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
+              ] && (
+                <Text style={InputStyles.error}>
+                  {errors[
+                    `f_references_cell_phone${ref}` as keyof ReferenceFormType
+                  ]?.type === "too_small"
+                    ? "Esto es requerido"
+                    : errors[
+                        `f_references_cell_phone${ref}` as keyof ReferenceFormType
+                      ]?.message?.toString()}
+                </Text>
+              )}
             </View>
           </View>
         );
@@ -278,7 +333,17 @@ const Referencias = ({
               </View>
               {errors[
                 `p_references_work_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
+              ] && (
+                <Text style={InputStyles.error}>
+                  {errors[
+                    `p_references_work_phone${ref}` as keyof ReferenceFormType
+                  ]?.type === "too_small"
+                    ? "Esto es requerido"
+                    : errors[
+                        `p_references_work_phone${ref}` as keyof ReferenceFormType
+                      ]?.message?.toString()}
+                </Text>
+              )}
             </View>
 
             <View style={InputStyles.field}>
@@ -304,7 +369,17 @@ const Referencias = ({
               </View>
               {errors[
                 `p_references_cell_phone${ref}` as keyof ReferenceFormType
-              ] && <Text style={InputStyles.error}>Esto es requerido.</Text>}
+              ] && (
+                <Text style={InputStyles.error}>
+                  {errors[
+                    `p_references_cell_phone${ref}` as keyof ReferenceFormType
+                  ]?.type === "too_small"
+                    ? "Esto es requerido"
+                    : errors[
+                        `p_references_cell_phone${ref}` as keyof ReferenceFormType
+                      ]?.message?.toString()}
+                </Text>
+              )}
             </View>
           </View>
         );
@@ -322,9 +397,9 @@ const Referencias = ({
           title="Anterior"
           onPress={() => {
             if (occupation === "SALARIED") {
-              goToStep(3);
+              previousStep(3);
             } else if (occupation === "NOINCOME") {
-              goToStep(2);
+              previousStep(2);
             } else {
               previousStep();
             }

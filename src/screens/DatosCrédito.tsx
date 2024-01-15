@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useWizard } from "react-use-wizard";
+// import { useWizard } from "react-use-wizard";
 import { z } from "zod";
 import api from "../api/api";
 import CustomCheckbox from "../components/CustomCheckbox";
@@ -16,12 +16,16 @@ import { InputStyles, theme } from "../constants/theme";
 
 const DatosCrédito = ({
   onSubmit,
-  onOccupationSelect
+  onOccupationSelect,
+  previousStep,
+  nextStep
 }: {
   onSubmit: (value: any) => void;
   onOccupationSelect: (value: string) => void;
+  previousStep: (e?: number) => void;
+  nextStep: (e?: number) => void;
 }) => {
-  const { previousStep, nextStep } = useWizard();
+  // const { previousStep, nextStep } = useWizard();
   const [products, setProducts] = useState<any[]>([]);
 
   const Schema = z

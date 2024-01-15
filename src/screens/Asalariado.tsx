@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
-import { useWizard } from "react-use-wizard";
 import { z } from "zod";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
@@ -13,26 +12,42 @@ import { InputStyles, Wizard } from "../constants/theme";
 
 const Asalariado = ({
   occupation,
-  onSubmit
+  onSubmit,
+  dpiData,
+  previousStep,
+  nextStep
 }: {
   occupation: string;
   onSubmit: (value: any) => void;
+  dpiData: any;
+  previousStep: (e?: number) => void;
+  nextStep: (e?: number) => void;
 }) => {
-  const { handleStep, previousStep, nextStep, goToStep } = useWizard();
+  // const { handleStep, previousStep, nextStep, goToStep } = useWizard();
 
   const Schema = z
     .object({
       company_name: z.string().min(1),
       entry_date: z.string().min(1),
       position: z.string().min(1),
-      monthly_income: z.number().min(1),
-      monthly_expenses: z.number().min(1),
+      monthly_income: z
+        .string()
+        .min(1)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
+      monthly_expenses: z
+        .string()
+        .min(1)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
       date_and_number_of_income: z.string().min(1),
       immediate_boss_name: z.string().min(1),
       work_address: z.string().min(1),
       work_department: z.string().min(1),
       work_municipality: z.string().min(1),
-      work_phone: z.number().min(1).max(8)
+      work_phone: z
+        .string()
+        .min(1)
+        .max(8)
+        .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números")
     })
     .required();
 
@@ -43,17 +58,19 @@ const Asalariado = ({
   } = useForm({
     resolver: zodResolver(Schema),
     defaultValues: {
-      company_name: "",
-      entry_date: "",
-      position: "",
-      monthly_income: "",
-      monthly_expenses: "",
-      date_and_number_of_income: "",
-      immediate_boss_name: "",
-      work_address: "",
-      work_department: "",
-      work_municipality: "",
-      work_phone: ""
+      company_name: dpiData ? dpiData.company_name : "",
+      entry_date: dpiData ? dpiData.entry_date : "",
+      position: dpiData ? dpiData.position : "",
+      monthly_income: dpiData ? dpiData.monthly_income : "",
+      monthly_expenses: dpiData ? dpiData.monthly_expenses : "",
+      date_and_number_of_income: dpiData
+        ? dpiData.date_and_number_of_income
+        : "",
+      immediate_boss_name: dpiData ? dpiData.immediate_boss_name : "",
+      work_address: dpiData ? dpiData.work_address : "",
+      work_department: dpiData ? dpiData.work_department : "",
+      work_municipality: dpiData ? dpiData.work_municipality : "",
+      work_phone: dpiData ? dpiData.work_phone : ""
     }
   });
   const [municipalities, setMunicipalities] = useState<any[]>([]);
@@ -64,7 +81,7 @@ const Asalariado = ({
     if (occupation === "BUSINESS" || occupation === "SALARIEDANDBUSINESS") {
       nextStep();
     } else {
-      goToStep(5);
+      nextStep(5);
     }
   };
 
@@ -159,7 +176,11 @@ const Asalariado = ({
           />
         </View>
         {errors.monthly_income && (
-          <Text style={InputStyles.error}>Esto es requerido.</Text>
+          <Text style={InputStyles.error}>
+            {errors.monthly_income.type === "too_small"
+              ? "Esto es requerido"
+              : errors.monthly_income.message?.toString()}
+          </Text>
         )}
       </View>
 
@@ -183,7 +204,11 @@ const Asalariado = ({
           />
         </View>
         {errors.monthly_expenses && (
-          <Text style={InputStyles.error}>Esto es requerido.</Text>
+          <Text style={InputStyles.error}>
+            {errors.monthly_expenses.type === "too_small"
+              ? "Esto es requerido"
+              : errors.monthly_expenses.message?.toString()}
+          </Text>
         )}
       </View>
 
@@ -322,7 +347,7 @@ const Asalariado = ({
           <Text style={InputStyles.error}>
             {errors.work_phone.type === "too_small"
               ? "Esto es requerido"
-              : errors.work_phone.message}
+              : errors.work_phone.message?.toString()}
           </Text>
         )}
       </View>
