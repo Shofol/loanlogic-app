@@ -54,6 +54,16 @@ const StackNavigator: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="ValidaciónCrédito"
+        component={screens.ValidaciónCrédito}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ValidarCréditoForm"
+        component={screens.ValidationForm}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Pago"
         component={screens.Pago}
         options={{ headerShown: false }}

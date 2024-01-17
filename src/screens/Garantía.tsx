@@ -101,7 +101,6 @@ const Garantía: React.FC = ({ route, navigation }: any) => {
     <>
       {renderHeader()}
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
-        {/* {renderContent()} */}
         <ScrollView style={{ padding: 20 }}>
           <View style={InputStyles.field}>
             <Text style={InputStyles.label}>Tipo garantía*</Text>

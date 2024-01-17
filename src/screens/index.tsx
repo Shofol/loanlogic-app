@@ -45,6 +45,7 @@ import TopUpPayment from "./TopUpPayment";
 import TransactionDetails from "./TransactionDetails";
 import TransactionHistory from "./TransactionHistory";
 import ValidaciónCrédito from "./ValidaciónCrédito";
+import ValidationForm from "./ValidationForm";
 import VerifyYourPhoneNumber from "./VerifyYourPhoneNumber";
 
 const screens = {
@@ -95,7 +96,8 @@ const screens = {
   Clientes,
   Pago,
   Cobertura,
-  ValidaciónCrédito
+  ValidaciónCrédito,
+  ValidationForm
 };
 
 export { screens };

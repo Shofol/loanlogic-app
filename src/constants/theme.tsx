@@ -150,6 +150,15 @@ export const DataStyle = StyleSheet.create({
   }
 });
 
+export const ChecboxGroupStyle = StyleSheet.create({
+  group: {
+    flexDirection: "row",
+    gap: 20,
+    marginTop: 10,
+    flexWrap: "wrap"
+  }
+});
+
 const SIZES = {
   width,
   height

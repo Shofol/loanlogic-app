@@ -78,7 +78,7 @@ const ValidaciónCrédito: React.FC = () => {
   };
 
   const handleNavigation = (id: number) => {
-    navigation.navigate("Garantía", { id: id });
+    navigation.navigate("ValidarCréditoForm", { id: id });
   };
 
   const renderItem = ({ item }: { item: any }) => {
