@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { components } from "../components";
 import Colocacion from "../components/Stat/Colocacion";
 import DesgloseRecuperación from "../components/Stat/DesgloseRecuperación";
+import MoraPorAgente from "../components/Stat/MoraPorAgente";
 import MoraStat from "../components/Stat/MoraStat";
 import Recuperación from "../components/Stat/Recuperación";
 import { theme } from "../constants";
@@ -27,6 +28,7 @@ const Dashboard = () => {
           <Colocacion />
           <Recuperación />
           <DesgloseRecuperación />
+          <MoraPorAgente />
         </ScrollView>
       </View>
     );

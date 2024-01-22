@@ -71,7 +71,7 @@ const SignIn: React.FC = ({ navigation }: any) => {
   };
 
   const renderHeader = () => {
-    return <components.Header title="Sign in" goBack={true} />;
+    return <components.Header title="Sign in" goBack={false} />;
   };
 
   const renderContent = () => {

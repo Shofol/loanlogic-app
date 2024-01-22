@@ -13,7 +13,8 @@ const COLORS = {
   transparent: "transparent",
   warning: "#ff9e43",
   danger: "#dc3444",
-  info: "#017bfe"
+  info: "#017bfe",
+  sage: "#E9F8EE"
 };
 
 const FONTS = {
