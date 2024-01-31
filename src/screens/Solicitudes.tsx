@@ -10,7 +10,7 @@ import { components } from "../components";
 import { theme } from "../constants";
 import Asalariado from "./Asalariado";
 import DPINIT from "./DPINIT";
-import DatosCrédito from "./DatosCrédito";
+import DatosCredito from "./DatosCredito";
 import DatosDelSolicitante from "./DatosDelSolicitante";
 import NegocioPropio from "./NegocioPropio";
 import Referencias from "./Referencias";
@@ -81,7 +81,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       id: "datos-crédito",
       title: "Datos crédito",
       content: (
-        <DatosCrédito
+        <DatosCredito
           previousStep={(e?: number) => handlePreviousStep(e)}
           nextStep={(e?: number) => handleNextStep(e)}
           onOccupationSelect={(occupation) => {

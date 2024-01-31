@@ -35,12 +35,12 @@ const StackNavigator: React.FC = () => {
       />
       <Stack.Screen
         name="FotoGarantía"
-        component={screens.FotoGarantía}
+        component={screens.FotoGarantia}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Garantía"
-        component={screens.Garantía}
+        component={screens.Garantia}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -55,7 +55,7 @@ const StackNavigator: React.FC = () => {
       />
       <Stack.Screen
         name="ValidaciónCrédito"
-        component={screens.ValidaciónCrédito}
+        component={screens.ValidacionCredito}
         options={{ headerShown: false }}
       />
       <Stack.Screen

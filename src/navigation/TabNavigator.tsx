@@ -15,11 +15,11 @@ const TabNavigator = () => {
   enum Tab {
     Dashboard = "Dashboard",
     Solicitudes = "Solicitudes",
-    Garantía = "Garantía",
-    RecuperaciónDiaria = "Recuperación",
+    Garantia = "Garantía",
+    RecuperacionDiaria = "Recuperación",
     Clientes = "Clientes",
     Cobertura = "Cobertura",
-    ValidaciónCrédito = "Validación Crédito"
+    ValidacionCredito = "Validación Crédito"
     // Loans = "Loans",
     // Notifications = "Notifications",
     // More = "More"
@@ -39,11 +39,11 @@ const TabNavigator = () => {
       )
     },
     {
-      name: Tab.Garantía,
+      name: Tab.Garantia,
       icon: (
         <svg.WalletSvg
           color={
-            currentScreen === Tab.Garantía
+            currentScreen === Tab.Garantia
               ? theme.COLORS.linkColor
               : theme.COLORS.bodyTextColor
           }
@@ -77,11 +77,11 @@ const TabNavigator = () => {
     },
 
     {
-      name: Tab.RecuperaciónDiaria,
+      name: Tab.RecuperacionDiaria,
       icon: (
         <svg.SafeDepositSvg
           color={
-            currentScreen === Tab.RecuperaciónDiaria
+            currentScreen === Tab.RecuperacionDiaria
               ? theme.COLORS.linkColor
               : theme.COLORS.bodyTextColor
           }
@@ -101,81 +101,30 @@ const TabNavigator = () => {
       )
     },
     {
-      name: Tab.ValidaciónCrédito,
+      name: Tab.ValidacionCredito,
       icon: (
         <svg.WalletSvg
           color={
-            currentScreen === Tab.ValidaciónCrédito
+            currentScreen === Tab.ValidacionCredito
               ? theme.COLORS.linkColor
               : theme.COLORS.bodyTextColor
           }
         />
       )
     }
-
-    // {
-    //   name: Tab.Loans,
-    //   icon: (
-    //     <svg.WalletSvg
-    //       color={
-    //         currentScreen === Tab.Loans
-    //           ? theme.COLORS.linkColor
-    //           : theme.COLORS.bodyTextColor
-    //       }
-    //     />
-    //   )
-    // },
-    // {
-    //   name: Tab.Notifications,
-    //   icon: (
-    //     <View>
-    //       <svg.NotificationSvg
-    //         color={
-    //           currentScreen === Tab.Notifications
-    //             ? theme.COLORS.linkColor
-    //             : theme.COLORS.bodyTextColor
-    //         }
-    //       />
-    //       <View
-    //         style={{
-    //           width: 8,
-    //           height: 8,
-    //           borderRadius: 4,
-    //           backgroundColor: theme.COLORS.linkColor,
-    //           position: "absolute",
-    //           right: 0,
-    //           top: -1
-    //         }}
-    //       />
-    //     </View>
-    //   )
-    // },
-    // {
-    //   name: Tab.More,
-    //   icon: (
-    //     <svg.MoreSvg
-    //       color={
-    //         currentScreen === Tab.More
-    //           ? theme.COLORS.linkColor
-    //           : theme.COLORS.bodyTextColor
-    //       }
-    //     />
-    //   )
-    // }
   ];
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
       {currentScreen === Tab.Dashboard && <screens.Dashboard />}
-      {currentScreen === Tab.Garantía && <screens.FotoGarantía />}
+      {currentScreen === Tab.Garantia && <screens.FotoGarantia />}
       {currentScreen === Tab.Solicitudes && <screens.Solicitudes />}
       {currentScreen === Tab.Clientes && <screens.Clientes />}
-      {currentScreen === Tab.RecuperaciónDiaria && (
-        <screens.RecuperaciónDiaria />
+      {currentScreen === Tab.RecuperacionDiaria && (
+        <screens.RecuperacionDiaria />
       )}
       {currentScreen === Tab.Cobertura && <screens.Cobertura />}
-      {currentScreen === Tab.ValidaciónCrédito && <screens.ValidaciónCrédito />}
-      {/* {currentScreen === Tab.More && <screens.More />} */}
+      {currentScreen === Tab.ValidacionCredito && <screens.ValidacionCredito />}
       <View
         style={{
           width: "100%",

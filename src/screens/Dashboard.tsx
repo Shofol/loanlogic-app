@@ -3,10 +3,10 @@ import { View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { components } from "../components";
 import Colocacion from "../components/Stat/Colocacion";
-import DesgloseRecuperación from "../components/Stat/DesgloseRecuperación";
+import DesgloseRecuperacion from "../components/Stat/DesgloseRecuperacion";
 import MoraPorAgente from "../components/Stat/MoraPorAgente";
 import MoraStat from "../components/Stat/MoraStat";
-import Recuperación from "../components/Stat/Recuperación";
+import Recuperacion from "../components/Stat/Recuperacion";
 import { theme } from "../constants";
 
 const Dashboard = () => {
@@ -26,8 +26,8 @@ const Dashboard = () => {
         <ScrollView>
           <MoraStat />
           <Colocacion />
-          <Recuperación />
-          <DesgloseRecuperación />
+          <Recuperacion />
+          <DesgloseRecuperacion />
           <MoraPorAgente />
         </ScrollView>
       </View>

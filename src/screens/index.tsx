@@ -13,9 +13,9 @@ import ExchangeRates from "./ExchangeRates";
 import FAQ from "./FAQ";
 import ForgotPassword from "./ForgotPassword";
 import ForgotPasswordSentEmail from "./ForgotPasswordSentEmail";
-import FotoGarantía from "./FotoGarantía";
+import FotoGarantia from "./FotoGarantia";
 import FundTransfer from "./FundTransfer";
-import Garantía from "./Garantía";
+import Garantia from "./Garantia";
 import IbanPayment from "./IbanPayment";
 import InvoiceSent from "./InvoiceSent";
 import Loans from "./Loans";
@@ -33,7 +33,7 @@ import PaymentSuccess from "./PaymentSuccess";
 import Payments from "./Payments";
 import PrivacyPolicy from "./PrivacyPolicy";
 import Profile from "./Profile";
-import RecuperaciónDiaria from "./RecuperaciónDiaria";
+import RecuperacionDiaria from "./RecuperacionDiaria";
 import SignIn from "./SignIn";
 import SignInCode from "./SignInCode";
 import SignUp from "./SignUp";
@@ -44,7 +44,7 @@ import StatisticsChooseCard from "./StatisticsChooseCard";
 import TopUpPayment from "./TopUpPayment";
 import TransactionDetails from "./TransactionDetails";
 import TransactionHistory from "./TransactionHistory";
-import ValidaciónCrédito from "./ValidaciónCrédito";
+import ValidacionCredito from "./ValidacionCredito";
 import ValidationForm from "./ValidationForm";
 import VerifyYourPhoneNumber from "./VerifyYourPhoneNumber";
 
@@ -89,14 +89,14 @@ const screens = {
   PaymentSuccess,
   PaymentFailed,
   Solicitudes,
-  FotoGarantía,
-  Garantía,
-  RecuperaciónDiaria,
+  FotoGarantia,
+  Garantia,
+  RecuperacionDiaria,
   Cobranza,
   Clientes,
   Pago,
   Cobertura,
-  ValidaciónCrédito,
+  ValidacionCredito,
   ValidationForm
 };
 

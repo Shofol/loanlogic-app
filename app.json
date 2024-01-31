@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "gestonia",
+    "slug": "gestonia",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.shofol.app"
+      "bundleIdentifier": "com.shofol.gestonia"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +31,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "0ca48313-4a51-4e96-bf82-8eda2c4f4dfa"
+        "projectId": "7f93bd95-01da-4b85-9711-2e33e3ae44e1"
       }
     }
   }
