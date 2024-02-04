@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setScreen } from "../store/tabSlice";
 
+import * as SecureStore from "expo-secure-store";
 import { theme } from "../constants";
 import { screens } from "../screens";
 import { svg } from "../svg";
@@ -19,13 +20,9 @@ const TabNavigator = () => {
     RecuperacionDiaria = "Recuperación",
     Clientes = "Clientes",
     Cobertura = "Cobertura",
-    ValidacionCredito = "Validación Crédito"
-    // Loans = "Loans",
-    // Notifications = "Notifications",
-    // More = "More"
+    ValidacionCredito = "Validación"
   }
-
-  const tabs = [
+  let initalTabs = [
     {
       name: Tab.Dashboard,
       icon: (
@@ -62,7 +59,6 @@ const TabNavigator = () => {
         />
       )
     },
-
     {
       name: Tab.Clientes,
       icon: (
@@ -75,7 +71,6 @@ const TabNavigator = () => {
         />
       )
     },
-
     {
       name: Tab.RecuperacionDiaria,
       icon: (
@@ -91,7 +86,7 @@ const TabNavigator = () => {
     {
       name: Tab.Cobertura,
       icon: (
-        <svg.WalletSvg
+        <svg.PiggyBankSvg
           color={
             currentScreen === Tab.Cobertura
               ? theme.COLORS.linkColor
@@ -103,7 +98,7 @@ const TabNavigator = () => {
     {
       name: Tab.ValidacionCredito,
       icon: (
-        <svg.WalletSvg
+        <svg.TypeCardSvg
           color={
             currentScreen === Tab.ValidacionCredito
               ? theme.COLORS.linkColor
@@ -113,6 +108,23 @@ const TabNavigator = () => {
       )
     }
   ];
+  const [tabs, setTabs] = useState<any[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      let user = JSON.parse((await SecureStore.getItemAsync("user")) as string);
+      if (user?.role === "AGENT") {
+        setTabs(
+          initalTabs.filter(
+            (tab) =>
+              tab.name !== Tab.ValidacionCredito && tab.name !== Tab.Cobertura
+          )
+        );
+      } else {
+        setTabs(initalTabs);
+      }
+    })();
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
@@ -138,8 +150,8 @@ const TabNavigator = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            paddingHorizontal: 22,
-            paddingBottom: 28,
+            paddingHorizontal: 10,
+            paddingBottom: 15,
             paddingTop: 15,
             backgroundColor: theme.COLORS.white,
             borderTopLeftRadius: 10,
@@ -151,11 +163,16 @@ const TabNavigator = () => {
               <TouchableOpacity
                 key={index}
                 onPress={() => dispatch(setScreen(item.name))}
+                style={{
+                  flexDirection: "column",
+                  justifyContent: "space-between"
+                }}
               >
                 <View
                   style={{
                     alignSelf: "center",
-                    marginBottom: 6
+                    marginBottom: 6,
+                    height: 20
                   }}
                 >
                   {item.icon}
@@ -164,7 +181,7 @@ const TabNavigator = () => {
                   style={{
                     textAlign: "center",
                     ...theme.FONTS.Mulish_600SemiBold,
-                    fontSize: 10,
+                    fontSize: 8,
                     color:
                       item.name === currentScreen
                         ? theme.COLORS.linkColor

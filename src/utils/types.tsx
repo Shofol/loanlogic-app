@@ -216,3 +216,26 @@ export interface Credit {
   createdAt: string;
   updatedAt: string;
 }
+
+export type Token = {
+  exp: number;
+  iat: number;
+  user: User;
+};
+
+export type User = {
+  agency: string[];
+  category: string;
+  createdAt: string;
+  date_of_birth: string;
+  email: string;
+  family_name: string;
+  id: number;
+  is_active: boolean;
+  name: string;
+  password: string;
+  phone: string;
+  role: string;
+  start_date: string;
+  updatedAt: string;
+};

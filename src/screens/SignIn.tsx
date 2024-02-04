@@ -4,7 +4,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import axios from "axios";
+import "core-js/stable/atob";
 import * as SecureStore from "expo-secure-store";
+import { jwtDecode } from "jwt-decode";
 import { Controller, useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { baseURL } from "../api/config";
@@ -12,6 +14,7 @@ import { components } from "../components";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import { InputStyles } from "../constants/theme";
+import { Token } from "../utils/types";
 
 const SignIn: React.FC = ({ navigation }: any) => {
   const [rememberMe, setRememberMe] = useState(false);
@@ -29,13 +32,19 @@ const SignIn: React.FC = ({ navigation }: any) => {
   });
 
   useEffect(() => {
-    checkToken();
+    // checkToken();
   }, []);
 
   const checkToken = async () => {
     const tokenStr = await SecureStore.getItemAsync("secure_token");
     if (tokenStr) {
-      navigation.navigate("TabNavigator");
+      const decoded: Token = jwtDecode(tokenStr);
+      const currentDate = new Date();
+      if (decoded.exp * 1000 > currentDate.getTime()) {
+        navigation.navigate("TabNavigator");
+      } else {
+        console.log("Token expired.");
+      }
     }
   };
 

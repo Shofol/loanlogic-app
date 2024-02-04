@@ -83,9 +83,8 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
     });
 
     form.append("application_id", id);
-
     try {
-      const response = await api.post("guarantee", form);
+      const response = await api.post("guarantee", form, {});
       Toast.show({
         type: "success",
         text1: response.data.message,
@@ -205,7 +204,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
           <Text style={InputStyles.label}>Foto ambos lados del DPI*</Text>
           <View style={{ marginBottom: 20 }}>
             <CustomFileUploader
-              onSelect={() => {
+              onUpload={() => {
                 pickDocument();
               }}
             />

@@ -1,3 +1,6 @@
+if (__DEV__) {
+  import("./ReactotronConfig").then(() => console.log("Reactotron Configured"));
+}
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Text, View } from "react-native";

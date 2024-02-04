@@ -17,14 +17,19 @@ api.interceptors.request.use(async function (config) {
       type: "info",
       text1: "Loading..."
     });
+
+    if (config.data instanceof FormData) {
+      config.headers["Content-Type"] = "multipart/form-data";
+    }
   }
+
   if (config.method === "get" && config.data) {
     showNotFoundError = config.data.showNotFoundError;
   }
   const tokenStr = await SecureStore.getItemAsync("secure_token");
 
   config.headers["Authorization"] = `Bearer ${tokenStr}`;
-  // config.headers["Content-Type"] = "multipart/form-data";
+
   return config;
 });
 
