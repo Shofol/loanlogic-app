@@ -131,11 +131,11 @@ const DPINIT = ({
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <CustomInput
-                  onChange={(value: any) => {
+                  onChange={onChange}
+                  onBlur={() => {
                     fetchDPIData(value);
-                    onChange(value);
+                    onBlur();
                   }}
-                  onBlur={onBlur}
                   value={value}
                   placeholder="Número DPI"
                 />

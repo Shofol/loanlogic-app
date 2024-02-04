@@ -5,6 +5,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import * as SecureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
 // import { Wizard } from "react-use-wizard";
+import Geolocation from "@react-native-community/geolocation";
+import * as Location from "expo-location";
 import api from "../api/api";
 import { components } from "../components";
 import { theme } from "../constants";
@@ -21,6 +23,53 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
   const [isLastForm, setIsLastForm] = useState(false);
   const [dpiData, setDpiData] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [location, setLocation] = useState<Location.LocationObject | null>(
+    null
+  );
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      Geolocation.requestAuthorization(
+        () => {
+          Geolocation.getCurrentPosition(
+            (position: {
+              coords: {
+                latitude: number;
+                longitude: number;
+                altitude: number | null;
+                accuracy: number;
+                altitudeAccuracy: number | null;
+                heading: number | null;
+                speed: number | null;
+              };
+              timestamp: number;
+            }) => {
+              setLocation(position);
+            },
+            (error: {
+              code: number;
+              message: string;
+              PERMISSION_DENIED: number;
+              POSITION_UNAVAILABLE: number;
+              TIMEOUT: number;
+            }) => {
+              alert(error);
+            }
+          );
+        },
+        (error: {
+          code: number;
+          message: string;
+          PERMISSION_DENIED: number;
+          POSITION_UNAVAILABLE: number;
+          TIMEOUT: number;
+        }) => {
+          alert(error.code);
+        }
+      );
+    })();
+  }, []);
 
   const handleSubmitForm = async () => {
     const form = new FormData();
@@ -39,6 +88,16 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
         form.append(pair[0], pair[1]);
       }
     });
+
+    form.append(
+      "application_latitude",
+      location?.coords.latitude.toString() as string
+    );
+
+    form.append(
+      "application_longitude",
+      location?.coords.longitude.toString() as string
+    );
 
     try {
       const response = await api.post("credit-application", form);
@@ -114,6 +173,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "Datos del solicitante",
       content: (
         <DatosDelSolicitante
+          location={location!}
           previousStep={(e?: number) => handlePreviousStep(e)}
           nextStep={(e?: number) => handleNextStep(e)}
           occupation={occupation}
@@ -193,7 +253,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
       >
         <View style={{ paddingTop: theme.SIZES.height * 0.05 }}>
-          {/* <Wizard> */}
           {steps.map((step, index) => {
             return (
               <View
@@ -204,7 +263,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
               </View>
             );
           })}
-          {/* </Wizard> */}
         </View>
       </KeyboardAwareScrollView>
     );
@@ -213,11 +271,37 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
   return (
     <>
       {renderHeader()}
-      {/* <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}> */}
       {renderContent()}
-      {/* </SafeAreaView> */}
     </>
   );
 };
 
 export default Solicitudes;
+
+// try {
+//   const granted = await PermissionsAndroid.request(
+//     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+//     {
+//       title: "Example App",
+//       message: "Example App access to your location ",
+//       buttonPositive: "Confirm"
+//     }
+//   );
+//   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//     try {
+//       Geolocation.getCurrentPosition((info) => {
+//         alert(info);
+//         setLocation(info);
+//       });
+//     } catch (error) {
+//       alert(error);
+//     }
+//     console.log("You can use the location");
+//     alert("You can use the location");
+//   } else {
+//     console.log("location permission denied");
+//     alert("Location permission denied");
+//   }
+// } catch (err) {
+//   console.warn(err);
+// }

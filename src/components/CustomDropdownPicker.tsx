@@ -22,6 +22,7 @@ const CustomDropdownPicker = ({
       items={items}
       setOpen={setOpen}
       setValue={() => {}}
+      placeholder="Seleccionar"
       listMode={items.length > 5 ? "MODAL" : "SCROLLVIEW"}
       onChangeValue={(e) => onSelectItem({ value: e })}
       onSelectItem={onSelectItem}

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as Location from "expo-location";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
@@ -19,6 +20,7 @@ import {
 import { InputStyles, Wizard } from "../constants/theme";
 
 const DatosDelSolicitante = ({
+  location,
   onSubmit,
   dpiData,
   occupation,
@@ -30,6 +32,7 @@ const DatosDelSolicitante = ({
   occupation: string | null;
   previousStep: (e?: number) => void;
   nextStep: (e?: number) => void;
+  location: Location.LocationObject;
 }) => {
   // const { handleStep, previousStep, nextStep, goToStep } = useWizard();
 
@@ -99,7 +102,9 @@ const DatosDelSolicitante = ({
       profession: dpiData ? dpiData.profession : "",
       civil_status: dpiData ? dpiData.civil_status : "",
       sex: dpiData ? dpiData.sex : "",
-      nationality: dpiData ? dpiData.nationality : ""
+      nationality: dpiData ? dpiData.nationality : "",
+      residence_latitude: "",
+      residence_longitude: ""
     }
   });
   // 1817283672722818263563113434
@@ -313,6 +318,19 @@ const DatosDelSolicitante = ({
           <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
+      <Button
+        title="Add Location"
+        onPress={() => {
+          setValue(
+            "residence_latitude",
+            location.coords.latitude.toString() as string
+          );
+          setValue(
+            "residence_longitude",
+            location.coords.longitude.toString() as string
+          );
+        }}
+      ></Button>
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>Departamento</Text>

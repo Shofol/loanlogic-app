@@ -33,14 +33,14 @@ const ProgressCard = ({
       <View style={{ marginVertical: 20 }}>
         <PieChart
           donut
-          radius={60}
-          innerRadius={50}
+          radius={80}
+          innerRadius={60}
           data={pieData}
           centerLabelComponent={() => {
             return (
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 16,
                   color: theme.COLORS.bodyTextColor
                 }}
               >
@@ -50,9 +50,9 @@ const ProgressCard = ({
           }}
         />
       </View>
-      <Text
-        style={{ ...theme.FONTS.Mulish_500Medium }}
-      >{`${qoutient}Q / ${divisor}Q`}</Text>
+      <Text style={{ ...theme.FONTS.Mulish_500Medium }}>{`${qoutient.toFixed(
+        2
+      )}Q / ${divisor.toFixed(2)}Q`}</Text>
     </View>
   );
 };

@@ -13,7 +13,6 @@ const MoraPorAgente: React.FC = () => {
 
   const fetchData = async () => {
     const response = await api.get(`stats/default_breakdown`);
-    console.log(JSON.stringify(response.data.data));
     setData(response.data.data);
   };
 
@@ -84,6 +83,16 @@ const MoraPorAgente: React.FC = () => {
           >
             Mora - {item?.default_amount}Q
           </Text>
+          <Text
+            style={{
+              ...theme.FONTS.Mulish_400Regular,
+              fontSize: 12,
+              color: theme.COLORS.bodyTextColor,
+              textAlign: "right"
+            }}
+          >
+            {item.default_percentage}%
+          </Text>
 
           <View
             style={{
@@ -92,7 +101,8 @@ const MoraPorAgente: React.FC = () => {
               width: "100%",
               borderRadius: 20,
               marginVertical: 5,
-              position: "relative"
+              position: "relative",
+              overflow: "hidden"
             }}
           >
             <View
@@ -101,6 +111,7 @@ const MoraPorAgente: React.FC = () => {
                 left: 0,
                 top: 0,
                 height: "100%",
+                maxWidth: "100%",
                 width: `${item.default_percentage}%`,
                 backgroundColor: returnColor(item.default_percentage),
                 borderRadius: 5
