@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
-import DateTimePicker from "react-native-ui-datepicker";
+import DateTimePicker, { DateType } from "react-native-ui-datepicker";
 import { InputStyles, theme } from "../constants/theme";
 
 const CustomDatePicker = ({
@@ -56,16 +56,21 @@ const CustomDatePicker = ({
       >
         <View style={{ marginTop: "50%", marginBottom: "50%" }}>
           <DateTimePicker
-            value={value}
-            mode="date"
+            mode="single"
             locale="es"
             headerButtonColor={theme.COLORS.linkColor}
             selectedItemColor={theme.COLORS.linkColor}
-            onValueChange={(date) => {
-              if (date) {
-                setDate(date);
+            // date={value}
+            onChange={(params: { date: DateType }) => {
+              if (params) {
+                console.log(
+                  new Date(params.date as string).toLocaleDateString("en-CA")
+                );
+                setDate(params.date);
                 setShowDatePicker(false);
-                onChange(date.toString().split(" ")[0]);
+                onChange(
+                  new Date(params.date as string).toLocaleDateString("en-CA")
+                );
               }
             }}
           />

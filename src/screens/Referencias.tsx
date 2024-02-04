@@ -117,7 +117,6 @@ const Referencias = ({
   return (
     <View>
       <Text style={Wizard.header}>Referencias</Text>
-      <Text>{JSON.stringify(errors)}</Text>
       <View style={{ marginBottom: 20 }}>
         <Text style={theme.FONTS.H4}>
           Referencias familiares {"\n"}(que no vivan con usted)

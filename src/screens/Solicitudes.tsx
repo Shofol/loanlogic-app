@@ -100,6 +100,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
     );
 
     try {
+      console.log(form);
       const response = await api.post("credit-application", form);
       Toast.show({
         type: "success",

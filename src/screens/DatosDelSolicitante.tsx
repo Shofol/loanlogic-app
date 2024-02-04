@@ -75,7 +75,9 @@ const DatosDelSolicitante = ({
       profession: z.string().min(1),
       civil_status: z.string().min(1),
       sex: z.string().min(1),
-      nationality: z.string().min(1)
+      nationality: z.string().min(1),
+      residence_latitude: z.string(),
+      residence_longitude: z.string()
     })
     .required();
 
@@ -115,9 +117,7 @@ const DatosDelSolicitante = ({
 
   return (
     <View>
-      <Text style={Wizard.header}>
-        Datos del Solicitante {JSON.stringify(errors)}
-      </Text>
+      <Text style={Wizard.header}>Datos del Solicitante</Text>
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>
@@ -318,19 +318,23 @@ const DatosDelSolicitante = ({
           <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
-      <Button
-        title="Add Location"
-        onPress={() => {
-          setValue(
-            "residence_latitude",
-            location.coords.latitude.toString() as string
-          );
-          setValue(
-            "residence_longitude",
-            location.coords.longitude.toString() as string
-          );
-        }}
-      ></Button>
+
+      <View style={{ marginBottom: 20 }}>
+        <Button
+          title="Agregar Direccion"
+          color={theme.COLORS.linkColor}
+          onPress={() => {
+            setValue(
+              "residence_latitude",
+              location.coords.latitude.toString() as string
+            );
+            setValue(
+              "residence_longitude",
+              location.coords.longitude.toString() as string
+            );
+          }}
+        ></Button>
+      </View>
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>Departamento</Text>

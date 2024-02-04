@@ -60,8 +60,7 @@ const Onboarding: React.FC = ({ navigation }: any) => {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        flex: 1,
-        paddingHorizontal: 20
+        flex: 1
       }}
     >
       {!isOnboarded && (
