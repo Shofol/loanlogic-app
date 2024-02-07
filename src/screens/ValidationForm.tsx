@@ -21,12 +21,14 @@ import CustomFileUploader from "../components/CustomFileUploader";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import { ChecboxGroupStyle, InputStyles } from "../constants/theme";
+import useLocation from "../utils/hooks/useLocation";
 
 const ValidationForm: React.FC = ({ route, navigation }: any) => {
   const [isNITNotRequired, setIsNITNotRequired] = useState(false);
   const [dirección, setDirección] = useState("");
   const [garantía, setGarantía] = useState([]);
   const { id } = route.params;
+  const location = useLocation();
 
   const mapInitialValues = () => {
     const initialValues: CreditValidation = {
@@ -114,6 +116,16 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
       }
     });
 
+    form.append(
+      "validation_latitude",
+      location?.coords.latitude.toString() as string
+    );
+
+    form.append(
+      "validation_longitude",
+      location?.coords.longitude.toString() as string
+    );
+
     try {
       const response = await api.post(`credit/validation/${id}`, form);
       Toast.show({
@@ -122,7 +134,7 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
       });
       navigation.navigate("ValidaciónCrédito");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -413,19 +425,19 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
           <View
             style={{
               flexDirection: "row",
-              marginTop: 20,
+              marginVertical: 20,
               justifyContent: "space-between"
             }}
           >
             <Button
               color={theme.COLORS.bodyTextColor}
-              title="Guardar"
-              onPress={handleSubmit(onFormSubmit)}
+              title="Descartar"
+              onPress={() => reset(formValues)}
             />
             <Button
               color={theme.COLORS.linkColor}
-              title="Descartar"
-              onPress={() => reset(formValues)}
+              title="Guardar"
+              onPress={handleSubmit(onFormSubmit)}
             />
           </View>
         </ScrollView>

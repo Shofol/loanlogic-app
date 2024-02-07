@@ -6,6 +6,7 @@ import Cobertura from "./Cobertura";
 import Cobranza from "./Cobranza";
 import ConfirmationCode from "./ConfirmationCode";
 import CreateInvoice from "./CreateInvoice";
+import CuotaAdelantada from "./CuotaAdelantada";
 import Dashboard from "./Dashboard";
 import Deposits from "./Deposits";
 import EditPersonalInfo from "./EditPersonalInfo";
@@ -97,7 +98,8 @@ const screens = {
   Pago,
   Cobertura,
   ValidacionCredito,
-  ValidationForm
+  ValidationForm,
+  CuotaAdelantada
 };
 
 export { screens };

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LocationObject } from "expo-location";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
@@ -15,16 +16,16 @@ const NegocioPropio = ({
   occupation,
   dpiData,
   previousStep,
-  nextStep
+  nextStep,
+  location
 }: {
   onSubmit: (value: any) => void;
   occupation: string;
   dpiData: any;
   previousStep: (e?: number) => void;
   nextStep: (e?: number) => void;
+  location: LocationObject;
 }) => {
-  // const { previousStep, nextStep, goToStep } = useWizard();
-
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
 
@@ -53,6 +54,8 @@ const NegocioPropio = ({
       business_address: z.string().min(1),
       business_municipality: z.string().min(1),
       business_department: z.string().min(1),
+      business_latitude: z.string(),
+      business_longitude: z.string(),
       business_phone: z
         .string()
         .min(1)
@@ -64,6 +67,7 @@ const NegocioPropio = ({
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
@@ -76,7 +80,9 @@ const NegocioPropio = ({
       business_address: dpiData ? dpiData.business_address : "",
       business_municipality: dpiData ? dpiData.business_municipality : "",
       business_department: dpiData ? dpiData.business_department : "",
-      business_phone: dpiData ? dpiData.business_phone : ""
+      business_phone: dpiData ? dpiData.business_phone : "",
+      business_latitude: "",
+      business_longitude: ""
     }
   });
   const [municipalities, setMunicipalities] = useState<any[]>([]);
@@ -229,6 +235,23 @@ const NegocioPropio = ({
         {errors.business_address && (
           <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
+      </View>
+
+      <View style={{ marginBottom: 20 }}>
+        <Button
+          title="Agregar Direccion"
+          color={theme.COLORS.linkColor}
+          onPress={() => {
+            setValue(
+              "business_latitude",
+              location.coords.latitude.toString() as string
+            );
+            setValue(
+              "business_longitude",
+              location.coords.longitude.toString() as string
+            );
+          }}
+        ></Button>
       </View>
 
       <View style={InputStyles.field}>

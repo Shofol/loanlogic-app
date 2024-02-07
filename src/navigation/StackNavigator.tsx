@@ -53,6 +53,13 @@ const StackNavigator: React.FC = () => {
         component={screens.Clientes}
         options={{ headerShown: false }}
       />
+
+      <Stack.Screen
+        name="CuotaAdelantada"
+        component={screens.CuotaAdelantada}
+        options={{ headerShown: false }}
+      />
+
       <Stack.Screen
         name="ValidaciónCrédito"
         component={screens.ValidacionCredito}

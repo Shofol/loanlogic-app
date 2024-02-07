@@ -83,7 +83,7 @@ const Clientes: React.FC = () => {
   };
 
   const handleNavigation = (id: number) => {
-    navigation.navigate("Pago", { id: id });
+    navigation.navigate("CuotaAdelantada", { id: id });
   };
 
   const renderItem = ({ item }: { item: any }) => {

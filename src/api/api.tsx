@@ -15,6 +15,7 @@ api.interceptors.request.use(async function (config) {
     loadingToast = true;
     Toast.show({
       type: "info",
+      position: "bottom",
       text1: "Loading..."
     });
 
@@ -43,13 +44,18 @@ api.interceptors.response.use(
     return response;
   },
   function (error) {
+    console.log(error);
     if (loadingToast) {
       Toast.hide();
     }
     if (showNotFoundError) {
       Toast.show({
         type: "error",
-        text1: error.response.data.error
+        position: "bottom",
+        text1:
+          error.response.status === 404
+            ? error.message
+            : error.response.data.error
       });
     }
     // Any status codes that falls outside the range of 2xx cause this function to trigger

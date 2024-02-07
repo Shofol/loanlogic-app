@@ -4,12 +4,10 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import * as SecureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
-// import { Wizard } from "react-use-wizard";
-import Geolocation from "@react-native-community/geolocation";
-import * as Location from "expo-location";
 import api from "../api/api";
 import { components } from "../components";
 import { theme } from "../constants";
+import useLocation from "../utils/hooks/useLocation";
 import Asalariado from "./Asalariado";
 import DPINIT from "./DPINIT";
 import DatosCredito from "./DatosCredito";
@@ -23,53 +21,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
   const [isLastForm, setIsLastForm] = useState(false);
   const [dpiData, setDpiData] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
-  const [location, setLocation] = useState<Location.LocationObject | null>(
-    null
-  );
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      Geolocation.requestAuthorization(
-        () => {
-          Geolocation.getCurrentPosition(
-            (position: {
-              coords: {
-                latitude: number;
-                longitude: number;
-                altitude: number | null;
-                accuracy: number;
-                altitudeAccuracy: number | null;
-                heading: number | null;
-                speed: number | null;
-              };
-              timestamp: number;
-            }) => {
-              setLocation(position);
-            },
-            (error: {
-              code: number;
-              message: string;
-              PERMISSION_DENIED: number;
-              POSITION_UNAVAILABLE: number;
-              TIMEOUT: number;
-            }) => {
-              alert(error);
-            }
-          );
-        },
-        (error: {
-          code: number;
-          message: string;
-          PERMISSION_DENIED: number;
-          POSITION_UNAVAILABLE: number;
-          TIMEOUT: number;
-        }) => {
-          alert(error.code);
-        }
-      );
-    })();
-  }, []);
+  const location = useLocation();
 
   const handleSubmitForm = async () => {
     const form = new FormData();
@@ -100,7 +52,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
     );
 
     try {
-      console.log(form);
       const response = await api.post("credit-application", form);
       Toast.show({
         type: "success",
@@ -194,6 +145,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
           nextStep={(e?: number) => handleNextStep(e)}
           dpiData={dpiData}
           occupation={occupation}
+          location={location!}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
           }}
@@ -209,6 +161,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
           nextStep={(e?: number) => handleNextStep(e)}
           dpiData={dpiData}
           occupation={occupation}
+          location={location!}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
           }}

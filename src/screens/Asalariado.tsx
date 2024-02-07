@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LocationObject } from "expo-location";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
@@ -11,6 +12,7 @@ import { departments, municipalitiesValues } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
 
 const Asalariado = ({
+  location,
   occupation,
   onSubmit,
   dpiData,
@@ -22,6 +24,7 @@ const Asalariado = ({
   dpiData: any;
   previousStep: (e?: number) => void;
   nextStep: (e?: number) => void;
+  location: LocationObject;
 }) => {
   // const { handleStep, previousStep, nextStep, goToStep } = useWizard();
 
@@ -43,6 +46,8 @@ const Asalariado = ({
       work_address: z.string().min(1),
       work_department: z.string().min(1),
       work_municipality: z.string().min(1),
+      work_latitude: z.string(),
+      work_longitude: z.string(),
       work_phone: z
         .string()
         .min(1)
@@ -54,6 +59,7 @@ const Asalariado = ({
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
@@ -70,7 +76,9 @@ const Asalariado = ({
       work_address: dpiData ? dpiData.work_address : "",
       work_department: dpiData ? dpiData.work_department : "",
       work_municipality: dpiData ? dpiData.work_municipality : "",
-      work_phone: dpiData ? dpiData.work_phone : ""
+      work_phone: dpiData ? dpiData.work_phone : "",
+      work_latitude: "",
+      work_longitude: ""
     }
   });
   const [municipalities, setMunicipalities] = useState<any[]>([]);
@@ -279,6 +287,23 @@ const Asalariado = ({
         {errors.work_address && (
           <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
+      </View>
+
+      <View style={{ marginBottom: 20 }}>
+        <Button
+          title="Agregar Direccion"
+          color={theme.COLORS.linkColor}
+          onPress={() => {
+            setValue(
+              "work_latitude",
+              location.coords.latitude.toString() as string
+            );
+            setValue(
+              "work_longitude",
+              location.coords.longitude.toString() as string
+            );
+          }}
+        ></Button>
       </View>
 
       <View style={InputStyles.field}>

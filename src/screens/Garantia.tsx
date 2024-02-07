@@ -14,9 +14,11 @@ import CustomInput from "../components/CustomInput";
 import { tipoDeGarantiaOptions } from "../constants/data";
 import { InputStyles, theme } from "../constants/theme";
 import { formatToFile } from "../utils/formatToFile";
+import useLocation from "../utils/hooks/useLocation";
 
 const Garantia: React.FC = ({ route, navigation }: any) => {
   const { id } = route.params;
+  const location = useLocation();
 
   const Schema = z
     .object({
@@ -83,6 +85,15 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
     });
 
     form.append("application_id", id);
+    form.append(
+      "guaranty_latitude",
+      location?.coords.latitude.toString() as string
+    );
+
+    form.append(
+      "guaranty_longitude",
+      location?.coords.longitude.toString() as string
+    );
     try {
       const response = await api.post("guarantee", form, {});
       Toast.show({
