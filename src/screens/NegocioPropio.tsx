@@ -27,6 +27,8 @@ const NegocioPropio = ({
   location: LocationObject;
 }) => {
   const onFormSubmit = async (values: any) => {
+    values.business_latitude = location.coords.latitude.toString() as string;
+    values.business_longitude = location.coords.longitude.toString() as string;
     onSubmit(values);
 
     if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
