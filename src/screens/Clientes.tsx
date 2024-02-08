@@ -142,7 +142,7 @@ const Clientes: React.FC = () => {
               color: theme.COLORS.bodyTextColor
             }}
           >
-            {`Phone: ${client.phone_number}`}
+            {`Celular: ${client.phone_number}`}
           </Text>
         </View>
 
