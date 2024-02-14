@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Toast from "react-native-toast-message";
 import { z } from "zod";
 import api from "../api/api";
 import CustomCheckbox from "../components/CustomCheckbox";
@@ -46,7 +47,11 @@ const DPINIT = ({
       setData(tempData);
       onLoadDPIData(response.data.data);
     } catch (error) {
-      reset();
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: "Cliente no encontrado"
+      });
       console.log(error);
     }
   };

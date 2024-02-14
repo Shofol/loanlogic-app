@@ -27,6 +27,9 @@ const DatosCredito = ({
 }) => {
   // const { previousStep, nextStep } = useWizard();
   const [products, setProducts] = useState<any[]>([]);
+  const [minValue, setMinValue] = useState<number>(500);
+  const [maxValue, setMaxValue] = useState<number>(20000);
+  const [rangeValue, setRangeValue] = useState(500);
 
   const Schema = z
     .object({
@@ -104,7 +107,14 @@ const DatosCredito = ({
               <CustomDropdownPicker
                 value={value}
                 items={products}
-                onSelectItem={(e: any) => onChange(e.value)}
+                onSelectItem={(e: any) => {
+                  if (e.max && e.min) {
+                    setMinValue(parseInt(e.min));
+                    setMaxValue(parseInt(e.max));
+                    setRangeValue(parseFloat(e.min));
+                  }
+                  onChange(e.value);
+                }}
               />
             )}
             name="product_id"
@@ -122,9 +132,9 @@ const DatosCredito = ({
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <Slider
-                value={value} // set the current slider's value
-                minimumValue={500} // Minimum value
-                maximumValue={20000} // Maximum value
+                value={rangeValue} // set the current slider's value
+                minimumValue={minValue} // Minimum value
+                maximumValue={maxValue} // Maximum value
                 step={500} // The step for the slider (0 means that the slider will handle any decimal value within the range [min, max])
                 minimumTrackTintColor="#3EB290" // The track color before the current value
                 maximumTrackTintColor="grey" // The track color after the current value

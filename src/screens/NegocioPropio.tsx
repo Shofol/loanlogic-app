@@ -1,31 +1,53 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LocationObject } from "expo-location";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { z } from "zod";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
 import CustomInput from "../components/CustomInput";
+import LocationButton from "../components/LocationButton";
 import { theme } from "../constants";
 import { departments, municipalitiesValues } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
+import { DPIContext } from "../utils/contexts/DPIContext";
 
 const NegocioPropio = ({
   onSubmit,
   occupation,
-  dpiData,
   previousStep,
   nextStep,
   location
 }: {
   onSubmit: (value: any) => void;
   occupation: string;
-  dpiData: any;
   previousStep: (e?: number) => void;
   nextStep: (e?: number) => void;
   location: LocationObject;
 }) => {
+  const [locationAdded, setLocationAdded] = useState(false);
+  const dpiData = useContext(DPIContext);
+  const defaultValues = {
+    business_name: dpiData ? dpiData.business_name : "",
+    start_date: dpiData ? dpiData.start_date : "",
+    nit5: dpiData ? dpiData.nit5 : "",
+    monthly_sales: dpiData ? dpiData.monthly_sales : "",
+    monthly_expenses5: dpiData ? dpiData.monthly_expenses5 : "",
+    business_address: dpiData ? dpiData.business_address : "",
+    business_municipality: dpiData ? dpiData.business_municipality : "",
+    business_department: dpiData ? dpiData.business_department : "",
+    business_phone: dpiData ? dpiData.business_phone : "",
+    business_latitude: "",
+    business_longitude: ""
+  };
+
+  useEffect(() => {
+    if (dpiData) {
+      reset(defaultValues);
+    }
+  }, [dpiData]);
+
   const onFormSubmit = async (values: any) => {
     values.business_latitude = location.coords.latitude.toString() as string;
     values.business_longitude = location.coords.longitude.toString() as string;
@@ -70,22 +92,11 @@ const NegocioPropio = ({
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
-    defaultValues: {
-      business_name: dpiData ? dpiData.business_name : "",
-      start_date: dpiData ? dpiData.start_date : "",
-      nit5: dpiData ? dpiData.nit5 : "",
-      monthly_sales: dpiData ? dpiData.monthly_sales : "",
-      monthly_expenses5: dpiData ? dpiData.monthly_expenses5 : "",
-      business_address: dpiData ? dpiData.business_address : "",
-      business_municipality: dpiData ? dpiData.business_municipality : "",
-      business_department: dpiData ? dpiData.business_department : "",
-      business_phone: dpiData ? dpiData.business_phone : "",
-      business_latitude: "",
-      business_longitude: ""
-    }
+    defaultValues: defaultValues
   });
   const [municipalities, setMunicipalities] = useState<any[]>([]);
 
@@ -240,20 +251,24 @@ const NegocioPropio = ({
       </View>
 
       <View style={{ marginBottom: 20 }}>
-        <Button
-          title="Agregar Direccion"
-          color={theme.COLORS.linkColor}
+        <LocationButton
+          locationAdded={locationAdded}
           onPress={() => {
-            setValue(
-              "business_latitude",
-              location.coords.latitude.toString() as string
-            );
-            setValue(
-              "business_longitude",
-              location.coords.longitude.toString() as string
-            );
+            try {
+              setValue(
+                "business_latitude",
+                location.coords.latitude.toString() as string
+              );
+              setValue(
+                "business_longitude",
+                location.coords.longitude.toString() as string
+              );
+              setLocationAdded(true);
+            } catch (error) {
+              console.log(error);
+            }
           }}
-        ></Button>
+        />
       </View>
 
       <View style={InputStyles.field}>

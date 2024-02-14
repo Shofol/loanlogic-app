@@ -102,6 +102,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
         position: "bottom",
         visibilityTime: 2000
       });
+      navigation.goBack();
     } catch (error) {
       console.log(error);
     }

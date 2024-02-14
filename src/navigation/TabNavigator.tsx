@@ -130,7 +130,9 @@ const TabNavigator = () => {
     <View style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
       {currentScreen === Tab.Dashboard && <screens.Dashboard />}
       {currentScreen === Tab.Garantia && <screens.FotoGarantia />}
-      {currentScreen === Tab.Solicitudes && <screens.Solicitudes />}
+      {currentScreen === Tab.Solicitudes && (
+        <screens.Solicitudes goBack={() => dispatch(setScreen(Tab.Garantia))} />
+      )}
       {currentScreen === Tab.Clientes && <screens.Clientes />}
       {currentScreen === Tab.RecuperacionDiaria && (
         <screens.RecuperacionDiaria />

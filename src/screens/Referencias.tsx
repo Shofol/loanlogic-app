@@ -8,16 +8,14 @@ import { theme } from "../constants";
 import { InputStyles, Wizard } from "../constants/theme";
 
 const Referencias = ({
-  onPrevious,
+  // onPrevious,
   onSubmit,
   occupation,
-  dpiData,
   previousStep
 }: {
-  onPrevious: (value: any) => void;
+  // onPrevious: (value: any) => void;
   onSubmit: (value: any) => void;
   occupation: string;
-  dpiData: any;
   previousStep: (e?: number) => void;
 }) => {
   // const { handleStep, previousStep, nextStep, goToStep } = useWizard();

@@ -7,6 +7,7 @@ import Toast from "react-native-toast-message";
 import api from "../api/api";
 import { components } from "../components";
 import { theme } from "../constants";
+import { DPIContext } from "../utils/contexts/DPIContext";
 import useLocation from "../utils/hooks/useLocation";
 import Asalariado from "./Asalariado";
 import DPINIT from "./DPINIT";
@@ -15,7 +16,7 @@ import DatosDelSolicitante from "./DatosDelSolicitante";
 import NegocioPropio from "./NegocioPropio";
 import Referencias from "./Referencias";
 
-const Solicitudes: React.FC = ({ navigation }: any) => {
+const Solicitudes = (props: any) => {
   const [valueToSubmit, setValueToSubmit] = useState({});
   const [occupation, setOccupation] = useState<string>("");
   const [isLastForm, setIsLastForm] = useState(false);
@@ -59,7 +60,7 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
         position: "bottom",
         visibilityTime: 2000
       });
-      // navigate(dashboardRoute);
+      props.goBack();
     } catch (error) {
       console.log(error);
     }
@@ -129,7 +130,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
           previousStep={(e?: number) => handlePreviousStep(e)}
           nextStep={(e?: number) => handleNextStep(e)}
           occupation={occupation}
-          dpiData={dpiData}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
           }}
@@ -143,7 +143,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
         <Asalariado
           previousStep={(e?: number) => handlePreviousStep(e)}
           nextStep={(e?: number) => handleNextStep(e)}
-          dpiData={dpiData}
           occupation={occupation}
           location={location!}
           onSubmit={(value) => {
@@ -159,7 +158,6 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
         <NegocioPropio
           previousStep={(e?: number) => handlePreviousStep(e)}
           nextStep={(e?: number) => handleNextStep(e)}
-          dpiData={dpiData}
           occupation={occupation}
           location={location!}
           onSubmit={(value) => {
@@ -173,13 +171,13 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       title: "Referencias",
       content: (
         <Referencias
-          previousStep={(e?: number) => handlePreviousStep(e)}
-          // nextStep={(e?: number) => handleNextStep(e)}
-          dpiData={dpiData}
-          occupation={occupation}
-          onPrevious={() => {
+          previousStep={(e?: number) => {
             setIsLastForm(false);
+            setTimeout(() => {
+              handlePreviousStep(e);
+            }, 100);
           }}
+          occupation={occupation}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
             setTimeout(() => {
@@ -206,18 +204,20 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
       <KeyboardAwareScrollView
         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
       >
-        <View style={{ paddingTop: theme.SIZES.height * 0.05 }}>
-          {steps.map((step, index) => {
-            return (
-              <View
-                style={{ display: index === currentStep ? "flex" : "none" }}
-                key={step?.id}
-              >
-                {step?.content}
-              </View>
-            );
-          })}
-        </View>
+        <DPIContext.Provider value={dpiData}>
+          <View style={{ paddingTop: theme.SIZES.height * 0.05 }}>
+            {steps.map((step, index) => {
+              return (
+                <View
+                  style={{ display: index === currentStep ? "flex" : "none" }}
+                  key={step?.id}
+                >
+                  {step?.content}
+                </View>
+              );
+            })}
+          </View>
+        </DPIContext.Provider>
       </KeyboardAwareScrollView>
     );
   };
@@ -231,31 +231,3 @@ const Solicitudes: React.FC = ({ navigation }: any) => {
 };
 
 export default Solicitudes;
-
-// try {
-//   const granted = await PermissionsAndroid.request(
-//     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-//     {
-//       title: "Example App",
-//       message: "Example App access to your location ",
-//       buttonPositive: "Confirm"
-//     }
-//   );
-//   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//     try {
-//       Geolocation.getCurrentPosition((info) => {
-//         alert(info);
-//         setLocation(info);
-//       });
-//     } catch (error) {
-//       alert(error);
-//     }
-//     console.log("You can use the location");
-//     alert("You can use the location");
-//   } else {
-//     console.log("location permission denied");
-//     alert("Location permission denied");
-//   }
-// } catch (err) {
-//   console.warn(err);
-// }

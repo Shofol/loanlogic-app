@@ -32,7 +32,7 @@ const SignIn: React.FC = ({ navigation }: any) => {
   });
 
   useEffect(() => {
-    // checkToken();
+    checkToken();
   }, []);
 
   const checkToken = async () => {

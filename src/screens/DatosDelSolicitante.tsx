@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Location from "expo-location";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { z } from "zod";
@@ -9,6 +9,7 @@ import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
 import CustomFileUploader from "../components/CustomFileUploader";
 import CustomInput from "../components/CustomInput";
+import LocationButton from "../components/LocationButton";
 import { theme } from "../constants";
 import {
   departments,
@@ -18,17 +19,18 @@ import {
   sexValues
 } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
+import { DPIContext } from "../utils/contexts/DPIContext";
 
 const DatosDelSolicitante = ({
   location,
   onSubmit,
-  dpiData,
+  // dpiData,
   occupation,
   previousStep,
   nextStep
 }: {
   onSubmit: (value: any) => void;
-  dpiData: any;
+  // dpiData: any;
   occupation: string | null;
   previousStep: (e?: number) => void;
   nextStep: (e?: number) => void;
@@ -49,6 +51,33 @@ const DatosDelSolicitante = ({
 
   const [isSecondNameNotRequired, setisSecondNameNotRequired] = useState(false);
   const [municipalities, setMunicipalities] = useState<any[]>([]);
+  const dpiData = useContext(DPIContext);
+  const defaultValues = {
+    photos_of_bills: [],
+    surname: dpiData ? dpiData.surname : "",
+    second_surname: dpiData ? dpiData.second_surname : "",
+    name: dpiData ? dpiData.name : "",
+    second_name: dpiData ? dpiData.second_name : "",
+    phone_number: dpiData ? dpiData.phone_number : "",
+    landline_phone_number: dpiData ? dpiData.landline_phone_number : "",
+    email: dpiData ? dpiData.email : "",
+    residence_address: dpiData ? dpiData.residence_address : "",
+    residence_municipality: dpiData ? dpiData.residence_municipality : "",
+    department_of_residence: dpiData ? dpiData.department_of_residence : "",
+    birth_date: dpiData ? dpiData.birth_date : null,
+    profession: dpiData ? dpiData.profession : "",
+    civil_status: dpiData ? dpiData.civil_status : "",
+    sex: dpiData ? dpiData.sex : "",
+    nationality: dpiData ? dpiData.nationality : "",
+    residence_latitude: "",
+    residence_longitude: ""
+  };
+
+  useEffect(() => {
+    if (dpiData) {
+      reset(defaultValues);
+    }
+  }, [dpiData]);
 
   const Schema = z
     .object({
@@ -85,35 +114,18 @@ const DatosDelSolicitante = ({
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
-    defaultValues: {
-      photos_of_bills: [],
-      surname: dpiData ? dpiData.surname : "",
-      second_surname: dpiData ? dpiData.second_surname : "",
-      name: dpiData ? dpiData.name : "",
-      second_name: dpiData ? dpiData.second_name : "",
-      phone_number: dpiData ? dpiData.phone_number : "",
-      landline_phone_number: dpiData ? dpiData.landline_phone_number : "",
-      email: dpiData ? dpiData.email : "",
-      residence_address: dpiData ? dpiData.residence_address : "",
-      residence_municipality: dpiData ? dpiData.residence_municipality : "",
-      department_of_residence: dpiData ? dpiData.department_of_residence : "",
-      birth_date: dpiData ? dpiData.birth_date : null,
-      profession: dpiData ? dpiData.profession : "",
-      civil_status: dpiData ? dpiData.civil_status : "",
-      sex: dpiData ? dpiData.sex : "",
-      nationality: dpiData ? dpiData.nationality : "",
-      residence_latitude: "",
-      residence_longitude: ""
-    }
+    defaultValues: defaultValues
   });
   // 1817283672722818263563113434
 
   const onDocumentUpload = async (newUploadedFiles: any) => {
     setValue("photos_of_bills", newUploadedFiles);
   };
+  const [locationAdded, setLocationAdded] = useState(false);
 
   return (
     <View>
@@ -320,20 +332,24 @@ const DatosDelSolicitante = ({
       </View>
 
       <View style={{ marginBottom: 20 }}>
-        <Button
-          title="Agregar Direccion"
-          color={theme.COLORS.linkColor}
+        <LocationButton
+          locationAdded={locationAdded}
           onPress={() => {
-            setValue(
-              "residence_latitude",
-              location.coords.latitude.toString() as string
-            );
-            setValue(
-              "residence_longitude",
-              location.coords.longitude.toString() as string
-            );
+            try {
+              setValue(
+                "residence_latitude",
+                location.coords.latitude.toString() as string
+              );
+              setValue(
+                "residence_longitude",
+                location.coords.longitude.toString() as string
+              );
+              setLocationAdded(true);
+            } catch (error) {
+              console.log(error);
+            }
           }}
-        ></Button>
+        />
       </View>
 
       <View style={InputStyles.field}>

@@ -1,32 +1,56 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LocationObject } from "expo-location";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { z } from "zod";
 import CustomDatePicker from "../components/CustomDatePicker";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
 import CustomInput from "../components/CustomInput";
+import LocationButton from "../components/LocationButton";
 import { theme } from "../constants";
 import { departments, municipalitiesValues } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
+import { DPIContext } from "../utils/contexts/DPIContext";
 
 const Asalariado = ({
   location,
   occupation,
   onSubmit,
-  dpiData,
+  // dpiData,
   previousStep,
   nextStep
 }: {
   occupation: string;
   onSubmit: (value: any) => void;
-  dpiData: any;
+  // dpiData: any;
   previousStep: (e?: number) => void;
   nextStep: (e?: number) => void;
   location: LocationObject;
 }) => {
   // const { handleStep, previousStep, nextStep, goToStep } = useWizard();
+  const dpiData = useContext(DPIContext);
+  const defaultValues = {
+    company_name: dpiData ? dpiData.company_name : "",
+    entry_date: dpiData ? dpiData.entry_date : "",
+    position: dpiData ? dpiData.position : "",
+    monthly_income: dpiData ? `${parseInt(dpiData.monthly_income)}` : "",
+    monthly_expenses: dpiData ? `${parseInt(dpiData.monthly_expenses)}` : "",
+    date_and_number_of_income: dpiData ? dpiData.date_and_number_of_income : "",
+    immediate_boss_name: dpiData ? dpiData.immediate_boss_name : "",
+    work_address: dpiData ? dpiData.work_address : "",
+    work_department: dpiData ? dpiData.work_department : "",
+    work_municipality: dpiData ? dpiData.work_municipality : "",
+    work_phone: dpiData ? dpiData.work_phone : "",
+    work_latitude: "",
+    work_longitude: ""
+  };
+
+  useEffect(() => {
+    if (dpiData) {
+      reset(defaultValues);
+    }
+  }, [dpiData]);
 
   const Schema = z
     .object({
@@ -60,28 +84,14 @@ const Asalariado = ({
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(Schema),
-    defaultValues: {
-      company_name: dpiData ? dpiData.company_name : "",
-      entry_date: dpiData ? dpiData.entry_date : "",
-      position: dpiData ? dpiData.position : "",
-      monthly_income: dpiData ? dpiData.monthly_income : "",
-      monthly_expenses: dpiData ? dpiData.monthly_expenses : "",
-      date_and_number_of_income: dpiData
-        ? dpiData.date_and_number_of_income
-        : "",
-      immediate_boss_name: dpiData ? dpiData.immediate_boss_name : "",
-      work_address: dpiData ? dpiData.work_address : "",
-      work_department: dpiData ? dpiData.work_department : "",
-      work_municipality: dpiData ? dpiData.work_municipality : "",
-      work_phone: dpiData ? dpiData.work_phone : "",
-      work_latitude: "",
-      work_longitude: ""
-    }
+    defaultValues: defaultValues
   });
   const [municipalities, setMunicipalities] = useState<any[]>([]);
+  const [locationAdded, setLocationAdded] = useState(false);
 
   const onFormSubmit = async (values: any) => {
     onSubmit(values);
@@ -290,20 +300,24 @@ const Asalariado = ({
       </View>
 
       <View style={{ marginBottom: 20 }}>
-        <Button
-          title="Agregar Direccion"
-          color={theme.COLORS.linkColor}
+        <LocationButton
+          locationAdded={locationAdded}
           onPress={() => {
-            setValue(
-              "work_latitude",
-              location.coords.latitude.toString() as string
-            );
-            setValue(
-              "work_longitude",
-              location.coords.longitude.toString() as string
-            );
+            try {
+              setValue(
+                "work_latitude",
+                location.coords.latitude.toString() as string
+              );
+              setValue(
+                "work_longitude",
+                location.coords.longitude.toString() as string
+              );
+              setLocationAdded(true);
+            } catch (error) {
+              console.log(error);
+            }
           }}
-        ></Button>
+        />
       </View>
 
       <View style={InputStyles.field}>
