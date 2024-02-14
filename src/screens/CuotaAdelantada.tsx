@@ -105,7 +105,7 @@ const CuotaAdelantada: React.FC = ({ route, navigation }: any) => {
   const renderHeader = () => {
     return (
       <components.Header
-        title={`Cobranza (${id})`}
+        title={`Cuota Adelantada (${id})`}
         goBack={true}
         goBackColor={theme.COLORS.white}
       />
