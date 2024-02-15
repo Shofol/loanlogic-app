@@ -1,4 +1,4 @@
-rootProject.name = 'gestonia'
+rootProject.name = 'gestiona'
 
 dependencyResolutionManagement {
   versionCatalogs {
