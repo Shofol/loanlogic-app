@@ -109,7 +109,7 @@ const Asalariado = ({
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>
-          SNombre de la empresa<Text>*</Text>
+          Nombre de la empresa<Text>*</Text>
         </Text>
         <View style={InputStyles.container}>
           <Controller
@@ -119,7 +119,7 @@ const Asalariado = ({
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
-                placeholder="SNombre de la empresa"
+                placeholder="Nombre de la empresa"
               />
             )}
             name="company_name"

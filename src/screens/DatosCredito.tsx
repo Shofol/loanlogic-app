@@ -163,7 +163,7 @@ const DatosCredito = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   value={value}
-                  placeholder="Teléfono del trabajo"
+                  placeholder="Mínimo 5 carácteres"
                 />
               )}
               name="credit_destination"
