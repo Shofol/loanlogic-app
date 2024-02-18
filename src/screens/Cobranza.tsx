@@ -1,3 +1,5 @@
+import * as Print from "expo-print";
+import { shareAsync } from "expo-sharing";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -49,10 +51,11 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
         position: "bottom",
         visibilityTime: 2000
       });
-    } catch (error) {
+    } catch (error: any) {
       Toast.show({
         type: "error",
-        text1: "Update Failed",
+        text1: error.response.data.error,
+        text1Style: { overflow: "scroll" },
         position: "bottom",
         visibilityTime: 2000
       });
@@ -105,6 +108,61 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
         goBackColor={theme.COLORS.white}
       />
     );
+  };
+
+  const print = async () => {
+    const html = `<h1 style="font-weight:'bold'">${data?.client.name.toUpperCase()}  
+      ${data?.client.surname.toUpperCase()} 
+      ${data?.client.second_surname.toUpperCase()}</h1>
+     <p><strong>DPI:</strong> ${data?.client.dpi_number}</p>
+     <p><strong>Núm. Crédito:</strong> ${data?.credit.id}</p>
+     <p><strong>Fecha crédito:</strong> ${data?.credit.disbursement_date}</p>
+     <p><strong>Monto solicitado:</strong> ${
+       data?.credit.requested_amount
+     } Q</p>
+     <p><strong>Crédito:</strong> ${data?.credit.product_name}</p>
+     <p><strong>Capital crédito:</strong> ${
+       data?.credit.total_credit_amount
+     } Q</p>
+    <p><strong>Cuota crédito:</strong> ${
+      data?.debt_collection?.credit_fee
+    } Q</p>
+    <p><strong>Total adeudado:</strong> ${data?.credit.total_amount} Q</p> 
+    <p><strong>Capital e intereses amortizado:</strong> ${totalPaid} Q</p>
+    <p><strong>Capital e interés pendiente:</strong> ${totalPending} Q</p>
+    <p><strong>Fecha Pago:</strong> ${data?.debt_collection?.payment_date}</p>
+    <p><strong>Cuota crédito:</strong> ${
+      data?.debt_collection?.credit_fee
+    } Q</p>
+    <p><strong>Mora:</strong> ${data?.debt_collection?.default_amount} Q</p>
+    <p><strong>Interés mora:</strong> ${
+      data?.debt_collection?.default_interest
+    } Q</p>
+    <p><strong>Monto total:</strong> ${
+      data?.debt_collection?.amount_to_pay
+    } Q</p>
+    <p><strong>Pago realizado:</strong> ${
+      data?.debt_collection?.paid_default_interest_with_tax
+    } Q</p>
+    <p><strong>Estado:</strong>
+    ${
+      data?.debt_collection?.status == " PAID"
+        ? " PAGADO"
+        : data?.debt_collection?.status == " PARTIALLY_PAID"
+        ? " PAGO PARCIAL"
+        : data?.debt_collection?.status == " PENDING"
+        ? " PENDIENTE"
+        : " IMPAGO"
+    }
+  </p>
+  <p><strong>
+    #Pago:</strong> ${data?.debt_collection?.no_of_installment}
+  </p>
+    `;
+
+    const { uri } = await Print.printToFileAsync({ html });
+    console.log("File has been saved to:", uri);
+    await shareAsync(uri, { UTI: ".pdf", mimeType: "application/pdf" });
   };
 
   return (
@@ -285,16 +343,16 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                 }}
               >
                 <Button
+                  color={theme.COLORS.bodyTextColor}
+                  disabled={data?.debt_collection?.status === "PENDING"}
+                  title="Imprimir ticket"
+                  onPress={() => print()}
+                />
+                <Button
                   color={theme.COLORS.linkColor}
                   title="Pagar"
                   disabled={data?.debt_collection?.status != "PENDING"}
                   onPress={() => submit()}
-                />
-                <Button
-                  color={theme.COLORS.bodyTextColor}
-                  disabled={data?.debt_collection?.status === "PENDING"}
-                  title="Imprimir ticket"
-                  // onPress={handleSubmit(onFormSubmit)}
                 />
               </View>
             </>

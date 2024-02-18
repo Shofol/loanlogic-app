@@ -229,7 +229,7 @@ const SignIn: React.FC = ({ navigation }: any) => {
             containerStyle={{ marginBottom: 30 }}
           />
 
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -258,7 +258,7 @@ const SignIn: React.FC = ({ navigation }: any) => {
                 Register now
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </KeyboardAwareScrollView>
     );
