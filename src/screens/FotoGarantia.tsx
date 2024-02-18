@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -13,16 +13,17 @@ import { components } from "../components";
 import { theme } from "../constants";
 import { Guarantee } from "../utils/types";
 
-const FotoGarantia: React.FC = () => {
+const FotoGarantia: any = () => {
   const [data, setData] = useState<Guarantee[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [dataFetchingCompleted, setDataFetchingCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigation: any = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isFocused]);
 
   const fetchData = async () => {
     if (!dataFetchingCompleted) {

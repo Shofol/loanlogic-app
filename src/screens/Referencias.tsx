@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, Text, View } from "react-native";
 import { z } from "zod";
+import CustomDropdownPicker from "../components/CustomDropdownPicker";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
+import { parentesco } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
 
 const Referencias = ({
@@ -157,11 +159,12 @@ const Referencias = ({
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomInput
-                      onChange={onChange}
-                      onBlur={onBlur}
+                    <CustomDropdownPicker
                       value={value}
-                      placeholder="Parentesco"
+                      items={parentesco}
+                      onSelectItem={(e: any) => {
+                        onChange(e.value);
+                      }}
                     />
                   )}
                   name={
@@ -290,11 +293,12 @@ const Referencias = ({
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomInput
-                      onChange={onChange}
-                      onBlur={onBlur}
+                    <CustomDropdownPicker
                       value={value}
-                      placeholder="Parentesco"
+                      items={parentesco}
+                      onSelectItem={(e: any) => {
+                        onChange(e.value);
+                      }}
                     />
                   )}
                   name={

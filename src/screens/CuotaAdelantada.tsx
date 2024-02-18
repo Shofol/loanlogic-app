@@ -41,7 +41,10 @@ const CuotaAdelantada: React.FC = ({ route, navigation }: any) => {
     };
 
     try {
-      const response = await api.put(`/debt/collection/${id}`, values);
+      const response = await api.put(
+        `/debt/collection/${data?.debt_collection?.id}`,
+        values
+      );
       setNewData(response);
       Toast.show({
         type: "success",

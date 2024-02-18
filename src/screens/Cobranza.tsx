@@ -134,16 +134,13 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                     `${data?.client.surname.toUpperCase()} ` +
                     `${data?.client.second_surname.toUpperCase()}`}
                 </Text>
-                <View
-                  style={{ flexDirection: "row", gap: 20, marginBottom: 10 }}
-                >
-                  <Text style={DataStyle.data}>
-                    DPI: {data?.client.dpi_number}
-                  </Text>
-                  <Text style={DataStyle.data}>
-                    Núm. Crédito:{` ${data?.credit.id}`}
-                  </Text>
-                </View>
+
+                <Text style={DataStyle.data}>
+                  DPI: {data?.client.dpi_number}
+                </Text>
+                <Text style={DataStyle.data}>
+                  Núm. Crédito:{` ${data?.credit.id}`}
+                </Text>
                 <Text style={DataStyle.data}>
                   Fecha crédito: {data?.credit.disbursement_date}
                 </Text>
@@ -247,6 +244,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                   <View style={InputStyles.containerBg}>
                     <CustomInput
                       value={payment_made}
+                      disabled={data?.debt_collection?.status != "PENDING"}
                       onChange={(value: string) => {
                         setErrors(false);
                         setPayment_made(value);
@@ -288,15 +286,15 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
               >
                 <Button
                   color={theme.COLORS.bodyTextColor}
-                  title="Pagar"
-                  disabled={data?.debt_collection?.status != "PENDING"}
-                  onPress={() => submit()}
-                />
-                <Button
-                  color={theme.COLORS.linkColor}
                   disabled={data?.debt_collection?.status === "PENDING"}
                   title="Imprimir ticket"
                   // onPress={handleSubmit(onFormSubmit)}
+                />
+                <Button
+                  color={theme.COLORS.linkColor}
+                  title="Pagar"
+                  disabled={data?.debt_collection?.status != "PENDING"}
+                  onPress={() => submit()}
                 />
               </View>
             </>

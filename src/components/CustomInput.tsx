@@ -7,6 +7,7 @@ const CustomInput = ({
   onChange,
   value,
   onBlur,
+  disabled = false,
   secureTextEntry = false,
   keyboardType = "default"
 }: {
@@ -14,11 +15,14 @@ const CustomInput = ({
   onChange?: any;
   value: string | undefined;
   onBlur?: any;
+  disabled?: boolean;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
 }) => {
   return (
     <TextInput
+      editable={!disabled}
+      selectTextOnFocus={!disabled}
       keyboardType={keyboardType}
       placeholder={placeholder}
       style={InputStyles.input}
