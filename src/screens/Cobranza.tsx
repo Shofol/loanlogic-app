@@ -285,16 +285,16 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                 }}
               >
                 <Button
-                  color={theme.COLORS.bodyTextColor}
-                  disabled={data?.debt_collection?.status === "PENDING"}
-                  title="Imprimir ticket"
-                  // onPress={handleSubmit(onFormSubmit)}
-                />
-                <Button
                   color={theme.COLORS.linkColor}
                   title="Pagar"
                   disabled={data?.debt_collection?.status != "PENDING"}
                   onPress={() => submit()}
+                />
+                <Button
+                  color={theme.COLORS.bodyTextColor}
+                  disabled={data?.debt_collection?.status === "PENDING"}
+                  title="Imprimir ticket"
+                  // onPress={handleSubmit(onFormSubmit)}
                 />
               </View>
             </>
