@@ -75,12 +75,12 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
       address_approved: z.boolean(),
       inventory: z.string().min(1),
       comment_observations: z.string(),
-      observations: z.string().array().nonempty(),
+      observations: z.any(),
       payment_day: z.string().min(1),
       guarantee_approved: z.boolean(),
       comment: z.string().min(1),
-      evidences: z.any().array().nonempty(),
-      work_documents: z.any().array().nonempty(),
+      evidences: z.any(),
+      work_documents: z.any(),
       credit_approval: z.boolean()
     })
     .required();
@@ -280,9 +280,7 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
           </View>
 
           <View style={InputStyles.field}>
-            <Text style={InputStyles.label}>
-              Observaciones<Text>*</Text>
-            </Text>
+            <Text style={InputStyles.label}>Observaciones</Text>
             <View style={ChecboxGroupStyle.group}>
               <CustomCheckbox
                 text="Vidrios rotos"

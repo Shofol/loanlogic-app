@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "gestonia",
-    "slug": "gestonia",
+    "name": "gestiona",
+    "slug": "gestiona",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.shofol.gestonia"
+      "bundleIdentifier": "com.shofol.gestiona"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +35,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "7f93bd95-01da-4b85-9711-2e33e3ae44e1"
+        "projectId": "7ca32372-1765-4d65-af65-7da425c11f14"
       }
     }
   }

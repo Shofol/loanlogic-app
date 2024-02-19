@@ -152,7 +152,7 @@ const CoberturaItem: React.FC<any> = ({
                 paddingVertical: 5
               }}
             >
-              Accpet
+              Aceptar
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -168,7 +168,7 @@ const CoberturaItem: React.FC<any> = ({
                 paddingVertical: 5
               }}
             >
-              Reject
+              Rechazar
             </Text>
           </TouchableOpacity>
         </View>
