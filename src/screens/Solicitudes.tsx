@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import * as SecureStore from "expo-secure-store";
+import { ScrollView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 import api from "../api/api";
 import { components } from "../components";
@@ -23,6 +23,13 @@ const Solicitudes = (props: any) => {
   const [dpiData, setDpiData] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
   const location = useLocation();
+  const scrollRef = useRef<any>();
+
+  const scrollToTop = () => {
+    scrollRef.current?.scrollTo({
+      y: 0
+    });
+  };
 
   const handleSubmitForm = async () => {
     const form = new FormData();
@@ -78,6 +85,7 @@ const Solicitudes = (props: any) => {
     } else {
       setCurrentStep(value);
     }
+    scrollToTop();
   };
 
   const handleNextStep = (value?: number) => {
@@ -86,6 +94,7 @@ const Solicitudes = (props: any) => {
     } else {
       setCurrentStep(value);
     }
+    scrollToTop();
   };
 
   const steps = [
@@ -201,7 +210,8 @@ const Solicitudes = (props: any) => {
 
   const renderContent = () => {
     return (
-      <KeyboardAwareScrollView
+      <ScrollView
+        ref={scrollRef}
         contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 20 }}
       >
         <DPIContext.Provider value={dpiData}>
@@ -218,7 +228,7 @@ const Solicitudes = (props: any) => {
             })}
           </View>
         </DPIContext.Provider>
-      </KeyboardAwareScrollView>
+      </ScrollView>
     );
   };
 

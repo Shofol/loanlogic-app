@@ -66,7 +66,7 @@ const NegocioPropio = ({
     .object({
       business_name: z.string().min(1),
       start_date: z.string().min(1),
-      nit5: z.string().min(1),
+      nit5: z.any(),
       monthly_sales: z
         .string()
         .min(1)
@@ -149,9 +149,7 @@ const NegocioPropio = ({
       </View>
 
       <View style={InputStyles.field}>
-        <Text style={InputStyles.label}>
-          NIT<Text>*</Text>
-        </Text>
+        <Text style={InputStyles.label}>NIT</Text>
         <View style={InputStyles.container}>
           <Controller
             control={control}

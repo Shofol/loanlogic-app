@@ -44,7 +44,7 @@ const CustomDatePicker = ({
           }}
         >
           {date
-            ? dayjs(date).locale("es").format("MMMM, DD, YYYY")
+            ? dayjs(date).locale("es").format("DD, MMMM, YYYY")
             : defaultText}
         </Text>
       </TouchableOpacity>

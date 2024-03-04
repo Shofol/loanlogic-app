@@ -96,7 +96,7 @@ const DatosDelSolicitante = ({
         .min(1)
         .max(8)
         .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
-      email: z.string().min(1).email(),
+      email: z.any(),
       residence_address: z.string().min(1),
       residence_municipality: z.string().min(1),
       department_of_residence: z.string().min(1),
@@ -286,7 +286,7 @@ const DatosDelSolicitante = ({
       </View>
 
       <View style={InputStyles.field}>
-        <Text style={InputStyles.label}>Correo electrónico*</Text>
+        <Text style={InputStyles.label}>Correo electrónico</Text>
         <View style={InputStyles.container}>
           <Controller
             control={control}

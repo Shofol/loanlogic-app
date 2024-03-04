@@ -6,7 +6,7 @@ import { z } from "zod";
 import CustomDropdownPicker from "../components/CustomDropdownPicker";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
-import { parentesco } from "../constants/data";
+import { parentesco, relacion } from "../constants/data";
 import { InputStyles, Wizard } from "../constants/theme";
 
 const Referencias = ({
@@ -295,7 +295,7 @@ const Referencias = ({
                   render={({ field: { onChange, onBlur, value } }) => (
                     <CustomDropdownPicker
                       value={value}
-                      items={parentesco}
+                      items={relacion}
                       onSelectItem={(e: any) => {
                         onChange(e.value);
                       }}
