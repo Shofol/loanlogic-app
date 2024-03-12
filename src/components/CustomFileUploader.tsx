@@ -117,7 +117,7 @@ const CustomFileUploader = ({
                   color: theme.COLORS.bodyTextColor
                 }}
               >
-                Take Picture
+                Capturar imagen
               </Text>
             </View>
           </TouchableOpacity>
