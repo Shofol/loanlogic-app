@@ -278,7 +278,6 @@ const DPINIT = ({
             <Text style={[InputStyles.error]}>Esto es requerido.</Text>
           )}
         </View>
-
         <View style={InputStyles.field}>
           <Text style={InputStyles.label}>
             NIT
