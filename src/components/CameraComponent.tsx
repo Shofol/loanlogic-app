@@ -1,12 +1,36 @@
 import { Camera, CameraType } from "expo-camera";
 import React, { useRef, useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 
-const CameraComponent = () => {
+const CameraComponent = ({ onCapture }: { onCapture: (file: any) => void }) => {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [image, setImage] = useState(null);
   const camRef = useRef<any>(null);
+
+  if (!permission) {
+    // Camera permissions are still loading
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
 
   function toggleCameraType() {
     setType((current) =>
@@ -14,17 +38,20 @@ const CameraComponent = () => {
     );
   }
 
-  const takePicture = () => {
+  const takePicture = async () => {
     if (camRef) {
       try {
-        const image = camRef.current.takePictureAsync();
+        const image = await camRef.current.takePictureAsync();
         console.log(image);
         setImage(image.uri);
+        console.log(image.uri);
+        onCapture(image.uri);
       } catch (error) {
         console.log(error);
       }
     }
   };
+
   return (
     <Modal>
       <View style={styles.container}>

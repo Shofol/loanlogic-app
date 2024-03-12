@@ -21,8 +21,19 @@ const CustomFileUploader = ({
     }
   }, [uploadedDocs]);
 
-  const takePicture = () => {
-    setShowCamera(true);
+  const onCapture = (file: any) => {
+    const documents = [
+      formatToFile({
+        name: "New File",
+        uri: file,
+        mimeType: "image/jpeg"
+        // size: file.size
+      })
+    ];
+    console.log(documents);
+    setDocuments(documents as any);
+    onUpload(documents as any);
+    setShowCamera(false);
   };
 
   const pickDocument = async () => {
@@ -44,69 +55,73 @@ const CustomFileUploader = ({
   return (
     <>
       <View>
-        <TouchableOpacity
-          style={{
-            padding: 10,
-            borderColor: theme.COLORS.green,
-            borderWidth: 2,
-            borderRadius: 5,
-            borderStyle: "dashed"
-          }}
-          onPress={(e) => {
-            pickDocument();
-          }}
-        >
-          <View
+        <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
+          <TouchableOpacity
             style={{
-              backgroundColor: theme.COLORS.white,
               padding: 10,
-              borderRadius: 5
+              borderColor: theme.COLORS.green,
+              borderWidth: 2,
+              borderRadius: 5,
+              borderStyle: "dashed",
+              flex: 1
+            }}
+            onPress={(e) => {
+              pickDocument();
             }}
           >
-            <Text
+            <View
               style={{
-                fontSize: 14,
-                textAlign: "center",
-                fontWeight: "bold",
-                color: theme.COLORS.bodyTextColor
+                backgroundColor: theme.COLORS.white,
+                padding: 10,
+                borderRadius: 5
               }}
             >
-              Cargar Foto
-            </Text>
-          </View>
-        </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: theme.COLORS.bodyTextColor
+                }}
+              >
+                Cargar Foto
+              </Text>
+            </View>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{
-            padding: 10,
-            borderColor: theme.COLORS.green,
-            borderWidth: 2,
-            borderRadius: 5,
-            borderStyle: "dashed"
-          }}
-          onPress={(e) => {
-            takePicture();
-          }}
-        >
-          <View
+          <TouchableOpacity
             style={{
-              backgroundColor: theme.COLORS.white,
               padding: 10,
-              borderRadius: 5
+              borderColor: theme.COLORS.green,
+              borderWidth: 2,
+              borderRadius: 5,
+              flex: 1,
+              borderStyle: "dashed"
+            }}
+            onPress={(e) => {
+              setShowCamera(true);
             }}
           >
-            <Text
+            <View
               style={{
-                fontSize: 14,
-                textAlign: "center",
-                fontWeight: "bold",
-                color: theme.COLORS.bodyTextColor
+                backgroundColor: theme.COLORS.white,
+                padding: 10,
+                borderRadius: 5
               }}
             >
-              Take Picture
-            </Text>
-          </View>
-        </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: theme.COLORS.bodyTextColor
+                }}
+              >
+                Take Picture
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
         <View style={{ marginVertical: 15, flexDirection: "row", gap: 16 }}>
           {documents.length > 0 &&
@@ -134,7 +149,13 @@ const CustomFileUploader = ({
             })}
         </View>
       </View>
-      {showCamera && <CameraComponent />}
+      {showCamera && (
+        <CameraComponent
+          onCapture={(file) => {
+            onCapture(file);
+          }}
+        />
+      )}
     </>
   );
 };
