@@ -1,13 +1,6 @@
 import { Camera, CameraType } from "expo-camera";
-import React, { useRef, useState } from "react";
-import {
-  Button,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const CameraComponent = ({ onCapture }: { onCapture: (file: any) => void }) => {
   const [type, setType] = useState(CameraType.back);
@@ -15,22 +8,16 @@ const CameraComponent = ({ onCapture }: { onCapture: (file: any) => void }) => {
   const [image, setImage] = useState(null);
   const camRef = useRef<any>(null);
 
-  if (!permission) {
-    // Camera permissions are still loading
-    return <View />;
-  }
+  useEffect(() => {
+    // if (!permission) {
+    //   // Camera permissions are still loading
 
-  if (!permission.granted) {
-    // Camera permissions are not granted yet
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
-          We need your permission to show the camera
-        </Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
+    // }
+
+    if (!permission?.granted) {
+      requestPermission();
+    }
+  }, []);
 
   function toggleCameraType() {
     setType((current) =>
@@ -58,10 +45,10 @@ const CameraComponent = ({ onCapture }: { onCapture: (file: any) => void }) => {
         <Camera style={styles.camera} type={type} ref={camRef}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={takePicture}>
-              <Text style={styles.text}>Take Picture</Text>
+              <Text style={styles.text}>Capturar imagen</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-              <Text style={styles.text}>Flip Camera</Text>
+              <Text style={styles.text}>Cámara plegable</Text>
             </TouchableOpacity>
           </View>
         </Camera>
@@ -82,7 +69,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "transparent",
-    marginTop: "100%"
+    marginTop: "100%",
+    marginBottom: 20
   },
   button: {
     flex: 1,
