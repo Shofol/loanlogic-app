@@ -55,8 +55,6 @@ const NegocioPropio = ({
 
     if (occupation === "SALARIED" || occupation === "SALARIEDANDBUSINESS") {
       nextStep();
-    } else if (occupation === "BUSINESS") {
-      nextStep(4);
     } else {
       nextStep(5);
     }
@@ -103,7 +101,7 @@ const NegocioPropio = ({
   return (
     <View>
       <Text style={Wizard.header}>NegocioPropio</Text>
-
+      <Text>{JSON.stringify(errors)}</Text>
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>
           Nombre del negocio<Text>*</Text>
