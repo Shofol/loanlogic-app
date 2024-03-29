@@ -100,8 +100,7 @@ const NegocioPropio = ({
 
   return (
     <View>
-      <Text style={Wizard.header}>NegocioPropio</Text>
-      <Text>{JSON.stringify(errors)}</Text>
+      <Text style={Wizard.header}>Negocio Propio</Text>
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>
           Nombre del negocio<Text>*</Text>
