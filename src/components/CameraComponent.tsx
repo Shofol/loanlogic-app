@@ -48,7 +48,7 @@ const CameraComponent = ({ onCapture }: { onCapture: (file: any) => void }) => {
               <Text style={styles.text}>Capturar imagen</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-              <Text style={styles.text}>Cámara plegable</Text>
+              <Text style={styles.text}>Cámara frontal</Text>
             </TouchableOpacity>
           </View>
         </Camera>
