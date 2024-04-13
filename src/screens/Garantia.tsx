@@ -161,7 +161,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
 
           <View style={InputStyles.field}>
             <Text style={InputStyles.label}>
-              Modelo<Text>*</Text>
+              Marca<Text>*</Text>
             </Text>
             <View style={InputStyles.container}>
               <Controller
@@ -174,7 +174,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
-                    placeholder="Modelo"
+                    placeholder="Marca"
                   />
                 )}
                 name="model"
@@ -187,20 +187,20 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
 
           <View style={InputStyles.field}>
             <Text style={InputStyles.label}>
-              Destino del crédito<Text>*</Text>
+              Número de serie<Text>*</Text>
             </Text>
             <View style={InputStyles.container}>
               <Controller
                 control={control}
                 rules={{
-                  required: "Número de série"
+                  required: "Número de serie"
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <CustomInput
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
-                    placeholder="Número de série"
+                    placeholder="Número de serie"
                   />
                 )}
                 name="serial_number"
@@ -213,7 +213,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
             )}
           </View>
 
-          <Text style={InputStyles.label}>Foto ambos lados del DPI*</Text>
+          <Text style={InputStyles.label}>Foto de Garantía*</Text>
           <View style={{ marginBottom: 20 }}>
             <CustomFileUploader
               onUpload={() => {

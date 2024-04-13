@@ -129,7 +129,7 @@ const DPINIT = ({
 
         <View style={InputStyles.field}>
           <Text style={InputStyles.label}>
-            Destino del crédito<Text>*</Text>
+            Número DPI<Text>*</Text>
           </Text>
           <View style={InputStyles.container}>
             <Controller
