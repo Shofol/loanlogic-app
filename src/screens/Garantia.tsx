@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as DocumentPicker from "expo-document-picker";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, SafeAreaView, Text, View } from "react-native";
@@ -13,7 +12,6 @@ import CustomFileUploader from "../components/CustomFileUploader";
 import CustomInput from "../components/CustomInput";
 import { tipoDeGarantiaOptions } from "../constants/data";
 import { InputStyles, theme } from "../constants/theme";
-import { formatToFile } from "../utils/formatToFile";
 import useLocation from "../utils/hooks/useLocation";
 
 const Garantia: React.FC = ({ route, navigation }: any) => {
@@ -56,20 +54,24 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
     );
   };
 
-  const pickDocument = async () => {
-    let newUploadedFiles: any[] = [];
-
-    let result = await DocumentPicker.getDocumentAsync({
-      multiple: true
-    });
-
-    if (result.assets) {
-      result.assets.map((item) => {
-        newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
-      });
-      setValue("photo", newUploadedFiles as any);
-    }
+  const onDocumentUpload = (newUploadedFiles: any) => {
+    setValue("photo", newUploadedFiles as any);
   };
+
+  // const pickDocument = async () => {
+  //   let newUploadedFiles: any[] = [];
+
+  //   let result = await DocumentPicker.getDocumentAsync({
+  //     multiple: true
+  //   });
+
+  //   if (result.assets) {
+  //     result.assets.map((item) => {
+  //       newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
+  //     });
+  //     setValue("photo", newUploadedFiles as any);
+  //   }
+  // };
 
   const onSubmit = async (values: any) => {
     const form = new FormData();
@@ -216,8 +218,8 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
           <Text style={InputStyles.label}>Foto de Garantía*</Text>
           <View style={{ marginBottom: 20 }}>
             <CustomFileUploader
-              onUpload={() => {
-                pickDocument();
+              onUpload={(files) => {
+                onDocumentUpload(files);
               }}
             />
             {errors.photo && (

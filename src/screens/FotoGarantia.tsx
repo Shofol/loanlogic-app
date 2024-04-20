@@ -1,4 +1,4 @@
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -19,11 +19,11 @@ const FotoGarantia: any = () => {
   const [dataFetchingCompleted, setDataFetchingCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigation: any = useNavigation();
-  const isFocused = useIsFocused();
+  // const isFocused = useIsFocused();
 
   useEffect(() => {
     fetchData();
-  }, [isFocused]);
+  }, []);
 
   const fetchData = async () => {
     if (!dataFetchingCompleted) {

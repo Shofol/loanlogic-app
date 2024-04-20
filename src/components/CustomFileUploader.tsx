@@ -22,17 +22,19 @@ const CustomFileUploader = ({
   }, [uploadedDocs]);
 
   const onCapture = (file: any) => {
-    const documents = [
+    const splittedFileName = file.toString().split("/");
+    const newDocuments = [
       formatToFile({
-        name: "New File",
+        name: splittedFileName[splittedFileName.length - 1]
+          ? splittedFileName[splittedFileName.length - 1]
+          : "Untitled",
         uri: file,
         mimeType: "image/jpeg"
-        // size: file.size
       })
     ];
-    console.log(documents);
-    setDocuments(documents as any);
-    onUpload(documents as any);
+    console.log(newDocuments);
+    setDocuments([...documents, ...newDocuments]);
+    onUpload([...documents, ...newDocuments]);
     setShowCamera(false);
   };
 
@@ -56,7 +58,7 @@ const CustomFileUploader = ({
     <>
       <View>
         <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               padding: 10,
               borderColor: theme.COLORS.green,
@@ -87,7 +89,7 @@ const CustomFileUploader = ({
                 Cargar Foto
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={{

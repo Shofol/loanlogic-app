@@ -29,9 +29,7 @@ const CameraComponent = ({ onCapture }: { onCapture: (file: any) => void }) => {
     if (camRef) {
       try {
         const image = await camRef.current.takePictureAsync();
-        console.log(image);
         setImage(image.uri);
-        console.log(image.uri);
         onCapture(image.uri);
       } catch (error) {
         console.log(error);
@@ -42,7 +40,7 @@ const CameraComponent = ({ onCapture }: { onCapture: (file: any) => void }) => {
   return (
     <Modal>
       <View style={styles.container}>
-        <Camera style={styles.camera} type={type} ref={camRef}>
+        <Camera style={styles.camera} type={type} ratio="16:9" ref={camRef}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={takePicture}>
               <Text style={styles.text}>Capturar imagen</Text>
