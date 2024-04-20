@@ -235,11 +235,13 @@ const DPINIT = ({
                 value={value}
                 items={departments}
                 onSelectItem={(e: any) => {
-                  setNegMunicipalities(
-                    municipalitiesValues.filter(
-                      (muni) => muni.department === e.value
-                    )[0].municipalities
-                  );
+                  if (e.value) {
+                    setNegMunicipalities(
+                      municipalitiesValues.filter(
+                        (muni) => muni.department === e.value
+                      )[0].municipalities
+                    );
+                  }
                   onChange(e.value);
                 }}
               />
