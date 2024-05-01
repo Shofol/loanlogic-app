@@ -675,29 +675,20 @@ export const roles = [
 ];
 
 export const parentesco = [
-  { label: "Hermano", value: "HERMANO" },
-  { label: "Hermana", value: "HERMANA" },
+  { label: "Hermano/a", value: "HERMANO" },
   { label: "Papá", value: "PAPA" },
   { label: "Mamá", value: "MAMA" },
-  { label: "Abuelo", value: "ABUELO" },
-  { label: "Abuela", value: "ABUELA" },
-  { label: "Primo", value: "PRIMO" },
-  { label: "Prima", value: "PRIMA" },
-  { label: "Sobrino", value: "SOBRINO" },
-  { label: "Sobrina", value: "SOBRINA" },
-  { label: "Cuñado", value: "CUÑADO" },
-  { label: "Cuñada", value: "CUÑADA" },
-  { label: "Tía", value: "TIA" },
-  { label: "Tío", value: "TIO" },
-  { label: "Hijo", value: "HIJO" },
-  { label: "Hija", value: "HIJA" }
+  { label: "Abuelo/a", value: "ABUELO" },
+  { label: "Primo/a", value: "PRIMO" },
+  { label: "Sobrino/a", value: "SOBRINO" },
+  { label: "Cuñado/a", value: "CUÑADO" },
+  { label: "Tío/a", value: "TIO" },
+  { label: "Hijo/a", value: "HIJO" },
 ];
 
 export const relacion = [
-  { label: "Amigo", value: "AMIGO" },
-  { label: "Amiga", value: "AMIGA" },
-  { label: "Conocido", value: "CONOCIDO" },
-  { label: "Conocida", value: "CONOCIDA" }
+  { label: "Amigo/a", value: "AMIGO" },
+  { label: "Conocido/a", value: "CONOCIDO" },
 ];
 
 export const guaranteeTypes = [
