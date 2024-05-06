@@ -30,6 +30,7 @@ const NegocioPropio = ({
   const dpiData = useContext(DPIContext);
   const defaultValues = {
     business_name: dpiData ? dpiData.business_name : "",
+    business_description: dpiData ? dpiData.business_description : "",
     start_date: dpiData ? dpiData.start_date : "",
     nit5: dpiData ? dpiData.nit5 : "",
     monthly_sales: dpiData ? dpiData.monthly_sales : "",
@@ -63,6 +64,7 @@ const NegocioPropio = ({
   const Schema = z
     .object({
       business_name: z.string().min(1),
+      business_description: z.string().min(1),
       start_date: z.string().min(1),
       nit5: z.any(),
       monthly_sales: z
@@ -120,6 +122,29 @@ const NegocioPropio = ({
           />
         </View>
         {errors.business_name && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
+      </View>
+
+      <View style={InputStyles.field}>
+        <Text style={InputStyles.label}>
+          Giro de negocio<Text>*</Text>
+        </Text>
+        <View style={InputStyles.container}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomInput
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value}
+                placeholder="Giro de negocio"
+              />
+            )}
+            name="business_description"
+          />
+        </View>
+        {errors.business_description && (
           <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
@@ -224,91 +249,6 @@ const NegocioPropio = ({
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>
-          Dirección del negocio<Text>*</Text>
-        </Text>
-        <View style={InputStyles.container}>
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <CustomInput
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                placeholder="Dirección del negocio"
-              />
-            )}
-            name="business_address"
-          />
-        </View>
-        {errors.business_address && (
-          <Text style={InputStyles.error}>Esto es requerido.</Text>
-        )}
-      </View>
-
-      <View style={{ marginBottom: 20 }}>
-        <LocationButton
-          locationAdded={locationAdded}
-          onPress={() => {
-            try {
-              setValue(
-                "business_latitude",
-                location.coords.latitude.toString() as string
-              );
-              setValue(
-                "business_longitude",
-                location.coords.longitude.toString() as string
-              );
-              setLocationAdded(true);
-            } catch (error) {
-              console.log(error);
-            }
-          }}
-        />
-      </View>
-
-      <View style={InputStyles.field}>
-        <Text style={InputStyles.label}>Departamento</Text>
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <CustomDropdownPicker
-              value={value}
-              items={departments}
-              onSelectItem={(e: any) => {
-                if (e.value) {
-                  setMunicipalities(
-                    municipalitiesValues.filter(
-                      (muni) => muni.department === e.value
-                    )[0].municipalities
-                  );
-                }
-                onChange(e.value);
-              }}
-            />
-          )}
-          name="business_department"
-        />
-        {errors.business_department && <Text>Esto es requerido.</Text>}
-      </View>
-
-      <View style={InputStyles.field}>
-        <Text style={InputStyles.label}>Municipio</Text>
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <CustomDropdownPicker
-              value={value}
-              items={municipalities}
-              onSelectItem={(e: any) => onChange(e.value)}
-            />
-          )}
-          name="business_municipality"
-        />
-        {errors.business_municipality && <Text>Esto es requerido.</Text>}
-      </View>
-
-      <View style={InputStyles.field}>
-        <Text style={InputStyles.label}>
           Teléfono del negocio<Text>*</Text>
         </Text>
         <View style={InputStyles.container}>
@@ -333,6 +273,95 @@ const NegocioPropio = ({
               : errors.business_phone.message?.toString()}
           </Text>
         )}
+      </View>
+
+      <View style={InputStyles.field}>
+        <Text style={InputStyles.label}>
+          Dirección del negocio<Text>*</Text>
+        </Text>
+        <View style={InputStyles.container}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomInput
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value}
+                placeholder="Dirección del negocio"
+              />
+            )}
+            name="business_address"
+          />
+        </View>
+        {errors.business_address && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
+      </View>
+
+      <View style={InputStyles.field}>
+        <Text style={InputStyles.label}>Departamento</Text>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <CustomDropdownPicker
+              value={value}
+              items={departments}
+              onSelectItem={(e: any) => {
+                if (e.value) {
+                  setMunicipalities(
+                    municipalitiesValues.filter(
+                      (muni) => muni.department === e.value
+                    )[0].municipalities
+                  );
+                }
+                onChange(e.value);
+              }}
+            />
+          )}
+          name="business_department"
+        />
+        {errors.business_department && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
+      </View>
+
+      <View style={InputStyles.field}>
+        <Text style={InputStyles.label}>Municipio</Text>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <CustomDropdownPicker
+              value={value}
+              items={municipalities}
+              onSelectItem={(e: any) => onChange(e.value)}
+            />
+          )}
+          name="business_municipality"
+        />
+        {errors.business_municipality && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
+      </View>
+
+      <View style={{ marginBottom: 20 }}>
+        <LocationButton
+          locationAdded={locationAdded}
+          onPress={() => {
+            try {
+              setValue(
+                "business_latitude",
+                location.coords.latitude.toString() as string
+              );
+              setValue(
+                "business_longitude",
+                location.coords.longitude.toString() as string
+              );
+              setLocationAdded(true);
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        />
       </View>
 
       <View

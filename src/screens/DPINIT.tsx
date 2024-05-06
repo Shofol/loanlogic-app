@@ -84,7 +84,11 @@ const DPINIT = ({
 
   const Schema = z
     .object({
-      dpi_number: z.string().min(1),
+      dpi_number: z
+        .string()
+        .min(13)
+        .max(13)
+        .refine((s) => !s.includes(" "), "No se permiten espacios"),
       place_of_birth_city: z.string(),
       place_of_birth_region: z.string(),
       neighborhood_city: z.string(),
@@ -143,13 +147,21 @@ const DPINIT = ({
                   }}
                   value={value}
                   placeholder="Número DPI"
+                  keyboardType="numeric"
                 />
               )}
               name="dpi_number"
             />
           </View>
+          {/* <Text>{JSON.stringify(errors)}</Text> */}
           {errors.dpi_number && (
-            <Text style={InputStyles.error}>Esto es requerido.</Text>
+            <Text style={InputStyles.error}>
+              {errors.dpi_number.type === "too_small"
+                ? "La cadena debe contener al menos 13 caracteres"
+                : errors.dpi_number.type === "too_big"
+                ? "La cadena debe contener como máximo 13 caracteres"
+                : errors.dpi_number.message?.toString()}
+            </Text>
           )}
         </View>
 
@@ -214,7 +226,6 @@ const DPINIT = ({
                 defaultValue={null}
                 value={dayjs(value)}
                 onChange={onChange}
-                defaultText="Seleccionar fecha de vencimiento"
               />
             )}
             name="expiration_date"

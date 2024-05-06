@@ -41,7 +41,7 @@ const App: React.FC = () => {
   } else {
     return (
       <View>
-        <Text>Loading...</Text>
+        <Text>Cargando...</Text>
       </View>
     );
   }
