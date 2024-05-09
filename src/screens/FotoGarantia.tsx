@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -11,6 +11,7 @@ import {
 import api from "../api/api";
 import { components } from "../components";
 import { theme } from "../constants";
+import { formatName } from "../utils/formatName";
 import { Guarantee } from "../utils/types";
 
 const FotoGarantia: any = () => {
@@ -19,11 +20,16 @@ const FotoGarantia: any = () => {
   const [dataFetchingCompleted, setDataFetchingCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigation: any = useNavigation();
-  // const isFocused = useIsFocused();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (isFocused) {
+      fetchData();
+    } else {
+      setData([]);
+      setDataFetchingCompleted(false);
+    }
+  }, [isFocused]);
 
   const fetchData = async () => {
     if (!dataFetchingCompleted) {
@@ -121,7 +127,8 @@ const FotoGarantia: any = () => {
               color: theme.COLORS.mainDark
             }}
           >
-            {guaranty?.client.name} {guaranty?.client.surname} ({guaranty.id})
+            {formatName(guaranty?.client.name, guaranty?.client.surname)} (
+            {guaranty.id})
           </Text>
           <Text
             style={{

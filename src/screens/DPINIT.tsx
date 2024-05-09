@@ -145,7 +145,7 @@ const DPINIT = ({
                     fetchDPIData(value);
                     onBlur();
                   }}
-                  value={value}
+                  value={value === "NaN" ? undefined : value}
                   placeholder="Número DPI"
                   keyboardType="numeric"
                 />

@@ -183,9 +183,9 @@ const Asalariado = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 keyboardType="numeric"
-                placeholder="Ingresos mensuales"
+                placeholder={"Ingresos mensuales"}
               />
             )}
             name="monthly_income"
@@ -211,7 +211,7 @@ const Asalariado = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 keyboardType="numeric"
                 placeholder="Gastos mensuales"
               />
@@ -351,7 +351,7 @@ const Asalariado = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 keyboardType="numeric"
                 placeholder="Teléfono del trabajo"
               />

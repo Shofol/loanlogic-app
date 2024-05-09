@@ -242,7 +242,7 @@ const DatosDelSolicitante = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 placeholder="Número de celular"
                 keyboardType="numeric"
               />
@@ -268,7 +268,7 @@ const DatosDelSolicitante = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 placeholder="Número de teléfono fijo"
                 keyboardType="numeric"
               />

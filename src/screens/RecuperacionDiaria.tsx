@@ -11,6 +11,7 @@ import {
 import api from "../api/api";
 import { components } from "../components";
 import { theme } from "../constants";
+import { formatName } from "../utils/formatName";
 import { DebtCollection } from "../utils/types";
 
 const RecuperacionDiaria: React.FC = () => {
@@ -103,7 +104,7 @@ const RecuperacionDiaria: React.FC = () => {
               color: theme.COLORS.mainDark
             }}
           >
-            {collection?.client.name} {collection?.client.surname} (
+            {formatName(collection?.client.name, collection?.client.surname)} (
             {collection.credit.id})
           </Text>
           <Text

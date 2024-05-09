@@ -11,6 +11,7 @@ import {
 import api from "../api/api";
 import { components } from "../components";
 import { theme } from "../constants";
+import { formatName } from "../utils/formatName";
 import { Guarantee } from "../utils/types";
 
 const Clientes: React.FC = () => {
@@ -120,7 +121,7 @@ const Clientes: React.FC = () => {
               color: theme.COLORS.mainDark
             }}
           >
-            {client.name} {client.surname} ({client.id})
+            {formatName(client.name, client.surname)} ({client.id})
           </Text>
 
           <Text

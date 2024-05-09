@@ -188,7 +188,7 @@ const Referencias = ({
                     <CustomInput
                       onChange={onChange}
                       onBlur={onBlur}
-                      value={value}
+                      value={value === "NaN" ? undefined : value}
                       placeholder="Teléfono trabajo"
                       keyboardType="numeric"
                     />
@@ -224,7 +224,7 @@ const Referencias = ({
                     <CustomInput
                       onChange={onChange}
                       onBlur={onBlur}
-                      value={value}
+                      value={value === "NaN" ? undefined : value}
                       placeholder="Celular"
                       keyboardType="numeric"
                     />
@@ -322,7 +322,7 @@ const Referencias = ({
                     <CustomInput
                       onChange={onChange}
                       onBlur={onBlur}
-                      value={value}
+                      value={value === "NaN" ? undefined : value}
                       placeholder="Teléfono trabajo"
                       keyboardType="numeric"
                     />
@@ -358,7 +358,7 @@ const Referencias = ({
                     <CustomInput
                       onChange={onChange}
                       onBlur={onBlur}
-                      value={value}
+                      value={value === "NaN" ? undefined : value}
                       placeholder="Celular"
                       keyboardType="numeric"
                     />

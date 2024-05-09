@@ -202,7 +202,7 @@ const NegocioPropio = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 placeholder="Ventas mensuales"
                 keyboardType="numeric"
               />
@@ -230,7 +230,7 @@ const NegocioPropio = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 placeholder="Gastos mensuales"
                 keyboardType="numeric"
               />
@@ -258,7 +258,7 @@ const NegocioPropio = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 placeholder="Teléfono del negocio"
                 keyboardType="numeric"
               />
