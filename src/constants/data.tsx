@@ -493,6 +493,7 @@ export const municipalitiesValues = [
       { label: "Sipacapa", value: "Sipacapa" },
       { label: "Tacaná", value: "Tacaná" },
       { label: "Tajumulco", value: "Tajumulco" },
+      { label: "Tecún Umán", value: "Tecún Umán" },
       { label: "Tejutla", value: "Tejutla" },
       { label: "La Blanca", value: "La Blanca" }
     ]
