@@ -1,19 +1,17 @@
-import Header from "./Header";
-import ProfileCategory from "./ProfileCategory";
 import Button from "./Button";
+import Header from "./Header";
 import InputField from "./InputField";
-import Transaction from "./Transaction";
-import TeofinShadow from "./TeofinShadow";
+import ProfileCategory from "./ProfileCategory";
 import SmallHeader from "./SmallHeader";
+import TeofinShadow from "./TeofinShadow";
 
 const components = {
-    Header,
-    ProfileCategory,
-    Button,
-    InputField,
-    Transaction,
-    TeofinShadow,
-    SmallHeader,
+  Header,
+  ProfileCategory,
+  Button,
+  InputField,
+  TeofinShadow,
+  SmallHeader
 };
 
 export { components };
