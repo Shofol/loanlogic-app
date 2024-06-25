@@ -22,8 +22,8 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
     .object({
       guarantee_item: z.string().min(1),
       description: z.string().min(1),
-      model: z.any(),
-      serial_number: z.any(),
+      model: z.string().min(1),
+      serial_number: z.string().min(1),
       photo: z.any().array().nonempty()
     })
     .required();
@@ -57,21 +57,6 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
   const onDocumentUpload = (newUploadedFiles: any) => {
     setValue("photo", newUploadedFiles as any);
   };
-
-  // const pickDocument = async () => {
-  //   let newUploadedFiles: any[] = [];
-
-  //   let result = await DocumentPicker.getDocumentAsync({
-  //     multiple: true
-  //   });
-
-  //   if (result.assets) {
-  //     result.assets.map((item) => {
-  //       newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
-  //     });
-  //     setValue("photo", newUploadedFiles as any);
-  //   }
-  // };
 
   const onSubmit = async (values: any) => {
     const form = new FormData();
@@ -155,9 +140,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
               />
             </View>
             {errors.description && (
-              <Text style={InputStyles.error}>
-                {errors.description.message}
-              </Text>
+              <Text style={InputStyles.error}>Esto es requerido. </Text>
             )}
           </View>
 
@@ -183,7 +166,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
               />
             </View>
             {errors.model && (
-              <Text style={InputStyles.error}>{errors.model.message}</Text>
+              <Text style={InputStyles.error}>Esto es requerido.</Text>
             )}
           </View>
 
@@ -209,9 +192,7 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
               />
             </View>
             {errors.serial_number && (
-              <Text style={InputStyles.error}>
-                {errors.serial_number.message}
-              </Text>
+              <Text style={InputStyles.error}>Esto es requerido.</Text>
             )}
           </View>
 

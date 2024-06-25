@@ -88,7 +88,10 @@ const DPINIT = ({
         .string()
         .min(13)
         .max(13)
-        .refine((s) => !s.includes(" "), "No se permiten espacios"),
+        .refine(
+          (s) => !s.includes(" ") && !s.includes(",") && !s.includes("."),
+          "Se encontraron caracteres no válidos"
+        ),
       place_of_birth_city: z.string(),
       place_of_birth_region: z.string(),
       neighborhood_city: z.string(),

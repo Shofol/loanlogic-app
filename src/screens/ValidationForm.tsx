@@ -79,8 +79,8 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
       payment_day: z.string().min(1),
       guarantee_approved: z.boolean(),
       comment: z.string().min(1),
-      evidences: z.any(),
-      work_documents: z.any(),
+      evidences: z.any().array().nonempty(),
+      work_documents: z.any().array().nonempty(),
       credit_approval: z.boolean()
     })
     .required();
@@ -355,7 +355,7 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
             )}
           </View>
 
-          <Text style={InputStyles.label}>Fotos de la casa</Text>
+          <Text style={InputStyles.label}>Fotos de la casa*</Text>
           <View style={{ marginBottom: 20 }}>
             <CustomFileUploader
               onUpload={(files) => {
@@ -367,7 +367,7 @@ const ValidationForm: React.FC = ({ route, navigation }: any) => {
             )}
           </View>
 
-          <Text style={InputStyles.label}>Fotos del negocio</Text>
+          <Text style={InputStyles.label}>Fotos del negocio*</Text>
           <View style={{ marginBottom: 20 }}>
             <CustomFileUploader
               onUpload={(files) => {

@@ -3,13 +3,16 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const CustomCheckbox = ({
   text,
-  onchange
+  onchange,
+  disabled = false
 }: {
   text: string;
   onchange: any;
+  disabled?: boolean;
 }) => {
   return (
     <BouncyCheckbox
+      disabled={disabled}
       size={20}
       fillColor="#26C770"
       unfillColor="#FFFFFF"

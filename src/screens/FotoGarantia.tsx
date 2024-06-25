@@ -88,14 +88,7 @@ const FotoGarantia: any = () => {
   };
 
   const renderItem = ({ item }: { item: any }) => {
-    return (
-      <Item
-        item={item}
-        onPress={() => handleNavigation(item.id)}
-        // backgroundColor={backgroundColor}
-        // textColor={color}
-      />
-    );
+    return <Item item={item} onPress={() => handleNavigation(item.id)} />;
   };
 
   const Item = ({

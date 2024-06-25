@@ -13,6 +13,7 @@ import { PieChart } from "react-native-gifted-charts";
 import Toast from "react-native-toast-message";
 import api from "../api/api";
 import { components } from "../components";
+import CustomCheckbox from "../components/CustomCheckbox";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import { ComponentStyles, DataStyle, InputStyles } from "../constants/theme";
@@ -26,18 +27,31 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
   const [total, setTotal] = useState(0);
   const [totalPending, setTotalPending] = useState(0);
   const [errors, setErrors] = useState(false);
+  const [exonerationErrors, setExonerationErrors] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
   const [payment_made, setPayment_made] = useState<string>();
+  const [exoneration_description, setExoneration_description] =
+    useState<string>();
+  const [exoneration_requested, setExoneration_requested] =
+    useState<boolean>(false);
 
   const submit = async () => {
-    if (!payment_made) {
-      setErrors(true);
+    if (!payment_made || (exoneration_requested && !exoneration_description)) {
+      if (!payment_made) {
+        setErrors(true);
+      }
+      if (exoneration_requested && !exoneration_description) {
+        setExonerationErrors(true);
+        return;
+      }
       return;
     }
+
     const values = {
       payment_made: payment_made
     };
@@ -108,6 +122,19 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
         goBackColor={theme.COLORS.white}
       />
     );
+  };
+
+  const checkValidation = (data: DebtCollection) => {
+    if (!data?.debt_collection?.default_amount) {
+      return true;
+    } else if (
+      +data?.debt_collection?.default_amount > 0 &&
+      data?.debt_collection?.status === "PENDING"
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   const print = async () => {
@@ -289,6 +316,42 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                   Monto total: {data?.debt_collection?.amount_to_pay} Q
                 </Text>
                 <View style={[DataStyle.separator, { marginBottom: 20 }]} />
+
+                <View style={{ marginBottom: 20 }}>
+                  <CustomCheckbox
+                    disabled={checkValidation(data)}
+                    text={"Solicitar exoneración de mo"}
+                    onchange={() => {
+                      setExoneration_requested((prev) => !prev);
+                    }}
+                  />
+                </View>
+
+                {exoneration_requested && (
+                  <View style={InputStyles.field}>
+                    <Text
+                      style={[
+                        { ...theme.FONTS.Mulish_500Medium },
+                        { marginBottom: 5 }
+                      ]}
+                    >
+                      Motivo petición de exoneración de mora*
+                    </Text>
+                    <View style={InputStyles.containerBg}>
+                      <CustomInput
+                        value={exoneration_description}
+                        onChange={(value: string) => {
+                          setExonerationErrors(false);
+                          setExoneration_description(value);
+                        }}
+                        placeholder="Ingrese el motivo de la petición de exoneración"
+                      />
+                    </View>
+                    {exonerationErrors && (
+                      <Text style={InputStyles.error}>Esto es requerido</Text>
+                    )}
+                  </View>
+                )}
 
                 <View style={InputStyles.field}>
                   <Text

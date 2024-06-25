@@ -32,7 +32,6 @@ const CustomFileUploader = ({
         mimeType: "image/jpeg"
       })
     ];
-    console.log(newDocuments);
     setDocuments([...documents, ...newDocuments]);
     onUpload([...documents, ...newDocuments]);
     setShowCamera(false);
