@@ -320,7 +320,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                 <View style={{ marginBottom: 20 }}>
                   <CustomCheckbox
                     disabled={checkValidation(data)}
-                    text={"Solicitar exoneración de mo"}
+                    text={"Solicitar exoneración de mora"}
                     onchange={() => {
                       setExoneration_requested((prev) => !prev);
                     }}
