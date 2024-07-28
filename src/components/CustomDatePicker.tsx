@@ -8,7 +8,7 @@ const CustomDatePicker = ({
   value,
   onChange,
   defaultValue = dayjs(),
-  defaultText = "Selecciona una fecha"
+  defaultText = "Seleccionar"
 }: {
   value: any;
   onChange: any;
@@ -43,7 +43,7 @@ const CustomDatePicker = ({
             color: theme.COLORS.bodyTextColor
           }}
         >
-          {date
+          {dayjs(date).isValid()
             ? dayjs(date).locale("es").format("DD, MMMM, YYYY")
             : defaultText}
         </Text>

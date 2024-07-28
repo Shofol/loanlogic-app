@@ -36,7 +36,6 @@ const Asalariado = ({
     position: dpiData ? dpiData.position : "",
     monthly_income: dpiData ? `${parseInt(dpiData.monthly_income)}` : "",
     monthly_expenses: dpiData ? `${parseInt(dpiData.monthly_expenses)}` : "",
-    date_and_number_of_income: dpiData ? dpiData.date_and_number_of_income : "",
     immediate_boss_name: dpiData ? dpiData.immediate_boss_name : "",
     work_address: dpiData ? dpiData.work_address : "",
     work_department: dpiData ? dpiData.work_department : "",
@@ -65,7 +64,6 @@ const Asalariado = ({
         .string()
         .min(1)
         .refine((value) => /^[0-9]*$/.test(value), "Sólo se permiten números"),
-      date_and_number_of_income: z.string().min(1),
       immediate_boss_name: z.string().min(1),
       work_address: z.string().min(1),
       work_department: z.string().min(1),
@@ -185,9 +183,9 @@ const Asalariado = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 keyboardType="numeric"
-                placeholder="Ingresos mensuales"
+                placeholder={"Ingresos mensuales"}
               />
             )}
             name="monthly_income"
@@ -213,7 +211,7 @@ const Asalariado = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 keyboardType="numeric"
                 placeholder="Gastos mensuales"
               />
@@ -227,29 +225,6 @@ const Asalariado = ({
               ? "Esto es requerido"
               : errors.monthly_expenses.message?.toString()}
           </Text>
-        )}
-      </View>
-
-      <View style={InputStyles.field}>
-        <Text style={InputStyles.label}>
-          Fecha y número de ingresos<Text>*</Text>
-        </Text>
-        <View style={InputStyles.container}>
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <CustomInput
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                placeholder="Fecha y número de ingresos"
-              />
-            )}
-            name="date_and_number_of_income"
-          />
-        </View>
-        {errors.date_and_number_of_income && (
-          <Text style={InputStyles.error}>Esto es requerido.</Text>
         )}
       </View>
 
@@ -376,7 +351,7 @@ const Asalariado = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 keyboardType="numeric"
                 placeholder="Teléfono del trabajo"
               />

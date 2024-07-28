@@ -32,7 +32,6 @@ const CustomFileUploader = ({
         mimeType: "image/jpeg"
       })
     ];
-    console.log(newDocuments);
     setDocuments([...documents, ...newDocuments]);
     onUpload([...documents, ...newDocuments]);
     setShowCamera(false);
@@ -58,39 +57,6 @@ const CustomFileUploader = ({
     <>
       <View>
         <View style={{ flex: 1, flexDirection: "row", gap: 10 }}>
-          {/* <TouchableOpacity
-            style={{
-              padding: 10,
-              borderColor: theme.COLORS.green,
-              borderWidth: 2,
-              borderRadius: 5,
-              borderStyle: "dashed",
-              flex: 1
-            }}
-            onPress={(e) => {
-              pickDocument();
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: theme.COLORS.white,
-                padding: 10,
-                borderRadius: 5
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 14,
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: theme.COLORS.bodyTextColor
-                }}
-              >
-                Cargar Foto
-              </Text>
-            </View>
-          </TouchableOpacity> */}
-
           <TouchableOpacity
             style={{
               padding: 10,

@@ -6,13 +6,14 @@ import {
   Button,
   SafeAreaView,
   Text,
-  View
+  View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { PieChart } from "react-native-gifted-charts";
 import Toast from "react-native-toast-message";
 import api from "../api/api";
 import { components } from "../components";
+import CustomCheckbox from "../components/CustomCheckbox";
 import CustomInput from "../components/CustomInput";
 import { theme } from "../constants";
 import { ComponentStyles, DataStyle, InputStyles } from "../constants/theme";
@@ -26,20 +27,35 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
   const [total, setTotal] = useState(0);
   const [totalPending, setTotalPending] = useState(0);
   const [errors, setErrors] = useState(false);
+  const [exonerationErrors, setExonerationErrors] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
   const [payment_made, setPayment_made] = useState<string>();
+  const [exoneration_description, setExoneration_description] =
+    useState<string>();
+  const [exoneration_requested, setExoneration_requested] =
+    useState<boolean>(false);
 
   const submit = async () => {
-    if (!payment_made) {
-      setErrors(true);
+    if (!payment_made || (exoneration_requested && !exoneration_description)) {
+      if (!payment_made) {
+        setErrors(true);
+      }
+      if (exoneration_requested && !exoneration_description) {
+        setExonerationErrors(true);
+        return;
+      }
       return;
     }
+
     const values = {
-      payment_made: payment_made
+      payment_made: payment_made,
+      exoneration_requested: exoneration_requested,
+      exoneration_description: exoneration_description,
     };
 
     try {
@@ -49,7 +65,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
         type: "success",
         text1: response.data.message,
         position: "bottom",
-        visibilityTime: 2000
+        visibilityTime: 2000,
       });
     } catch (error: any) {
       Toast.show({
@@ -57,7 +73,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
         text1: error.response.data.error,
         text1Style: { overflow: "scroll" },
         position: "bottom",
-        visibilityTime: 2000
+        visibilityTime: 2000,
       });
       console.log(error);
     }
@@ -88,13 +104,13 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
       {
         value: progressValue,
         color: theme.COLORS.linkColor,
-        text: `${progressValue}%`
+        text: `${progressValue}%`,
       },
       {
         value: 100 - progressValue,
         color: theme.COLORS.bgColor,
-        text: `${100 - progressValue}%`
-      }
+        text: `${100 - progressValue}%`,
+      },
     ]);
 
     setData(response.data.data);
@@ -108,6 +124,19 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
         goBackColor={theme.COLORS.white}
       />
     );
+  };
+
+  const checkValidation = (data: DebtCollection) => {
+    if (!data?.debt_collection?.default_amount) {
+      return true;
+    } else if (
+      +data?.debt_collection?.default_amount > 0 &&
+      data?.debt_collection?.status === "PENDING"
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   const print = async () => {
@@ -185,7 +214,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                   style={{
                     color: theme.COLORS.linkColor,
                     ...theme.FONTS.H4,
-                    marginBottom: 2
+                    marginBottom: 2,
                   }}
                 >
                   {`${data?.client.name.toUpperCase()} ` +
@@ -222,13 +251,13 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
               <View
                 style={[
                   ComponentStyles.card,
-                  { flex: 1, justifyContent: "center", alignItems: "center" }
+                  { flex: 1, justifyContent: "center", alignItems: "center" },
                 ]}
               >
                 <Text
                   style={{
                     ...theme.FONTS.H5,
-                    color: theme.COLORS.bodyTextColor
+                    color: theme.COLORS.bodyTextColor,
                   }}
                 >
                   Crédito pendiente
@@ -245,7 +274,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                         <Text
                           style={{
                             fontSize: 30,
-                            color: theme.COLORS.bodyTextColor
+                            color: theme.COLORS.bodyTextColor,
                           }}
                         >
                           {`${Math.round((totalPaid / total) * 100)}%`}
@@ -261,7 +290,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                 <Text
                   style={[
                     { ...theme.FONTS.Mulish_500Medium },
-                    { marginVertical: 5 }
+                    { marginVertical: 5 },
                   ]}
                 >
                   Capital e intereses amortizado: {totalPaid} Q
@@ -290,11 +319,47 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                 </Text>
                 <View style={[DataStyle.separator, { marginBottom: 20 }]} />
 
+                <View style={{ marginBottom: 20 }}>
+                  <CustomCheckbox
+                    disabled={checkValidation(data)}
+                    text={"Solicitar exoneración de mora"}
+                    onchange={() => {
+                      setExoneration_requested((prev) => !prev);
+                    }}
+                  />
+                </View>
+
+                {exoneration_requested && (
+                  <View style={InputStyles.field}>
+                    <Text
+                      style={[
+                        { ...theme.FONTS.Mulish_500Medium },
+                        { marginBottom: 5 },
+                      ]}
+                    >
+                      Motivo petición de exoneración de mora*
+                    </Text>
+                    <View style={InputStyles.containerBg}>
+                      <CustomInput
+                        value={exoneration_description}
+                        onChange={(value: string) => {
+                          setExonerationErrors(false);
+                          setExoneration_description(value);
+                        }}
+                        placeholder="Ingrese el motivo de la petición de exoneración"
+                      />
+                    </View>
+                    {exonerationErrors && (
+                      <Text style={InputStyles.error}>Esto es requerido</Text>
+                    )}
+                  </View>
+                )}
+
                 <View style={InputStyles.field}>
                   <Text
                     style={[
                       { ...theme.FONTS.Mulish_500Medium },
-                      { marginBottom: 5 }
+                      { marginBottom: 5 },
                     ]}
                   >
                     Pago realizado<Text>*</Text>
@@ -339,7 +404,7 @@ const Cobranza: React.FC = ({ route, navigation }: any) => {
                   flexDirection: "row",
                   marginHorizontal: 20,
                   marginTop: 20,
-                  justifyContent: "space-between"
+                  justifyContent: "space-between",
                 }}
               >
                 <Button

@@ -5,6 +5,7 @@ import Toast from "react-native-toast-message";
 import api from "../api/api";
 import { theme } from "../constants";
 import { svg } from "../svg";
+import { formatName } from "../utils/formatName";
 import StatusTag from "./StatusTag";
 
 const CoberturaItem: React.FC<any> = ({
@@ -64,7 +65,7 @@ const CoberturaItem: React.FC<any> = ({
               color: theme.COLORS.mainDark
             }}
           >
-            {item.client.name} {item.client.surname} ({item.id})
+            {formatName(item?.client.name, item?.client.surname)} ({item.id})
           </Text>
 
           <Text

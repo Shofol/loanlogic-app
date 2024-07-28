@@ -16,7 +16,8 @@ api.interceptors.request.use(async function (config) {
     Toast.show({
       type: "info",
       position: "bottom",
-      text1: "Loading..."
+      text1: "Cargando...",
+      autoHide: false
     });
 
     if (config.data instanceof FormData) {

@@ -1,49 +1,27 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Button, SafeAreaView, Text, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { Button, SafeAreaView, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import Toast from "react-native-toast-message";
-import { z } from "zod";
-import api from "../api/api";
 import { components } from "../components";
-import CustomDropdownPicker from "../components/CustomDropdownPicker";
-import CustomFileUploader from "../components/CustomFileUploader";
-import CustomInput from "../components/CustomInput";
-import { tipoDeGarantiaOptions } from "../constants/data";
-import { InputStyles, theme } from "../constants/theme";
+import { theme } from "../constants/theme";
 import useLocation from "../utils/hooks/useLocation";
+import GarantiaForm from "../components/GarantiaForm";
+import Toast from "react-native-toast-message";
+import api from "../api/api";
 
 const Garantia: React.FC = ({ route, navigation }: any) => {
   const { id } = route.params;
   const location = useLocation();
+  let formsToSubmit: any = [];
+  const initialValue = {
+    guarantee_item: "",
+    description: "",
+    model: "",
+    serial_number: "",
+    photo: [],
+  };
+  const [guarantees, setGuarantees] = useState([initialValue]);
+  const formRefs = useRef<any>([]);
 
-  const Schema = z
-    .object({
-      guarantee_item: z.string().min(1),
-      description: z.string().min(1),
-      model: z.any(),
-      serial_number: z.any(),
-      photo: z.any().array().nonempty()
-    })
-    .required();
-
-  const {
-    setValue,
-    setError,
-    control,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    resolver: zodResolver(Schema),
-    defaultValues: {
-      guarantee_item: "",
-      description: "",
-      model: "",
-      serial_number: "",
-      photo: []
-    }
-  });
   const renderHeader = () => {
     return (
       <components.Header
@@ -54,60 +32,90 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
     );
   };
 
-  const onDocumentUpload = (newUploadedFiles: any) => {
-    setValue("photo", newUploadedFiles as any);
+  const handleNewEntry = () => {
+    const tempArray = formRefs.current.map((ref: any) => ref.getGuarantee());
+    tempArray.push(initialValue);
+    setGuarantees(tempArray);
   };
 
-  // const pickDocument = async () => {
-  //   let newUploadedFiles: any[] = [];
+  const handleRemove = (index: number) => {
+    if (guarantees.length > 1) {
+      const tempArray = [...guarantees];
+      tempArray.splice(index, 1);
+      setGuarantees(tempArray);
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Se requiere al menos una garantía.",
+        position: "bottom",
+        visibilityTime: 2000,
+      });
+    }
+  };
 
-  //   let result = await DocumentPicker.getDocumentAsync({
-  //     multiple: true
-  //   });
-
-  //   if (result.assets) {
-  //     result.assets.map((item) => {
-  //       newUploadedFiles = [...newUploadedFiles, formatToFile(item)];
-  //     });
-  //     setValue("photo", newUploadedFiles as any);
-  //   }
-  // };
+  const onReset = () => {
+    setGuarantees([]);
+    setTimeout(() => {
+      setGuarantees([initialValue]);
+    }, );
+    formsToSubmit = [];
+  };
 
   const onSubmit = async (values: any) => {
+    formsToSubmit = [];
     const form = new FormData();
-
-    Object.keys(values).map((key) => {
-      if (key === "photo") {
-        values[`${key}`].map((file: any) => {
-          form.append(key, file);
-        });
-      } else {
-        form.append(key, values[`${key}`]);
-      }
+    formRefs.current.map((ref: any) => {
+      ref.submit();
     });
 
-    form.append("application_id", id);
-    form.append(
-      "guaranty_latitude",
-      location?.coords.latitude.toString() as string
-    );
+    setTimeout(async () => {
+      if (formsToSubmit.length === guarantees.length) {
+        formsToSubmit.forEach((guarantee: any, index: number) => {
+          Object.keys(guarantee).forEach((key) => {
+            if (key === "photo") {
+              // Ensure photo is always an array
+              if (!Array.isArray(guarantee[key])) {
+                guarantee[key] = [guarantee[key]];
+              }
+              guarantee[key].forEach((file: any) => {
+                form.append(`guarantees[${index}][${key}]`, file, file.name);
+              });
+            } else {
+              form.append(`guarantees[${index}][${key}]`, guarantee[key]);
+            }
+          });
+          form.append(
+            `guarantees[${index}][guaranty_latitude]`,
+            location?.coords.latitude.toString() as string
+          );
+          form.append(
+            `guarantees[${index}][guaranty_longitude]`,
+            location?.coords.longitude.toString() as string
+          );
+        });
 
-    form.append(
-      "guaranty_longitude",
-      location?.coords.longitude.toString() as string
-    );
-    try {
-      const response = await api.post("guarantee", form, {});
-      Toast.show({
-        type: "success",
-        text1: response.data.message,
-        position: "bottom",
-        visibilityTime: 2000
-      });
-      navigation.goBack();
-    } catch (error) {
-      console.log(error);
-    }
+        form.append("application_id", id);
+        try {
+          const response = await api.post("guarantee", form, {});
+          Toast.show({
+            type: "success",
+            text1: response.data.message,
+            position: "bottom",
+            visibilityTime: 2000,
+          });
+          navigation.goBack();
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        Toast.show({
+          type: "error",
+          text1: `There's error in form`,
+          position: "bottom",
+          visibilityTime: 2000,
+        });
+      }
+    });
   };
 
   return (
@@ -115,125 +123,55 @@ const Garantia: React.FC = ({ route, navigation }: any) => {
       {renderHeader()}
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.bgColor }}>
         <ScrollView style={{ padding: 20 }}>
-          <View style={InputStyles.field}>
-            <Text style={InputStyles.label}>Tipo garantía*</Text>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <CustomDropdownPicker
-                  value={value}
-                  items={tipoDeGarantiaOptions}
-                  onSelectItem={(e: any) => onChange(e.value)}
-                />
-              )}
-              name="guarantee_item"
+          {guarantees.map((guarantee, idx) => {
+            return (
+              <GarantiaForm
+                key={idx}
+                onFormSubmit={(values: any) => {
+                  formsToSubmit.push(values);
+                }}
+                onRemove={() => handleRemove(idx)}
+                ref={(el: any) => (formRefs.current[idx] = el)}
+                init={guarantee}
+              />
+            );
+          })}
+
+          <View style={{ marginTop: 10, paddingBottom: 100 }}>
+            <Button
+              color={theme.COLORS.linkColor}
+              title="Añadir garantía"
+              onPress={() => handleNewEntry()}
             />
-            {errors.guarantee_item && (
-              <Text style={InputStyles.error}>Esto es requerido.</Text>
-            )}
           </View>
+        </ScrollView>
+      </SafeAreaView>
 
-          <View style={InputStyles.field}>
-            <Text style={InputStyles.label}>
-              Descripción<Text>*</Text>
-            </Text>
-            <View style={InputStyles.container}>
-              <Controller
-                control={control}
-                rules={{
-                  required: "Esto es requerido"
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <CustomInput
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    placeholder="Descripción"
-                  />
-                )}
-                name="description"
-              />
-            </View>
-            {errors.description && (
-              <Text style={InputStyles.error}>
-                {errors.description.message}
-              </Text>
-            )}
-          </View>
-
-          <View style={InputStyles.field}>
-            <Text style={InputStyles.label}>
-              Marca<Text>*</Text>
-            </Text>
-            <View style={InputStyles.container}>
-              <Controller
-                control={control}
-                rules={{
-                  required: "Esto es requerido"
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <CustomInput
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    placeholder="Marca"
-                  />
-                )}
-                name="model"
-              />
-            </View>
-            {errors.model && (
-              <Text style={InputStyles.error}>{errors.model.message}</Text>
-            )}
-          </View>
-
-          <View style={InputStyles.field}>
-            <Text style={InputStyles.label}>
-              Número de serie<Text>*</Text>
-            </Text>
-            <View style={InputStyles.container}>
-              <Controller
-                control={control}
-                rules={{
-                  required: "Número de serie"
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <CustomInput
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    placeholder="Número de serie"
-                  />
-                )}
-                name="serial_number"
-              />
-            </View>
-            {errors.serial_number && (
-              <Text style={InputStyles.error}>
-                {errors.serial_number.message}
-              </Text>
-            )}
-          </View>
-
-          <Text style={InputStyles.label}>Foto de Garantía*</Text>
-          <View style={{ marginBottom: 20 }}>
-            <CustomFileUploader
-              onUpload={(files) => {
-                onDocumentUpload(files);
-              }}
-            />
-            {errors.photo && (
-              <Text style={[InputStyles.error]}>Esto es requerido.</Text>
-            )}
-          </View>
-
+      <View
+        style={{
+          position: "absolute",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <View style={{ flex: 1 }}>
           <Button
             color={theme.COLORS.linkColor}
             title="Guardar"
-            onPress={handleSubmit(onSubmit)}
+            onPress={onSubmit}
           />
-        </ScrollView>
-      </SafeAreaView>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Button
+            color={theme.COLORS.grey1}
+            title="Descartar"
+            onPress={onReset}
+          />
+        </View>
+      </View>
     </>
   );
 };

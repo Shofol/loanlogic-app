@@ -12,6 +12,7 @@ import api from "../api/api";
 import { components } from "../components";
 import StatusTag from "../components/StatusTag";
 import { theme } from "../constants";
+import { formatName } from "../utils/formatName";
 import { Guarantee } from "../utils/types";
 
 const ValidacionCredito: React.FC = () => {
@@ -115,7 +116,7 @@ const ValidacionCredito: React.FC = () => {
               color: theme.COLORS.mainDark
             }}
           >
-            {item?.client.name} {item?.client.surname} ({item.id})
+            {formatName(item?.client.name, item?.client.surname)} ({item.id})
           </Text>
           <Text
             style={{

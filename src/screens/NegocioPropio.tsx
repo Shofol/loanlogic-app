@@ -30,6 +30,7 @@ const NegocioPropio = ({
   const dpiData = useContext(DPIContext);
   const defaultValues = {
     business_name: dpiData ? dpiData.business_name : "",
+    business_description: dpiData ? dpiData.business_description : "",
     start_date: dpiData ? dpiData.start_date : "",
     nit5: dpiData ? dpiData.nit5 : "",
     monthly_sales: dpiData ? dpiData.monthly_sales : "",
@@ -63,6 +64,7 @@ const NegocioPropio = ({
   const Schema = z
     .object({
       business_name: z.string().min(1),
+      business_description: z.string().min(1),
       start_date: z.string().min(1),
       nit5: z.any(),
       monthly_sales: z
@@ -126,6 +128,29 @@ const NegocioPropio = ({
 
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>
+          Giro de negocio<Text>*</Text>
+        </Text>
+        <View style={InputStyles.container}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomInput
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value}
+                placeholder="Giro de negocio"
+              />
+            )}
+            name="business_description"
+          />
+        </View>
+        {errors.business_description && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
+      </View>
+
+      <View style={InputStyles.field}>
+        <Text style={InputStyles.label}>
           Fecha de inicio<Text>*</Text>
         </Text>
 
@@ -177,7 +202,7 @@ const NegocioPropio = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 placeholder="Ventas mensuales"
                 keyboardType="numeric"
               />
@@ -205,7 +230,7 @@ const NegocioPropio = ({
               <CustomInput
                 onChange={onChange}
                 onBlur={onBlur}
-                value={value}
+                value={value === "NaN" ? undefined : value}
                 placeholder="Gastos mensuales"
                 keyboardType="numeric"
               />
@@ -218,6 +243,34 @@ const NegocioPropio = ({
             {errors.monthly_expenses5.type === "too_small"
               ? "Esto es requerido"
               : errors.monthly_expenses5.message?.toString()}
+          </Text>
+        )}
+      </View>
+
+      <View style={InputStyles.field}>
+        <Text style={InputStyles.label}>
+          Teléfono del negocio<Text>*</Text>
+        </Text>
+        <View style={InputStyles.container}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <CustomInput
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value === "NaN" ? undefined : value}
+                placeholder="Teléfono del negocio"
+                keyboardType="numeric"
+              />
+            )}
+            name="business_phone"
+          />
+        </View>
+        {errors.business_phone && (
+          <Text style={InputStyles.error}>
+            {errors.business_phone.type === "too_small"
+              ? "Esto es requerido"
+              : errors.business_phone.message?.toString()}
           </Text>
         )}
       </View>
@@ -245,27 +298,6 @@ const NegocioPropio = ({
         )}
       </View>
 
-      <View style={{ marginBottom: 20 }}>
-        <LocationButton
-          locationAdded={locationAdded}
-          onPress={() => {
-            try {
-              setValue(
-                "business_latitude",
-                location.coords.latitude.toString() as string
-              );
-              setValue(
-                "business_longitude",
-                location.coords.longitude.toString() as string
-              );
-              setLocationAdded(true);
-            } catch (error) {
-              console.log(error);
-            }
-          }}
-        />
-      </View>
-
       <View style={InputStyles.field}>
         <Text style={InputStyles.label}>Departamento</Text>
         <Controller
@@ -288,7 +320,9 @@ const NegocioPropio = ({
           )}
           name="business_department"
         />
-        {errors.business_department && <Text>Esto es requerido.</Text>}
+        {errors.business_department && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
       </View>
 
       <View style={InputStyles.field}>
@@ -304,35 +338,30 @@ const NegocioPropio = ({
           )}
           name="business_municipality"
         />
-        {errors.business_municipality && <Text>Esto es requerido.</Text>}
+        {errors.business_municipality && (
+          <Text style={InputStyles.error}>Esto es requerido.</Text>
+        )}
       </View>
 
-      <View style={InputStyles.field}>
-        <Text style={InputStyles.label}>
-          Teléfono del negocio<Text>*</Text>
-        </Text>
-        <View style={InputStyles.container}>
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <CustomInput
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value}
-                placeholder="Teléfono del negocio"
-                keyboardType="numeric"
-              />
-            )}
-            name="business_phone"
-          />
-        </View>
-        {errors.business_phone && (
-          <Text style={InputStyles.error}>
-            {errors.business_phone.type === "too_small"
-              ? "Esto es requerido"
-              : errors.business_phone.message?.toString()}
-          </Text>
-        )}
+      <View style={{ marginBottom: 20 }}>
+        <LocationButton
+          locationAdded={locationAdded}
+          onPress={() => {
+            try {
+              setValue(
+                "business_latitude",
+                location.coords.latitude.toString() as string
+              );
+              setValue(
+                "business_longitude",
+                location.coords.longitude.toString() as string
+              );
+              setLocationAdded(true);
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        />
       </View>
 
       <View

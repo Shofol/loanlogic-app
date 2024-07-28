@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { View } from "react-native";
 
 import * as SecureStore from "expo-secure-store";
@@ -31,9 +31,9 @@ const Solicitudes = (props: any) => {
     });
   };
 
-  const handleSubmitForm = async () => {
+  const handleSubmitForm = async (submittedValue: any) => {
     const form = new FormData();
-    let values: any = { ...valueToSubmit };
+    let values: any = { ...submittedValue };
     values.created_from = "DASHBOARD";
     const user: any = await SecureStore.getItemAsync("user");
     values.userId = JSON.parse(user).id;
@@ -73,11 +73,11 @@ const Solicitudes = (props: any) => {
     }
   };
 
-  useEffect(() => {
-    if (isLastForm) {
-      handleSubmitForm();
-    }
-  }, [valueToSubmit]);
+  // useEffect(() => {
+  //   if (isLastForm) {
+  //     handleSubmitForm();
+  //   }
+  // }, [valueToSubmit]);
 
   const handlePreviousStep = (value?: number) => {
     if (!value) {
@@ -181,7 +181,7 @@ const Solicitudes = (props: any) => {
       content: (
         <Referencias
           previousStep={(e?: number) => {
-            setIsLastForm(false);
+            // setIsLastForm(false);
             setTimeout(() => {
               handlePreviousStep(e);
             }, 100);
@@ -189,9 +189,10 @@ const Solicitudes = (props: any) => {
           occupation={occupation}
           onSubmit={(value) => {
             setValueToSubmit({ ...valueToSubmit, ...value });
-            setTimeout(() => {
-              setIsLastForm(true);
-            }, 100);
+            handleSubmitForm({ ...valueToSubmit, ...value });
+            // setTimeout(() => {
+            //   setIsLastForm(true);
+            // }, 100);
           }}
         />
       )
